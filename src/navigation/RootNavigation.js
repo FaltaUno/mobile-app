@@ -8,6 +8,8 @@ import registerForPushNotificationsAsync from 'api/registerForPushNotificationsA
 import MainTabNavigator from 'navigation/MainTabNavigator';
 import MatchSelectorNavigator from 'navigation/MatchSelectorNavigator';
 import InviteScreen from 'screens/InviteScreen';
+import AddMatchScreen from 'screens/AddMatchScreen';
+import MyProfileScreen from 'screens/MyProfileScreen';
 
 const RootStackNavigator = StackNavigator(
   {
@@ -19,6 +21,12 @@ const RootStackNavigator = StackNavigator(
     },
     Invite: {
       screen: InviteScreen
+    },
+    CreateMatch: {
+      screen: AddMatchScreen
+    },
+    MyProfile: {
+      screen: MyProfileScreen
     }
   },
   {

@@ -5,8 +5,10 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import MyProfileScreen from 'screens/MyProfileScreen';
-import HomeScreen from 'screens/HomeScreen';
+import MatchListScreen from '../screens/MatchListScreen';
+import NearPlayerScreen from '../screens/NearPlayersScreen';
+import AddMatchScreen from '../screens/AddMatchScreen';
+
 
 const navigationResolver = ({ navigation }) => ({
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
@@ -16,19 +18,16 @@ const iconResolver = (navigation, focused) => {
   const { routeName } = navigation.state;
   let iconName;
   switch (routeName) {
-    case 'MyProfile':
+    case 'Matches':
       iconName =
-        Platform.OS === 'ios' ? `ios-person${focused ? '' : '-outline'}` : 'md-person';
+        Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
       break;
-    case 'Home':
+    case 'NearPlayers':
       iconName =
         Platform.OS === 'ios'
           ? `ios-home${focused ? '' : '-outline'}`
           : 'md-home';
       break;
-    // case 'MyMatches':
-    //   iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
-    //   break;
   }
   return (
     <Ionicons
@@ -42,15 +41,15 @@ const iconResolver = (navigation, focused) => {
 
 export default TabNavigator(
   {
-    Home: {
-      screen: HomeScreen,
+    NearPlayers: {
+      screen: NearPlayerScreen,
     },
-    MyProfile: {
-      screen: MyProfileScreen,
-    },
+    Matches: {
+      screen: MatchListScreen,
+    }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'NearPlayers',
     navigationOptions: navigationResolver,
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',

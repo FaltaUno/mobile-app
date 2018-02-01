@@ -1,24 +1,31 @@
 import React from 'react';
 
-import { Text, View, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
-import MatchesList  from '../components/MatchesList';
+import { ScrollView, View, StyleSheet } from 'react-native';
+import { List, ListItem, Text, Icon } from 'react-native-elements';
+import MatchesList from '../components/MatchesList';
 import AddMatchButton from '../components/AddMatchButton';
 
 import * as Firebase from 'firebase';
+import moment from 'moment'
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
-export default class MatchSelectorScreen extends React.Component {
-  // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = () => ({
-    title: Lang.t('matchSelector.title'),
-  })
+export default class MatchListScreen extends React.Component {
 
-  state = {
-    matches: {}
+  constructor(props) {
+    super(props)
+    this.state = {
+      matches: {}
+    }
   }
+
+  // Dynamic definition so we can get the actual Lang locale
+  static navigationOptions = ({navigation}) => ({
+    title: Lang.t('matchList.title'),
+    headerRight: (<Icon name='settings' color={ Colors.tabIconSelected }
+    onPress={ () => navigation.navigate('MyProfile') } />)
+  })
 
   componentDidMount(){
     const uid = Firebase.auth().currentUser.uid
@@ -35,38 +42,25 @@ export default class MatchSelectorScreen extends React.Component {
     })
   }
 
-  _onPressMatch(match, player) {
-    this.props.navigation.navigate('Invite', { player, match })
-  }
-
-  _onPrssMatchButton(navigation) {
-    navigation = this.props.navigation
-    navigation.navigate('CreateMatch')
-  }
-
   render() {
-    const { player } = this.props.navigation.state.params;
     const matches = this.state.matches
     const matchesKeys = Object.keys(matches)
     return (
       <View style={styles.container}>
         {!matchesKeys.length ? (
           <View style={styles.emptyMacthesContainer}>
-            <Text style={styles.emptyMatchesText}>{Lang.t(`matchSelector.noMatchesAvailable`)}</Text>
+            <Text style={styles.emptyMatchesText}>{Lang.t(`matchList.noMatchesAvailable`)}</Text>
           </View>
         ) : (
           <View>
-            <Text style={styles.label}>{Lang.t(`matchSelector.label`, player)}</Text>
-            <MatchesList matches={ matches } player={ player } hideChevron={ false } 
-            onPress={ (match, player) => this._onPressMatch(match, player) } />
+            <MatchesList matches={ matches } hideChevron={ true } />
           </View>
           )
         }
-        <AddMatchButton onPress={ (navigation) => this._onPrssMatchButton(navigation) } />
+        <AddMatchButton />
       </View>
     )
   }
-
 }
 
 const styles = StyleSheet.create({
@@ -89,11 +83,5 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
     fontSize: 16,
-  },
-  addMatchButtonContainer: {
-    bottom: 0,
-    marginLeft: 0,
-    position: 'absolute',
-    width: '100%',
   }
 })

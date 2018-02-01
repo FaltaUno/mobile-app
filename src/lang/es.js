@@ -40,6 +40,11 @@ export default {
     noMatchesAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`
   },
+  matchList: {
+    title: `Mis partidos`,
+    noMatchesAvailable: `No tenés ningún partido`,
+    addMatch: `Agregar partido`
+  },
   myProfile: {
     title: `Perfil`,
     available: `Estoy disponible para jugar`,
