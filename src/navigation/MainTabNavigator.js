@@ -7,8 +7,6 @@ import Colors from 'constants/Colors';
 
 import MatchListScreen from '../screens/MatchListScreen';
 import NearPlayerScreen from '../screens/NearPlayersScreen';
-import AddMatchScreen from '../screens/AddMatchScreen';
-
 
 const navigationResolver = ({ navigation }) => ({
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
