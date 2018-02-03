@@ -40,6 +40,11 @@ export default {
     noMatchesAvailable: `You have no available matches`,
     addMatch: `Add match`
   },
+  matchList: {
+    title: `My matches`,
+    noMatchesAvailable: `You have no avaiable matches`,
+    addMatch: `Add match`
+  },
   myProfile: {
     title: `Profile`,
     available: `Show me available to play`,

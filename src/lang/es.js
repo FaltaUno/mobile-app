@@ -87,7 +87,7 @@ export default {
   },
   whatsapp: {
     buttonTitle: `Enviar un WhatsApp`,
-    urlNotSupported: `Can't handle url: {{url}}`,
-    urlUnkownError: `An error occurred.\n{{err}}`,
+    urlNotSupported: `La url no pudo ser procesada: {{url}}`,
+    urlUnkownError: `Ocurrió un error.\n{{err}}`,
   }
 }
