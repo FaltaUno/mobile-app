@@ -2,6 +2,7 @@ export default {
   app: {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
+    contactEmail: `falta.uno.2018@gmail.com`
   },
   addMatch: {
     title: `New match`,
