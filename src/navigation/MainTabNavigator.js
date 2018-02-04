@@ -20,8 +20,8 @@ const iconResolver = (navigation, focused) => {
     case 'Home':
       iconName =
         Platform.OS === 'ios'
-          ? `ios-home${focused ? '' : '-outline'}`
-          : 'md-home';
+          ? `ios-people${focused ? '' : '-outline'}`
+          : 'md-people';
       break;
     case 'MyMatches':
       iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
