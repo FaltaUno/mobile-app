@@ -38,7 +38,7 @@ export default class MatchAddScreen extends React.Component {
   componentDidMount() {
     // We can only set the function after the component has been initialized
     this.props.navigation.setParams({ handleSave: this._handleSave });
-    this.setState({ match: this.props.navigation.state.params.match? 
+    this.setState({ match: this.props.navigation.state.params? 
       this.props.navigation.state.params.match : {} } )
   }
 
