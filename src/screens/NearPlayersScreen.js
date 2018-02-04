@@ -1,11 +1,26 @@
 import React from 'react';
-import { ActivityIndicator, ScrollView, View, StyleSheet } from 'react-native';
-import { SearchBar, Text, ListItem, List, Icon } from 'react-native-elements';
-import Colors from 'constants/Colors';
-import Lang from 'lang';
+import { ActivityIndicator, ScrollView, View, StyleSheet, Platform } from 'react-native';
 import * as Firebase from 'firebase';
 
-export default class NearPlayerScreen extends React.Component {
+import Colors from 'constants/Colors';
+import Lang from 'lang';
+import { Ionicons } from '@expo/vector-icons';
+import { Text, ListItem, List } from 'react-native-elements';
+
+export default class HomeScreen extends React.Component {
+  // Dynamic definition so we can get the actual Lang locale
+  static navigationOptions = ({ navigation }) => ({
+    title: Lang.t('home.title'),
+    headerRight: (
+      <Ionicons
+        name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-settings'}
+        size={28}
+        style={styles.headerRightIconContainer}
+        color={Colors.tintColor}
+        onPress={() => navigation.navigate('MyProfile')}
+      />
+    ),
+  })
 
   constructor(props) {
     super(props);
@@ -22,42 +37,35 @@ export default class NearPlayerScreen extends React.Component {
     }
   }
 
-  // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = ({ navigation }) => ({
-    title: Lang.t('home.title'),
-      headerRight: (<Icon name='settings' color={ Colors.tabIconSelected }
-      onPress={ () => navigation.navigate('MyProfile') } />)
-  });
-
   componentWillMount() {
     let me = Firebase.auth().currentUser;
     Firebase.database().ref(`users/${me.uid}`)
       .on('value', (snapshot) => {
-        this.setState( { currUser: snapshot.val() } );
+        this.setState({ currUser: snapshot.val() });
         this._getNearPlayers(me.uid);
       })
   }
 
   /** It uses the userKey to remove the user itself in the players List */
   _getNearPlayers(userKey) {
-      this.usersRef.on('value', (snapshot) => {
-        let playerList = snapshot.val()
-        delete playerList[userKey]
-        this._filterLongDistancePlayers(playerList)
-      });
+    this.usersRef.on('value', (snapshot) => {
+      let playerList = snapshot.val()
+      delete playerList[userKey]
+      this._filterLongDistancePlayers(playerList)
+    });
   }
 
   _filterLongDistancePlayers(players) {
     const currUser = this.state.currUser
     const keys = Object.keys(players)
-    if(currUser) {
+    if (currUser) {
       keys.forEach((key) => {
         const playerDistance = parseInt(this._calculatePlayerDistance(currUser, players[key]))
-        if(currUser.distance <= playerDistance) {
+        if (currUser.distance <= playerDistance) {
           delete players[key]
-        } 
-      }) 
-      this.setState({loading: false, players: players })
+        }
+      })
+      this.setState({ loading: false, players: players })
     }
   }
 
@@ -117,7 +125,7 @@ export default class NearPlayerScreen extends React.Component {
                           title={player.displayName}
                           avatar={{ uri: player.photoURL }}
                           subtitle={Lang.t(`playerCard.fromDistance`, { distance: dist })}
-                          onPress={() => this.props.navigation.navigate('MatchSelector', { player })}
+                          onPress={() => this.props.navigation.navigate('SelectMatch', { player })}
                         />
                       )
                     }
@@ -145,12 +153,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  searchBar: {
-    backgroundColor: Colors.light,
-    width: '100%',
-  },
-  input: {
-    backgroundColor: Colors.tabBar
+  headerRightIconContainer: {
+    marginLeft: 15,
+    marginRight: 15,
   },
   emptyPlayers: {
     marginTop: 10,

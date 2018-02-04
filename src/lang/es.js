@@ -37,8 +37,13 @@ export default {
   matchSelector: {
     title: `Selección de partido`,
     label: `¿A qué partido querés invitar a {{displayName}}?`,
-    noMatchesAvailable: `No tenés ningún partido`,
-    addMatch: `Agregar partido`
+  },  
+  myMatches: {
+    title: `Mis partidos`,
+  },
+  matches:{
+    noAvailable: `No tenés ningún partido`,
+    addMatch: `Agregar partido`,
   },
   matchList: {
     title: `Mis partidos`,

@@ -1,10 +1,12 @@
 node_modules/**/*
 .expo/**/*
-.vscode/.react
-.vscode/.react/debuggerWorker.js
+.vscode/settings.json
+.vscode/.react/*
 
 src/config/development.js
 src/config/staging.js
 src/config/production.js
 
 package-lock.json
+
+!.gitkeep

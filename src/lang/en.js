@@ -37,6 +37,11 @@ export default {
   matchSelector: {
     title: `Match selection`,
     label: `What match do you want to invite {{displayName}} to?`,
+  },
+  myMatches: {
+    title: `My matches`,
+  },
+  matches:{
     noMatchesAvailable: `You have no available matches`,
     addMatch: `Add match`
   },

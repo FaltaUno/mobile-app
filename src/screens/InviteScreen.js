@@ -13,6 +13,7 @@ import WhatsAppInvite from 'components/WhatsAppInvite';
 export default class InviteScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('invite.title', navigation.state.params.match),
+    tabBarVisible: false,
   });
 
   state = {

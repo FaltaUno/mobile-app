@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ActivityIndicator, Alert, Picker, StyleSheet, View, ScrollView } from 'react-native';
+import { ActivityIndicator, Alert, Picker, StyleSheet, View, ScrollView, Text } from 'react-native';
 import { List, ListItem, Slider } from 'react-native-elements';
 import { Location, Permissions } from 'expo';
 import { parse, format, isValidNumber } from 'libphonenumber-js'
@@ -12,8 +12,11 @@ import Colors from 'constants/Colors';
 import * as Firebase from 'firebase';
 
 export default class MyProfileScreen extends React.Component {
-  static navigationOptions = () => ({
+  static navigationOptions = ({ navigation }) => ({
     title: Lang.t('myProfile.title'),
+    headerLeft: (
+      <Text style={styles.headerButton} onPress={() => navigation.goBack()}>{Lang.t('action.close')}</Text>
+    ),
   });
 
   // Avaiable countries. ISO code format
@@ -76,6 +79,10 @@ export default class MyProfileScreen extends React.Component {
       const user = Object.assign({}, this.state.user, snapshot.val())
       this.setState({ user })
     })
+  }
+
+  componentWillUnmount(){
+    this.userRef.off('value');
   }
 
   render() {
@@ -193,8 +200,8 @@ export default class MyProfileScreen extends React.Component {
     )
   }
 
-  _validatePhoneNumber(phoneNumber){
-    if (! isValidNumber(phoneNumber, this.state.user.phone.country)) {
+  _validatePhoneNumber(phoneNumber) {
+    if (!isValidNumber(phoneNumber, this.state.user.phone.country)) {
       Alert.alert(Lang.t(`myProfile.invalidPhoneNumber`));
       const phone = Object.assign({}, this.state.user.phone, { phone: '' })
       const user = Object.assign({}, this.state.user, { phone })
@@ -245,7 +252,7 @@ export default class MyProfileScreen extends React.Component {
   }
 
   _getLocationText() {
-    if (! this.state.user.locationPermission) {
+    if (!this.state.user.locationPermission) {
       return Lang.t(`location.error.permissionDenied`);
     } else if (this.state.user.location) {
       const location = this.state.user.location
@@ -273,6 +280,12 @@ const styles = StyleSheet.create({
   },
   locationText: {
     color: Colors.muted
+  },
+  headerButton: {
+    color: Colors.tintColor,
+    fontSize: 16,
+    marginLeft: 15,
+    marginRight: 15,
   },
   picker: {
     padding: 0,

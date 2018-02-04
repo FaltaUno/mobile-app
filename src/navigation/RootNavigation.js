@@ -6,33 +6,23 @@ import { Alert } from 'react-native';
 import registerForPushNotificationsAsync from 'api/registerForPushNotificationsAsync';
 
 import MainTabNavigator from 'navigation/MainTabNavigator';
-import MatchSelectorNavigator from 'navigation/MatchSelectorNavigator';
-import InviteScreen from 'screens/InviteScreen';
-import AddMatchScreen from 'screens/AddMatchScreen';
 import MyProfileScreen from 'screens/MyProfileScreen';
+import AddMatchScreen from 'screens/AddMatchScreen';
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
       screen: MainTabNavigator,
     },
-    MatchSelector: {
-      screen: MatchSelectorNavigator
-    },
-    Invite: {
-      screen: InviteScreen
-    },
-    CreateMatch: {
-      screen: AddMatchScreen
-    },
     MyProfile: {
-      screen: MyProfileScreen
+      screen: MyProfileScreen,
+    },
+    AddMatch: {
+      screen: AddMatchScreen,
     }
   },
   {
-    navigationOptions: {
-      headerBackTitle: null,
-    },
+    mode: 'modal',
   }
 );
 

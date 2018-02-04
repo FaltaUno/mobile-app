@@ -1,21 +1,16 @@
 import React from 'react';
-import {
-  ActivityIndicator,
-  DatePickerAndroid,
-  DatePickerIOS,
-  Platform,
-  StyleSheet,
-  TimePickerAndroid,
-  View,
-} from 'react-native';
-import { Text, FormLabel, FormInput, Button } from 'react-native-elements';
-
 import * as Firebase from 'firebase';
-import Lang from 'lang'
+
+// UI
 import Colors from 'constants/Colors';
+import Lang from 'lang'
+import { ActivityIndicator, StyleSheet } from 'react-native';
+import { Text } from 'react-native-elements';
 
+// App
+import MatchForm from 'components/MatchForm';
 
-export default class AddMatchScreen extends React.Component {
+export default class MatchAddScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
@@ -38,11 +33,7 @@ export default class AddMatchScreen extends React.Component {
   }
 
   state = {
-    name: null,
-    place: null,
-    date: new Date(),
-    chosenDate: null,
-    chosenTime: null,
+    match: {}
   }
 
   componentDidMount() {
@@ -51,97 +42,40 @@ export default class AddMatchScreen extends React.Component {
   }
 
   render() {
-    let datePicker;
-    if (Platform.OS === 'ios') {
-      datePicker = (
-        <DatePickerIOS
-          date={this.state.date}
-          minimumDate={new Date()}
-          minuteInterval={15}
-          onDateChange={(date) => this.setState({ date: date })}
-          locale={Lang.currentLocale()}
-        />
-      )
-    } else {
-      datePicker = (
-        <View>
-          <Button title="Android DatePicker" onPress={() => this._handleAndroidDatePicker()} />
-          <Button title="Android TimePicker" onPress={() => this._handleAndroidTimePicker()} />
-        </View>
-      )
-    }
-
-    return (
-      <View style={styles.container}>
-        <FormLabel>{Lang.t(`addMatch.nameLabel`)}</FormLabel>
-        <FormInput onChangeText={(name) => this.setState({ name: name })} />
-        <FormLabel>{Lang.t(`addMatch.placeLabel`)}</FormLabel>
-        <FormInput onChangeText={(place) => this.setState({ place: place })} />
-        <FormLabel>{Lang.t(`addMatch.dateLabel`)}</FormLabel>
-        {datePicker}
-      </View>
-    )
+    return (<MatchForm onChange={(match) => this.setState({ match })} />)
   }
 
   _handleSave = () => {
     // Update state, show ActivityIndicator
     this.props.navigation.setParams({ isSaving: true });
 
+    // Get match data
+    let match = Object.assign({}, this.state.match)
+    const dateTimestamp = match.date.getTime()
+    match.date = dateTimestamp
+    match.createdAt = Firebase.database.ServerValue.TIMESTAMP
+
+    // Fb connection
     const uid = Firebase.auth().currentUser.uid;
     const db = Firebase.database();
+
+    // Match key
     const key = db.ref().child('matches').push().key;
-    const dateTimestamp = this.state.date.getTime()
-    const match = {
-      name: this.state.name,
-      place: this.state.place,
-      date: dateTimestamp,
-      createdAt: Firebase.database.ServerValue.TIMESTAMP
-    };
 
     let updates = {};
     updates['/matches/' + key] = match;
-    updates['/users/' + uid + '/matches/' + key] = { date: dateTimestamp }
+    updates['/users/' + uid + '/matches/' + key] = { date: match.date }
 
+    // Exec update
     db.ref().update(updates).then(() => {
       this.props.navigation.setParams({ isSaving: false });
       this.props.navigation.goBack();
     })
   }
-
-  async _handleAndroidDatePicker() {
-    try {
-      const { action, year, month, day } = await DatePickerAndroid.open({
-        date: this.state.chosenDate
-      });
-      if (action !== DatePickerAndroid.dismissedAction) {
-        // Selected year, month (0-11), day
-      }
-    } catch ({ code, message }) {
-      console.warn('Cannot open date picker', message);
-    }
-  }
-
-  async _handleAndroidTimePicker() {
-    try {
-      const { action, hour, minute } = await TimePickerAndroid.open({
-        hour: 14,
-        minute: 0,
-        is24Hour: false, // Will display '2 PM'
-      });
-      if (action !== TimePickerAndroid.dismissedAction) {
-        // Selected hour (0-23), minute (0-59)
-      }
-    } catch ({ code, message }) {
-      console.warn('Cannot open time picker', message);
-    }
-  }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  headerActivityIndicator:{
+  headerActivityIndicator: {
     marginLeft: 15,
     marginRight: 15,
   },

@@ -5,12 +5,11 @@ import { TabNavigator, TabBarBottom } from 'react-navigation';
 
 import Colors from 'constants/Colors';
 
-import MatchListScreen from '../screens/MatchListScreen';
-import NearPlayerScreen from '../screens/NearPlayersScreen';
-import AddMatchScreen from '../screens/AddMatchScreen';
-
+import InvitePlayerNavigator from 'navigation/InvitePlayerNavigator';
+import MyMatchesNavigator from 'navigation/MyMatchesNavigator';
 
 const navigationResolver = ({ navigation }) => ({
+  header: null,
   tabBarIcon: ({ focused }) => iconResolver(navigation, focused)
 })
 
@@ -18,15 +17,14 @@ const iconResolver = (navigation, focused) => {
   const { routeName } = navigation.state;
   let iconName;
   switch (routeName) {
-    case 'Matches':
-      iconName =
-        Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
-      break;
-    case 'NearPlayers':
+    case 'Home':
       iconName =
         Platform.OS === 'ios'
           ? `ios-home${focused ? '' : '-outline'}`
           : 'md-home';
+      break;
+    case 'MyMatches':
+      iconName = Platform.OS === 'ios' ? `ios-football${focused ? '' : '-outline'}` : 'md-football';
       break;
   }
   return (
@@ -41,20 +39,19 @@ const iconResolver = (navigation, focused) => {
 
 export default TabNavigator(
   {
-    NearPlayers: {
-      screen: NearPlayerScreen,
+    Home: {
+      screen: InvitePlayerNavigator,
     },
-    Matches: {
-      screen: MatchListScreen,
+    MyMatches: {
+      screen: MyMatchesNavigator,
     }
   },
   {
-    initialRouteName: 'NearPlayers',
+    animationEnabled: false,
     navigationOptions: navigationResolver,
+    swipeEnabled: false,
     tabBarComponent: TabBarBottom,
     tabBarPosition: 'bottom',
-    animationEnabled: false,
-    swipeEnabled: false,
   }
 );
 
