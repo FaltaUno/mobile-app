@@ -14,7 +14,6 @@ export default class MatchAddScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
-
     let headerRight = (
       <Text style={styles.headerButton} onPress={params.handleSave ? (params.handleSave) : () => null}>
         {Lang.t('action.add')}
@@ -39,10 +38,13 @@ export default class MatchAddScreen extends React.Component {
   componentDidMount() {
     // We can only set the function after the component has been initialized
     this.props.navigation.setParams({ handleSave: this._handleSave });
+    this.setState({ match: this.props.navigation.state.params.match? 
+      this.props.navigation.state.params.match : {} } )
   }
 
   render() {
-    return (<MatchForm onChange={(match) => this.setState({ match })} />)
+    return (<MatchForm match={ this.state.match } 
+      onChange={(match) => this.setState({ match })} />)
   }
 
   _handleSave = () => {

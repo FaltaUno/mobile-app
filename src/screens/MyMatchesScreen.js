@@ -25,7 +25,7 @@ export default class MatchListScreen extends React.Component {
 
   render() {
     return (
-      <MyMatchesList onPress={(match) => Alert.alert(`Edit ${match.name}`)} />
+      <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", {match: match})} />
     )
   }
 }

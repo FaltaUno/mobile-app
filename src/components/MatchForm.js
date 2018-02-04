@@ -13,7 +13,7 @@ import Lang from 'lang'
 
 export default class MatchForm extends React.Component {
   state = {
-    match: {
+    match: this.props.match || {
       name: null,
       place: null,
       date: new Date(),
@@ -23,11 +23,12 @@ export default class MatchForm extends React.Component {
   }
 
   render() {
+    const match = this.props.match;
     let datePicker;
     if (Platform.OS === 'ios') {
       datePicker = (
         <DatePickerIOS
-          date={this.state.match.date}
+          date={ new Date(match.date) }
           minimumDate={new Date()}
           minuteInterval={15}
           onDateChange={(date) => this._update({ date })}
@@ -43,16 +44,30 @@ export default class MatchForm extends React.Component {
       )
     }
 
-    return (
-      <View style={styles.container}>
-        <FormLabel>{Lang.t(`addMatch.nameLabel`)}</FormLabel>
-        <FormInput onChangeText={(name) => this._update({ name })} />
-        <FormLabel>{Lang.t(`addMatch.placeLabel`)}</FormLabel>
-        <FormInput onChangeText={(place) => this._update({ place })} />
-        <FormLabel>{Lang.t(`addMatch.dateLabel`)}</FormLabel>
-        {datePicker}
-      </View>
-    )
+    if(match) {
+      return (
+        <View style={styles.container}>
+          <FormLabel>{Lang.t(`addMatch.nameLabel`)}</FormLabel>
+          <FormInput onChangeText={(name) => this._update({ name })} value={ match.name }/>
+          <FormLabel>{Lang.t(`addMatch.placeLabel`)}</FormLabel>
+          <FormInput onChangeText={(place) => this._update({ place })} value={ match.place }/>
+          <FormLabel>{Lang.t(`addMatch.dateLabel`)}</FormLabel>
+          {datePicker}
+        </View>
+      ) 
+    } else {
+      return (
+        <View style={styles.container}>
+          <FormLabel>{Lang.t(`addMatch.nameLabel`)}</FormLabel>
+          <FormInput onChangeText={(name) => this._update({ name })} />
+          <FormLabel>{Lang.t(`addMatch.placeLabel`)}</FormLabel>
+          <FormInput onChangeText={(place) => this._update({ place })} />
+          <FormLabel>{Lang.t(`addMatch.dateLabel`)}</FormLabel>
+          {datePicker}
+        </View>
+      )  
+    }
+
   }
 
   _update(data){
