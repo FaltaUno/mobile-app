@@ -2,6 +2,7 @@ export default {
   app: {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
+    contactEmail: `falta.uno.2018@gmail.com`
   },
   addMatch: {
     title: `Nuevo partido`,
@@ -78,9 +79,11 @@ export default {
     title: `Invitar a {{name}}`,
     invitationTitle: `Invitación a...`,
     matchPlaceholder: `Se juega en {{place}}`,
-    defaultText: "Hola, falta uno para jugar. Te interesa?",
     invalidPhoneNumber: "El jugador no cargó su teléfono. Probá con señales de humo. ",
-    invalidPhoneNumberTitle: "Número inválido. "
+    invalidPhoneNumberTitle: "Número inválido. ",
+    invitationText: `Hola, {{playerName}}.\nTe contacto a través de *{{appName}}*.\nTe invito a un partido el *{{matchDate}} hs.* en *"{{matchPlace}}"*.\n{{matchLocationInfo}}\nSi te interesa, respondeme este mensaje por favor.`,
+    invitationLocationText: `Por las dudas, te dejo el link de la ubicación del lugar.\n{{locationUrl}}\n`,
+    invitationFooter: `Mensaje enviado desde *{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`,
   },
   playerCard: {
     fromDistance: `A {{distance}} km de distancia`

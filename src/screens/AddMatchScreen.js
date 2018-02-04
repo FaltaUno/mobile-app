@@ -9,6 +9,7 @@ import { Text } from 'react-native-elements';
 
 // App
 import MatchForm from 'components/MatchForm';
+import LocationService from 'services/LocationService';
 
 export default class MatchAddScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -33,7 +34,11 @@ export default class MatchAddScreen extends React.Component {
   }
 
   state = {
-    match: {}
+    match: {
+      name: null,
+      place: null,
+      date: new Date(),
+    },
   }
 
   componentDidMount() {
@@ -45,7 +50,7 @@ export default class MatchAddScreen extends React.Component {
     return (<MatchForm onChange={(match) => this.setState({ match })} />)
   }
 
-  _handleSave = () => {
+  _handleSave = async () => {
     // Update state, show ActivityIndicator
     this.props.navigation.setParams({ isSaving: true });
 
@@ -54,6 +59,14 @@ export default class MatchAddScreen extends React.Component {
     const dateTimestamp = match.date.getTime()
     match.date = dateTimestamp
     match.createdAt = Firebase.database.ServerValue.TIMESTAMP
+    match.locationFound = false;
+    match.location = { lat: null, lng: null }
+    match.locationUrl = null;
+    if(match.place){
+      match.locationFound = true;
+      match.location = await LocationService.locationFromAddress(match.place)
+      match.locationUrl = LocationService.linkFromLocation(match.location) 
+    }
 
     // Fb connection
     const uid = Firebase.auth().currentUser.uid;

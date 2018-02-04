@@ -29,6 +29,9 @@ export default {
   },
   loading: `Loading...`,
   location: {
+    service: {
+      unkownError: `An error occurred.\n{{error}}`,
+    },
     error: {
       androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
       permissionDenied: `Permission to access location was denied`
@@ -78,9 +81,11 @@ export default {
     title: `{{name}}'s invitation`,
     invitationTitle: `Invitation to...`,
     matchPlaceholder: `It'll be played at {{place}}`,
-    defaultText: "Hi. We need one player for our match. Wanna join in?",
     invalidPhoneNumber: `This player didn't set up the phone. We can do nothing :(`,
-    invalidPhoneNumberTitle: "Invalid phone number. "
+    invalidPhoneNumberTitle: "Invalid phone number. ",
+    invitationText: `Hi, {{playerName}}.\nI contact you through *{{appName}}*.\nI need one player for the match on *{{matchDate}} h* at *"{{matchPlace}}"*.\n{{matchLocationInfo}}\nIf you're interested, let me know please.`,
+    invitationLocationText: `Just in case, I give you the place location url.\n{{locationUrl}}\n`,
+    invitationFooter: `Message sent by *{{appName}}, _{{appSlogan}}_*\nRequest your test access at {{appContactEmail}}`,
   },
   playerCard: {
     fromDistance: `At {{distance}} km away`
