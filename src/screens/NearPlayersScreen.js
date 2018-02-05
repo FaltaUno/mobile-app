@@ -13,7 +13,7 @@ export default class HomeScreen extends React.Component {
     title: Lang.t('home.title'),
     headerRight: (
       <Ionicons
-        name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-settings'}
+        name={(Platform.OS === 'ios' ? 'ios-settings-outline' : 'md-settings')}
         size={28}
         style={styles.headerRightIconContainer}
         color={Colors.tintColor}
