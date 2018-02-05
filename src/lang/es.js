@@ -4,12 +4,6 @@ export default {
     slogan: `La app que no te deja tirado`,
     contactEmail: `falta.uno.2018@gmail.com`
   },
-  addMatch: {
-    title: `Nuevo partido`,
-    nameLabel: `Nombre del partido`,
-    placeLabel: `¿Dónde se juega?`,
-    dateLabel: `¿Cuándo?`
-  },
   action: {
     add: `Agregar`,
     close: `Cerrar`,
@@ -34,6 +28,13 @@ export default {
       androidEmulator: `Ups, esto no va a funcionar en Sketch en el emulador de Android. ¡Prueba en tu dispositivo!`,
       permissionDenied: `Permisos denegados`
     }
+  },
+  addMatch: {
+    title: `Nuevo partido`,
+    nameLabel: `Título del partido`,
+    placeLabel: `¿Dónde?`,
+    dateLabel: `¿Cuándo?`,
+    notesLabel: `Notas`,
   },
   matchSelector: {
     title: `Selección de partido`,

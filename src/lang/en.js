@@ -4,12 +4,6 @@ export default {
     slogan: `La app que no te deja tirado`,
     contactEmail: `falta.uno.2018@gmail.com`
   },
-  addMatch: {
-    title: `New match`,
-    nameLabel: `Match name`,
-    placeLabel: `Where is the match?`,
-    dateLabel: `When is the match?`
-  },
   action: {
     add: `Add`,
     close: `Close`,
@@ -44,6 +38,13 @@ export default {
   },
   myMatches: {
     title: `My matches`,
+  },
+  addMatch: {
+    title: `New match`,
+    nameLabel: `Match's title`,
+    placeLabel: `Where?`,
+    dateLabel: `When?`,
+    notesLabel: `Notas`
   },
   matches:{
     noMatchesAvailable: `You have no available matches`,

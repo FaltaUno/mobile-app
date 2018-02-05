@@ -20,6 +20,7 @@ const social = {
 export default {
   tintColor,
   text: '#444',
+  listBackground: '#fff',
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,
   tabBar: '#fefefe',
