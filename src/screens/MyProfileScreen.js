@@ -1,15 +1,16 @@
 import React from 'react';
 
-import { ActivityIndicator, Alert, Picker, StyleSheet, View, ScrollView, Text } from 'react-native';
+import { ActivityIndicator, Alert, StyleSheet, View, ScrollView, Text } from 'react-native';
 import { List, ListItem, Slider } from 'react-native-elements';
 import { Location, Permissions } from 'expo';
-import { parse, format, isValidNumber } from 'libphonenumber-js'
+import { format } from 'libphonenumber-js'
 
 import PlayerCard from 'components/PlayerCard';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 import * as Firebase from 'firebase';
+import moment from 'moment'
 
 export default class MyProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -43,8 +44,8 @@ export default class MyProfileScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    const uid = Firebase.auth().currentUser.uid;
-    this.userRef = Firebase.database().ref(`users/${uid}`)
+    this.userFb = Firebase.auth().currentUser;
+    this.userRef = Firebase.database().ref(`users/${this.userFb.uid}`)
   }
 
   async componentWillMount() {
@@ -81,7 +82,7 @@ export default class MyProfileScreen extends React.Component {
     })
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.userRef.off('value');
   }
 
@@ -94,58 +95,27 @@ export default class MyProfileScreen extends React.Component {
 
     const user = this.state.user
 
-    let phoneNumberTitle = Lang.t(`myProfile.phoneNumber`);
-    let phoneNumberPlacholder = Lang.t(`myProfile.phoneNumberEmptyPlacholder`);
-    if (user.phone.country) {
-      const countryPhoneCode = Lang.t(`country.phoneData.${user.phone.country}.code`)
-      phoneNumberTitle += ` (${countryPhoneCode})`;
-      phoneNumberPlacholder = Lang.t(`country.phoneData.${user.phone.country}.placeholder`)
-    }
-
     return (
       <ScrollView>
         <PlayerCard player={user} />
         <List>
           <ListItem
             hideChevron
-            title={<Picker
-              selectedValue={user.phone.country}
-              onValueChange={(phoneCountry) => {
-                if (phoneCountry != this.state.user.phone.country) {
-                  const newPhone = Object.assign({}, this.state.user.phone, { country: phoneCountry ? phoneCountry : '', phone: '' })
-                  this._updateUser({ phone: newPhone })
-                }
-              }}
-              style={styles.picker}>
-              <Picker.Item label={Lang.t(`myProfile.phoneCountryLabel`)} value={null} />
-              {this.countries.map((item) => <Picker.Item label={Lang.t(`country.list.${item}`)} value={item} key={item} />)}
-            </Picker>}
+            title={Lang.t(`myProfile.email`)}
+            rightTitle={user.email}
+            rightTitleStyle={styles.infoText}
           />
           <ListItem
-            title={phoneNumberTitle}
             hideChevron
-            keyboardType={`phone-pad`}
-            textInput
-            textInputEditable={!user.phone.country ? false : true}
-            textInputPlaceholder={phoneNumberPlacholder}
-            textInputValue={format(user.phone, 'National')}
-            textInputOnChangeText={(phoneNumber) => {
-              if (isValidNumber(phoneNumber, this.state.user.phone.country)) {
-                return this._updateUser({
-                  phone: parse(phoneNumber, this.state.user.phone.country)
-                })
-              }
-              const phone = Object.assign({}, this.state.user.phone, { phone: phoneNumber })
-              const user = Object.assign({}, this.state.user, { phone })
-              this.setState({ user })
-
-              if (!phoneNumber) {
-                this._updateUser({ phone })
-              }
-            }}
-            textInputOnBlur={(event) => {
-              this._validatePhoneNumber(event.nativeEvent.text)
-            }}
+            title={Lang.t(`myProfile.phoneNumber`)}
+            rightTitle={format(user.phone, 'International')}
+            rightTitleStyle={styles.infoText}
+          />
+          <ListItem
+            hideChevron
+            title={Lang.t(`myProfile.memberSince`)}
+            rightTitle={moment(user.createdAt).fromNow()}
+            rightTitleStyle={styles.infoText}
           />
         </List>
         <List>
@@ -198,27 +168,6 @@ export default class MyProfileScreen extends React.Component {
         </List>
       </ScrollView>
     )
-  }
-
-  _validatePhoneNumber(phoneNumber) {
-    if (!isValidNumber(phoneNumber, this.state.user.phone.country)) {
-      Alert.alert(Lang.t(`myProfile.invalidPhoneNumber`));
-      const phone = Object.assign({}, this.state.user.phone, { phone: '' })
-      const user = Object.assign({}, this.state.user, { phone })
-      this.setState({ user })
-    }
-  }
-
-  _formatPhoneNumber(phoneNumber, phoneNumberFormat = 'National') {
-    if (isValidNumber(phoneNumber, this.state.user.phone.country)) {
-      const parsedPhoneNumber = parse(phoneNumber, this.state.user.phoneCountry);
-      return format(parsedPhoneNumber, phoneNumberFormat)
-    }
-    return phoneNumber
-  }
-
-  _phoneNumberInternationalFormat(phoneNumber) {
-    return this._formatPhoneNumber(phoneNumber, 'International');
   }
 
   _updateUser(userState) {
@@ -287,16 +236,17 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
   },
-  picker: {
-    padding: 0,
-    margin: 0,
+  infoText: {
+    color: Colors.text
   },
   logoutContainer: {
     borderTopColor: Colors.danger,
-    marginTop: 40,
+    marginTop: 20,
   },
   logoutWrapper: {
     borderBottomColor: Colors.danger,
+    paddingTop: 15,
+    paddingBottom: 15,
   },
   logout: {
     color: Colors.danger,

@@ -56,6 +56,8 @@ export default {
     myLocation: `Mi ubicación`,
     phoneCountryLabel: `País`,
     phoneNumber: `Teléfono`,
+    email: `Correo`,
+    memberSince: `Miembro desde`,
     phoneNumberEmptyPlacholder: `Seleccione país`,
     invalidPhoneNumber: `El número telefónico ingresado no coincide con ningún formato válido para tu país`
   },
