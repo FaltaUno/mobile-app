@@ -71,7 +71,7 @@ export default class MatchForm extends React.Component {
   }
 
   _update(data){
-    const match = Object.assign({}, this.state.match, data);
+    const match = Object.assign({}, this.props.match, data);
     this.setState({ match });
     // Trigger the onChange event
     this.props.onChange(match);

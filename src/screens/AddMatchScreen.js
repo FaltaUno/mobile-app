@@ -47,6 +47,9 @@ export default class MatchAddScreen extends React.Component {
       onChange={(match) => this.setState({ match })} />)
   }
 
+  /** This method decide which kind of action is going to be executed (UPDATE or INSERT) 
+   * and deletegates the actual action to _doUpdate()
+  */
   _handleSave = () => {
     // Update state, show ActivityIndicator
     this.props.navigation.setParams({ isSaving: true });
@@ -59,21 +62,32 @@ export default class MatchAddScreen extends React.Component {
 
     // Fb connection
     const uid = Firebase.auth().currentUser.uid;
-    const db = Firebase.database();
-
-    // Match key
-    const key = db.ref().child('matches').push().key;
-
+    
     let updates = {};
-    updates['/matches/' + key] = match;
-    updates['/users/' + uid + '/matches/' + key] = { date: match.date }
+    // Match key
+    if(!match.key) {
+      const key = db.ref().child('matches').push().key
+      updates['/matches/' + key] = match;
+      updates['/users/' + uid + '/matches/' + key] = { date: new Date(match.date) }
+      this._doUpdate(updates)
 
-    // Exec update
+    } else {
+      updates['/matches/' + match.key] = match;
+      updates['/users/' + uid + '/matches/' + match.key] = { date: new Date(match.date) }
+      this._doUpdate(updates)
+    }
+    
+  }
+
+  /** This method do the update whatever the kind of action needs to be done. (UPDATE or INSERT) */
+  _doUpdate(updates) {
+    const db = Firebase.database();
     db.ref().update(updates).then(() => {
       this.props.navigation.setParams({ isSaving: false });
       this.props.navigation.goBack();
     })
   }
+
 }
 
 const styles = StyleSheet.create({
