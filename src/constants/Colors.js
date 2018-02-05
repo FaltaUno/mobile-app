@@ -19,6 +19,7 @@ const social = {
 
 export default {
   tintColor,
+  text: '#444',
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,
   tabBar: '#fefefe',

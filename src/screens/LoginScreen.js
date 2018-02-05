@@ -101,6 +101,7 @@ export default class LoginScreen extends React.Component {
     return userRef.once('value', function (snapshot) {
       const exists = (snapshot.val() !== null);
       let newUserState = user.providerData[0]
+      newUserState.createdAt = new Date(user.metadata.creationTime).getTime();
       // If the user exists already
       if (exists) {
         // Merge the incoming data with the existent one

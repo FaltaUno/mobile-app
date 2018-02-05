@@ -59,6 +59,8 @@ export default {
     myLocation: `My location`,
     phoneCountryLabel: `Country`,
     phoneNumber: `Phone number`,
+    email: `Email`,
+    memberSince: `Member since`,
     phoneNumberEmptyPlacholder: `Select country`,
     invalidPhoneNumber: `The phone number doesn't match with any valid format for your country`
   },
