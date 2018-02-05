@@ -13,7 +13,7 @@ export default class MyProfileScreen extends React.Component {
     player: {}
   }
 
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state.player = Object.assign({}, props.player);
   }
@@ -35,12 +35,14 @@ export default class MyProfileScreen extends React.Component {
             rightTitle={format(player.phone, 'International')}
             rightTitleStyle={styles.infoText}
           />
-          <ListItem
-            hideChevron
-            title={Lang.t(`myProfile.memberSince`)}
-            rightTitle={moment(player.createdAt).fromNow()}
-            rightTitleStyle={styles.infoText}
-          />
+          {!player.createdAt ? null : (
+            <ListItem
+              hideChevron
+              title={Lang.t(`myProfile.memberSince`)}
+              rightTitle={moment(player.createdAt).fromNow()}
+              rightTitleStyle={styles.infoText}
+            />)
+          }
         </List>
         <List>
           <ListItem
