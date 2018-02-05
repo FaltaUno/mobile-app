@@ -68,7 +68,7 @@ export default class MatchForm extends React.Component {
                 containerStyle={styles.listItemFullInputTextContainer}
                 inputStyle={styles.listItemFullInputText}
                 placeholder={Lang.t('addMatch.nameLabel')}
-                onChange={(name) => this._update({ name })}
+                onChangeText={(name) => this._update({ name })}
                 onFocus={() => this.setState({ showDatePicker: false })}
               />
             )}
@@ -83,7 +83,7 @@ export default class MatchForm extends React.Component {
             textInput
             textInputStyle={styles.infoText}
             textInputContainerStyle={styles.fullInput}
-            onChange={(place) => this._update({ place })}
+            textInputOnChangeText={(place) => this._update({ place })}
             onPress={() => this.setState({ showDatePicker: false })}
             textInputOnFocus={() => this.setState({ showDatePicker: false })}
           />
@@ -97,7 +97,7 @@ export default class MatchForm extends React.Component {
               <TextInput
                 style={styles.listItemTextArea}
                 multiline={true}
-                onChange={(notes) => this._update({ notes })}
+                onChangeText={(notes) => this._update({ notes })}
                 onFocus={() => this.setState({ showDatePicker: false })}
               />
             )}
