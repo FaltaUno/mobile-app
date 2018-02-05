@@ -53,8 +53,17 @@ export default class LoginScreen extends React.Component {
 
   login = async () => {
     this.setState({ isLogging: true });
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId,
-      { permissions: ['user_birthday'] });
+    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId, {
+      permissions: [
+        // -- Default Expo Permissions -- //
+        'public_profile',
+        'email',
+        // 'user_friends',
+        
+        // -- Custom permissions -- //
+        'user_birthday',
+      ]
+    });
     if (type === 'success') {
 
       this.setState({
@@ -89,11 +98,11 @@ export default class LoginScreen extends React.Component {
 
   _getUserData(user) {
     const userRef = Firebase.database().ref(`users/${user.uid}`)
-    return userRef.once('value', function(snapshot) {
+    return userRef.once('value', function (snapshot) {
       const exists = (snapshot.val() !== null);
       let newUserState = user.providerData[0]
       // If the user exists already
-      if(exists){
+      if (exists) {
         // Merge the incoming data with the existent one
         newUserState = Object.assign({}, snapshot.val(), newUserState)
       }
