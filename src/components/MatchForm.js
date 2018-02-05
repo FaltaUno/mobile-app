@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-} from 'react-native';
-
+import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
 import { List, ListItem, FormInput } from 'react-native-elements';
 
 import moment from 'moment'
@@ -40,6 +35,7 @@ export default class MatchForm extends React.Component {
     let datePickerComponent;
 
     if (this.state.showDatePicker) {
+      Keyboard.dismiss()
       datePicker = (
         <ListItem
           hideChevron
@@ -89,6 +85,7 @@ export default class MatchForm extends React.Component {
             textInputContainerStyle={styles.fullInput}
             onChange={(place) => this._update({ place })}
             onPress={() => this.setState({ showDatePicker: false })}
+            textInputOnFocus={() => this.setState({ showDatePicker: false })}
           />
         </List>
         <List>
