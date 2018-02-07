@@ -1,8 +1,7 @@
 import React from 'react';
-import { Keyboard, StyleSheet, TextInput, View } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import { List, ListItem, FormInput } from 'react-native-elements';
 
-import moment from 'moment'
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
@@ -18,44 +17,9 @@ export default class MatchForm extends React.Component {
     },
     chosenDate: null,
     chosenTime: null,
-    showDatePicker: false,
   }
 
   render() {
-    let datePicker = (
-      <ListItem
-        hideChevron
-        title={Lang.t(`addMatch.dateLabel`)}
-        rightTitle={moment(this.state.match.date).format('ddd D/M/YY HH:mm')}
-        rightTitleStyle={styles.infoText}
-        onPress={() => this.setState({ showDatePicker: true })}
-      />
-    )
-
-    let datePickerComponent;
-
-    if (this.state.showDatePicker) {
-      Keyboard.dismiss()
-      datePicker = (
-        <ListItem
-          hideChevron
-          title={moment(this.state.match.date).format('LLLL')}
-          titleStyle={styles.datePickerActive}
-          onPress={() => this.setState({ showDatePicker: false })}
-        />
-      )
-
-      datePickerComponent = (
-        <ListItemDatePicker
-          date={this.state.match.date}
-          minimumDate={new Date()}
-          minuteInterval={15}
-          onDateChange={(date) => this._update({ date })}
-          locale={Lang.currentLocale()}
-        />
-      )
-    }
-
     return (
       <View style={styles.container}>
         <List>
@@ -75,8 +39,13 @@ export default class MatchForm extends React.Component {
           />
         </List>
         <List>
-          {datePicker}
-          {datePickerComponent}
+          <ListItemDatePicker
+            date={this.state.match.date}
+            minimumDate={new Date()}
+            minuteInterval={15}
+            onDateChange={(date) => this._update({ date })}
+            locale={Lang.currentLocale()}
+          />
           <ListItem
             hideChevron
             title={Lang.t(`addMatch.placeLabel`)}
@@ -144,8 +113,5 @@ const styles = StyleSheet.create({
   infoText: {
     color: Colors.muted,
     fontSize: 16,
-  },
-  datePickerActive: {
-    color: Colors.tintColor
   }
 })
