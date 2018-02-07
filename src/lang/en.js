@@ -1,3 +1,6 @@
+
+import { Platform } from 'react-native';
+
 export default {
   app: {
     name: `Falta uno!`,
@@ -43,13 +46,19 @@ export default {
     title: `New match`,
     nameLabel: `Match's title`,
     placeLabel: `Where?`,
-    dateLabel: `When?`,
-    datePickerLabel: `Date`,
-    timePickerLabel: `Time`,
+    ...Platform.select({
+      ios: {
+        dateLabel: 'When?',
+      },
+      android: {
+        dateLabel: 'Date',
+        timeLabel: 'Time',
+      },
+    }),
     notesLabel: `Notas`
   },
   matches:{
-    noMatchesAvailable: `You have no available matches`,
+    noAvailable: `You have no available matches`,
     addMatch: `Add match`
   },
   myProfile: {

@@ -36,13 +36,15 @@ export default class ListItemDatePickerIOS extends React.Component {
         />
         <ListItem
           hideChevron
-          title={<DatePickerIOS
-            date={this.props.date}
-            minimumDate={this.props.minimumDate}
-            minuteInterval={this.props.minuteInterval}
-            onDateChange={(date) => this.props.onDateChange(date)}
-            locale={this.props.locale}
-          />}
+          title={(
+            <DatePickerIOS
+              date={this.props.date}
+              minimumDate={this.props.minimumDate}
+              minuteInterval={this.props.minuteInterval}
+              onDateChange={(date) => this.props.onDateChange(date)}
+              locale={this.props.locale}
+            />
+          )}
         />
       </View>
     )

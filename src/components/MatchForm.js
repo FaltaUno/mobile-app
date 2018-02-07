@@ -5,7 +5,8 @@ import { List, ListItem, FormInput } from 'react-native-elements';
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
-import ListItemDatePicker from './ListItemDatePicker.ios';
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import ListItemDatePicker from './ListItemDatePicker';
 
 export default class MatchForm extends React.Component {
   state = {
@@ -15,8 +16,6 @@ export default class MatchForm extends React.Component {
       date: new Date(),
       notes: null,
     },
-    chosenDate: null,
-    chosenTime: null,
   }
 
   render() {

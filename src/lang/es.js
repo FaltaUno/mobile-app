@@ -1,3 +1,6 @@
+
+import { Platform } from 'react-native';
+
 export default {
   app: {
     name: `Falta uno!`,
@@ -33,9 +36,15 @@ export default {
     title: `Nuevo partido`,
     nameLabel: `Título del partido`,
     placeLabel: `¿Dónde?`,
-    dateLabel: `¿Cuándo?`,
-    datePickerLabel: `Fecha`,
-    timePickerLabel: `Hora`,
+    ...Platform.select({
+      ios: {
+        dateLabel: '¿Cuándo?',
+      },
+      android: {
+        dateLabel: 'Fecha',
+        timeLabel: 'Hora',
+      },
+    }),
     notesLabel: `Notas`,
   },
   matchSelector: {

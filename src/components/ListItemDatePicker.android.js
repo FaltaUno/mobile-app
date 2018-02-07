@@ -8,21 +8,20 @@ import moment from 'moment';
 import { DatePickerAndroid, TimePickerAndroid, StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
-// @todo: DO IT!
 export default class ListItemDatePickerAndroid extends React.Component {
   render() {
     return (
       <View>
         <ListItem
           hideChevron
-          title={Lang.t(`addMatch.datePickerLabel`)}
+          title={Lang.t(`addMatch.dateLabel`)}
           rightTitle={moment(this.props.date).format('D/M/YYYY')}
           rightTitleStyle={styles.infoText}
           onPress={() => this._handleAndroidDatePicker()}
         />
         <ListItem
           hideChevron
-          title={Lang.t(`addMatch.timePickerLabel`)}
+          title={Lang.t(`addMatch.timeLabel`)}
           rightTitle={moment(this.props.date).format('HH:mm')}
           rightTitleStyle={styles.infoText}
           onPress={() => this._handleAndroidTimePicker()}
@@ -71,9 +70,6 @@ export default class ListItemDatePickerAndroid extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  datePickerActive: {
-    color: Colors.tintColor
-  },
   infoText: {
     color: Colors.muted,
     fontSize: 16,
