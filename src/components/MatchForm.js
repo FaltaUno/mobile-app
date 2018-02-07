@@ -13,11 +13,6 @@ import Lang from 'lang'
 
 export default class MatchForm extends React.Component {
   state = {
-    match: {
-      name: null,
-      place: null,
-      date: new Date(),
-    },
     chosenDate: null,
     chosenTime: null,
   }
@@ -27,10 +22,13 @@ export default class MatchForm extends React.Component {
     if (Platform.OS === 'ios') {
       datePicker = (
         <DatePickerIOS
-          date={this.state.match.date}
+          date={new Date(this.props.match.date)}
           minimumDate={new Date()}
           minuteInterval={15}
-          onDateChange={(date) => this._update({ date })}
+          onDateChange={(date) =>
+            this._update({
+              date: date.getTime()
+            })}
           locale={Lang.currentLocale()}
         />
       )
@@ -46,18 +44,17 @@ export default class MatchForm extends React.Component {
     return (
       <View style={styles.container}>
         <FormLabel>{Lang.t(`addMatch.nameLabel`)}</FormLabel>
-        <FormInput onChangeText={(name) => this._update({ name })} />
+        <FormInput onChangeText={(name) => this._update({ name })} value={this.props.match.name} />
         <FormLabel>{Lang.t(`addMatch.placeLabel`)}</FormLabel>
-        <FormInput onChangeText={(place) => this._update({ place })} />
+        <FormInput onChangeText={(place) => this._update({ place })} value={this.props.match.place} />
         <FormLabel>{Lang.t(`addMatch.dateLabel`)}</FormLabel>
         {datePicker}
       </View>
     )
   }
 
-  _update(data){
-    const match = Object.assign({}, this.state.match, data);
-    this.setState({ match });
+  _update(data) {
+    const match = Object.assign({}, this.props.match, data);
     // Trigger the onChange event
     this.props.onChange(match);
   }

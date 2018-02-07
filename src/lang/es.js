@@ -12,6 +12,7 @@ export default {
   },
   action: {
     add: `Agregar`,
+    edit: `Editar`,
     close: `Cerrar`,
   },
   home: {
@@ -45,6 +46,11 @@ export default {
   matches:{
     noAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`,
+  },
+  matchList: {
+    title: `Mis partidos`,
+    noMatchesAvailable: `No tenés ningún partido`,
+    addMatch: `Agregar partido`
   },
   myProfile: {
     title: `Perfil`,

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Alert, Platform } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
@@ -25,7 +25,7 @@ export default class MatchListScreen extends React.Component {
 
   render() {
     return (
-      <MyMatchesList onPress={(match) => Alert.alert(`Edit ${match.name}`)} />
+      <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", {match: match})} />
     )
   }
 }
