@@ -41,7 +41,6 @@ export default class MatchForm extends React.Component {
         <List>
           <ListItemDatePicker
             date={new Date(this.props.match.date)}
-            minimumDate={new Date()}
             minuteInterval={15}
             onDateChange={(date) => this._update({ date: date.getTime() })}
             locale={Lang.currentLocale()}
