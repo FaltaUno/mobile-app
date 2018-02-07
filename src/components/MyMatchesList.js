@@ -50,7 +50,7 @@ export default class MyMatchesList extends React.Component {
     if (!matches.length) {
       return (
         <View style={styles.emptyMacthesContainer}>
-          <Text style={styles.emptyMatchesText}>{Lang.t(`matches.noMatchesAvailable`)}</Text>
+          <Text style={styles.emptyMatchesText}>{Lang.t(`matches.noAvailable`)}</Text>
         </View>
       )
     }

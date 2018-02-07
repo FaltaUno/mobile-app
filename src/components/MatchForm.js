@@ -1,54 +1,79 @@
 import React from 'react';
-import {
-  DatePickerAndroid,
-  DatePickerIOS,
-  Platform,
-  StyleSheet,
-  TimePickerAndroid,
-  View,
-} from 'react-native';
-import { FormLabel, FormInput, Button } from 'react-native-elements';
+import { StyleSheet, TextInput, View } from 'react-native';
+import { List, ListItem, FormInput } from 'react-native-elements';
 
 import Lang from 'lang'
+import Colors from 'constants/Colors';
+
+// eslint-disable-next-line import/extensions, import/no-unresolved
+import ListItemDatePicker from './ListItemDatePicker';
 
 export default class MatchForm extends React.Component {
   state = {
-    chosenDate: null,
-    chosenTime: null,
+    match: {
+      name: null,
+      place: null,
+      date: new Date(),
+      notes: null,
+    },
   }
 
   render() {
-    let datePicker;
-    if (Platform.OS === 'ios') {
-      datePicker = (
-        <DatePickerIOS
-          date={new Date(this.props.match.date)}
-          minimumDate={new Date()}
-          minuteInterval={15}
-          onDateChange={(date) =>
-            this._update({
-              date: date.getTime()
-            })}
-          locale={Lang.currentLocale()}
-        />
-      )
-    } else {
-      datePicker = (
-        <View>
-          <Button title="Android DatePicker" onPress={() => this._handleAndroidDatePicker()} />
-          <Button title="Android TimePicker" onPress={() => this._handleAndroidTimePicker()} />
-        </View>
-      )
-    }
-
     return (
       <View style={styles.container}>
-        <FormLabel>{Lang.t(`addMatch.nameLabel`)}</FormLabel>
-        <FormInput onChangeText={(name) => this._update({ name })} value={this.props.match.name} />
-        <FormLabel>{Lang.t(`addMatch.placeLabel`)}</FormLabel>
-        <FormInput onChangeText={(place) => this._update({ place })} value={this.props.match.place} />
-        <FormLabel>{Lang.t(`addMatch.dateLabel`)}</FormLabel>
-        {datePicker}
+        <List>
+          <ListItem
+            hideChevron
+            containerStyle={styles.listItemFullInputTextWrapper}
+            titleStyle={styles.listItemFullInputText}
+            title={(
+              <FormInput
+                value={this.props.match.name} 
+                containerStyle={styles.listItemFullInputTextContainer}
+                inputStyle={styles.listItemFullInputText}
+                placeholder={Lang.t('addMatch.nameLabel')}
+                onChangeText={(name) => this._update({ name })}
+                onFocus={() => this.setState({ showDatePicker: false })}
+              />
+            )}
+          />
+        </List>
+        <List>
+          <ListItemDatePicker
+            date={new Date(this.props.match.date)}
+            minimumDate={new Date()}
+            minuteInterval={15}
+            onDateChange={(date) => this._update({ date: date.getTime() })}
+            locale={Lang.currentLocale()}
+          />
+          <ListItem
+            hideChevron
+            title={Lang.t(`addMatch.placeLabel`)}
+            textInput
+            textInputValue={this.props.match.place}
+            textInputStyle={styles.infoText}
+            textInputContainerStyle={styles.fullInput}
+            textInputOnChangeText={(place) => this._update({ place })}
+            onPress={() => this.setState({ showDatePicker: false })}
+            textInputOnFocus={() => this.setState({ showDatePicker: false })}
+          />
+        </List>
+        <List>
+          <ListItem
+            hideChevron
+            title={Lang.t(`addMatch.notesLabel`)}
+            containerStyle={styles.listItemTextAreaContainer}
+            subtitle={(
+              <TextInput
+                value={this.props.match.notes} 
+                style={styles.listItemTextArea}
+                multiline={true}
+                onChangeText={(notes) => this._update({ notes })}
+                onFocus={() => this.setState({ showDatePicker: false })}
+              />
+            )}
+          />
+        </List>
       </View>
     )
   }
@@ -58,38 +83,36 @@ export default class MatchForm extends React.Component {
     // Trigger the onChange event
     this.props.onChange(match);
   }
-
-  async _handleAndroidDatePicker() {
-    try {
-      const { action, year, month, day } = await DatePickerAndroid.open({
-        date: this.state.chosenDate
-      });
-      if (action !== DatePickerAndroid.dismissedAction) {
-        // Selected year, month (0-11), day
-      }
-    } catch ({ code, message }) {
-      console.warn('Cannot open date picker', message);
-    }
-  }
-
-  async _handleAndroidTimePicker() {
-    try {
-      const { action, hour, minute } = await TimePickerAndroid.open({
-        hour: 14,
-        minute: 0,
-        is24Hour: false, // Will display '2 PM'
-      });
-      if (action !== TimePickerAndroid.dismissedAction) {
-        // Selected hour (0-23), minute (0-59)
-      }
-    } catch ({ code, message }) {
-      console.warn('Cannot open time picker', message);
-    }
-  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  listItemFullInputTextWrapper: {
+    paddingBottom: 5,
+    paddingTop: 5,
+  },
+  listItemFullInputTextContainer: {
+    marginLeft: 10,
+    marginRight: 10,
+    borderBottomWidth: 0,
+  },
+  listItemFullInputText: {
+    color: Colors.text
+  },
+  listItemTextAreaContainer: {
+    minHeight: 75,
+  },
+  listItemTextArea: {
+    color: Colors.muted,
+    fontSize: 16,
+    marginTop: 0,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  infoText: {
+    color: Colors.muted,
+    fontSize: 16,
+  }
 })

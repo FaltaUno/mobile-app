@@ -1,14 +1,11 @@
+
+import { Platform } from 'react-native';
+
 export default {
   app: {
     name: `Falta uno!`,
     slogan: `La app que no te deja tirado`,
     contactEmail: `falta.uno.2018@gmail.com`
-  },
-  addMatch: {
-    title: `New match`,
-    nameLabel: `Match name`,
-    placeLabel: `Where is the match?`,
-    dateLabel: `When is the match?`
   },
   action: {
     add: `Add`,
@@ -46,8 +43,23 @@ export default {
   myMatches: {
     title: `My matches`,
   },
+  addMatch: {
+    title: `New match`,
+    nameLabel: `Match's title`,
+    placeLabel: `Where?`,
+    ...Platform.select({
+      ios: {
+        dateLabel: 'When?',
+      },
+      android: {
+        dateLabel: 'Date',
+        timeLabel: 'Time',
+      },
+    }),
+    notesLabel: `Notas`
+  },
   matches:{
-    noMatchesAvailable: `You have no available matches`,
+    noAvailable: `You have no available matches`,
     addMatch: `Add match`
   },
   myProfile: {

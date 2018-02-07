@@ -15,7 +15,7 @@ export default class MatchListScreen extends React.Component {
     headerRight: (
       <Ionicons
         name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-add'}
-        size={28}
+        size={36}
         style={styles.headerRightIconContainer}
         color={Colors.tintColor}
         onPress={() => navigation.navigate('AddMatch')}
