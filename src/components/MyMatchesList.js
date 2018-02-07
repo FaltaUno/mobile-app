@@ -26,11 +26,14 @@ export default class MyMatchesList extends React.Component {
       matchesRef.child(userMatch.key).once('value', (matchSnap) => {
         let match = matchSnap.val()
         match.key = matchSnap.key; // ID de firebase
+        
         let matches = this.state.matches.slice()
-        matches.push(match)
-        // matches = matches.sort((matchA, matchB) => {
-        //   return matchA.date > matchB.date
-        // })
+        let matchIndex = matches.findIndex((matchSearch) => {
+          return matchSearch.key === match.key;
+        })
+
+        // If the match is already preset, update it; otherwise push it
+        matchIndex > -1 ? matches[matchIndex] = match :  matches.push(match);
 
         this.setState({ matches })
       })

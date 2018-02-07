@@ -28,6 +28,7 @@ export default class MatchForm extends React.Component {
             titleStyle={styles.listItemFullInputText}
             title={(
               <FormInput
+                value={this.props.match.name} 
                 containerStyle={styles.listItemFullInputTextContainer}
                 inputStyle={styles.listItemFullInputText}
                 placeholder={Lang.t('addMatch.nameLabel')}
@@ -39,16 +40,17 @@ export default class MatchForm extends React.Component {
         </List>
         <List>
           <ListItemDatePicker
-            date={this.state.match.date}
+            date={new Date(this.props.match.date)}
             minimumDate={new Date()}
             minuteInterval={15}
-            onDateChange={(date) => this._update({ date })}
+            onDateChange={(date) => this._update({ date: date.getTime() })}
             locale={Lang.currentLocale()}
           />
           <ListItem
             hideChevron
             title={Lang.t(`addMatch.placeLabel`)}
             textInput
+            textInputValue={this.props.match.place}
             textInputStyle={styles.infoText}
             textInputContainerStyle={styles.fullInput}
             textInputOnChangeText={(place) => this._update({ place })}
@@ -63,6 +65,7 @@ export default class MatchForm extends React.Component {
             containerStyle={styles.listItemTextAreaContainer}
             subtitle={(
               <TextInput
+                value={this.props.match.notes} 
                 style={styles.listItemTextArea}
                 multiline={true}
                 onChangeText={(notes) => this._update({ notes })}
@@ -76,8 +79,7 @@ export default class MatchForm extends React.Component {
   }
 
   _update(data) {
-    const match = Object.assign({}, this.state.match, data);
-    this.setState({ match });
+    const match = Object.assign({}, this.props.match, data);
     // Trigger the onChange event
     this.props.onChange(match);
   }
