@@ -44,6 +44,8 @@ export default {
     nameLabel: `Match's title`,
     placeLabel: `Where?`,
     dateLabel: `When?`,
+    datePickerLabel: `Date`,
+    timePickerLabel: `Time`,
     notesLabel: `Notas`
   },
   matches:{

@@ -34,6 +34,8 @@ export default {
     nameLabel: `Título del partido`,
     placeLabel: `¿Dónde?`,
     dateLabel: `¿Cuándo?`,
+    datePickerLabel: `Fecha`,
+    timePickerLabel: `Hora`,
     notesLabel: `Notas`,
   },
   matchSelector: {

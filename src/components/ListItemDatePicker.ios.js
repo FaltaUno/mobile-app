@@ -2,7 +2,7 @@
 import React from 'react';
 import Colors from 'constants/Colors';
 import Lang from 'lang';
-import moment from 'moment'
+import moment from 'moment';
 
 import { Keyboard, DatePickerIOS, StyleSheet, View } from 'react-native';
 import { ListItem } from 'react-native-elements';
