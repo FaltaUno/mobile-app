@@ -11,6 +11,7 @@ export default {
   },
   action: {
     add: `Add`,
+    edit: `Edit`,
     close: `Close`,
   },
   home: {

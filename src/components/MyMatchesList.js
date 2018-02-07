@@ -24,28 +24,16 @@ export default class MyMatchesList extends React.Component {
     this.userMatchesRef = db.ref(`users/${uid}/matches`);
     this.userMatchesRef.orderByChild('date').on('child_added', (userMatch) => {
       matchesRef.child(userMatch.key).once('value', (matchSnap) => {
-        
-        /**
-         * Esta parte del codigo esta haciendo que cuando se haga un update en AddMatchScreen, 
-         * se agrege temporalmente a la lista de matches una replica del partido modificado como 
-         * si fuese uno nuevo. 
-         * 
-         * Pasos para replicar el comportamiento:
-         * 1 - Editar un partido existente,
-         * 2 - Se va a agregar como una nueva row
-         * 3 - Cerrar la app y volverla a abrir
-         * Como resultado se va a ver como se esperaba, es decir, la cantidad de partidos correcta.
-         * 
-         * En la BD en ningun momento se duplican los partidos, es solo a nivel de FrontEnd
-         */
-        
         let match = matchSnap.val()
         match.key = matchSnap.key; // ID de firebase
+        
         let matches = this.state.matches.slice()
-        matches.push(match)
-        // matches = matches.sort((matchA, matchB) => {
-        //   return matchA.date > matchB.date
-        // })
+        let matchIndex = matches.findIndex((matchSearch) => {
+          return matchSearch.key === match.key;
+        })
+
+        // If the match is already preset, update it; otherwise push it
+        matchIndex > -1 ? matches[matchIndex] = match :  matches.push(match);
 
         this.setState({ matches })
       })

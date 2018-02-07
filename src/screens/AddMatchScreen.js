@@ -16,7 +16,7 @@ export default class MatchAddScreen extends React.Component {
     const { params = {} } = navigation.state;
     let headerRight = (
       <Text style={styles.headerButton} onPress={params.handleSave ? (params.handleSave) : () => null}>
-        {Lang.t('action.add')}
+        {Lang.t(params.match ? 'action.edit' : 'action.add')}
       </Text>
     )
 
@@ -37,14 +37,23 @@ export default class MatchAddScreen extends React.Component {
 
   componentDidMount() {
     // We can only set the function after the component has been initialized
+    const { params = {} } = this.props.navigation.state;
     this.props.navigation.setParams({ handleSave: this._handleSave });
-    this.setState({ match: this.props.navigation.state.params? 
-      this.props.navigation.state.params.match : {} } )
+
+    if (params.match) {
+      this.setState({ match: params.match })
+    }
   }
 
   render() {
-    return (<MatchForm match={ this.state.match } 
-      onChange={(match) => this.setState({ match })} />)
+    return (
+      <MatchForm
+        match={this.state.match}
+        onChange={(match) =>
+          this.setState({ match }
+        )}
+      />
+    )
   }
 
   /** This method decide which kind of action is going to be executed (UPDATE or INSERT) 
@@ -56,32 +65,23 @@ export default class MatchAddScreen extends React.Component {
 
     // Get match data
     let match = Object.assign({}, this.state.match)
-    const dateTimestamp = match.date.getTime()
-    match.date = dateTimestamp
     match.createdAt = Firebase.database.ServerValue.TIMESTAMP
 
     // Fb connection
     const uid = Firebase.auth().currentUser.uid;
-    
-    let updates = {};
-    // Match key
-    if(!match.key) {
-      const key = db.ref().child('matches').push().key
-      updates['/matches/' + key] = match;
-      updates['/users/' + uid + '/matches/' + key] = { date: new Date(match.date) }
-      this._doUpdate(updates)
-
-    } else {
-      updates['/matches/' + match.key] = match;
-      updates['/users/' + uid + '/matches/' + match.key] = { date: new Date(match.date) }
-      this._doUpdate(updates)
-    }
-    
-  }
-
-  /** This method do the update whatever the kind of action needs to be done. (UPDATE or INSERT) */
-  _doUpdate(updates) {
     const db = Firebase.database();
+
+    // Match key detection/creation
+    let key = match.key
+    if (! key) {
+      key = db.ref().child('matches').push().key
+    }
+    delete match.key // key is not saved as a field
+
+    let updates = {};
+    updates['/matches/' + key] = match;
+    updates['/users/' + uid + '/matches/' + key] = { date: new Date(match.date) }
+
     db.ref().update(updates).then(() => {
       this.props.navigation.setParams({ isSaving: false });
       this.props.navigation.goBack();
