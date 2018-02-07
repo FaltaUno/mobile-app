@@ -31,7 +31,18 @@ export default class App extends React.Component {
     loggedIn: false
   };
 
-  componentWillMount(){
+  constructor() {
+    super();
+    
+    // Android timer warning message
+    // TL;DR Ignore the warning
+    // https://github.com/facebook/react-native/issues/12981#issuecomment-347227544
+
+    // eslint-disable-next-line no-console
+    console.ignoredYellowBox = ['Setting a timer'];
+  }
+
+  componentWillMount() {
     // Start firebase connection
     Firebase.initializeApp(Config.firebase);
   }
@@ -46,13 +57,13 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } 
+    }
     // Once all it's loaded...
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-        {this.state.loggedIn ?  <RootNavigation /> : <LoginScreen />}
+        {this.state.loggedIn ? <RootNavigation /> : <LoginScreen />}
       </View>
     );
   }
@@ -74,7 +85,7 @@ export default class App extends React.Component {
     // I18n
     const langAssets = I18n.initAsync().then(() => {
       const locale = I18n.locale.split('-')[0];
-      switch(locale){
+      switch (locale) {
         case 'es':
           require('moment/locale/es');
           break;
@@ -100,12 +111,12 @@ export default class App extends React.Component {
     Firebase.auth().onAuthStateChanged((user) => {
       // Loading is totally completed,
       // trigger the login page or home based on user existence
-      this.setState({ 
+      this.setState({
         isLoadingComplete: true,
         loggedIn: user != null
       });
     });
-    
+
   };
 }
 
