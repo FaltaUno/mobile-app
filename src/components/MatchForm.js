@@ -33,13 +33,14 @@ export default class MatchForm extends React.Component {
                 inputStyle={styles.listItemFullInputText}
                 placeholder={Lang.t('addMatch.nameLabel')}
                 onChangeText={(name) => this._update({ name })}
-                onFocus={() => this.setState({ showDatePicker: false })}
+                onFocus={() => this._datepicker.hide()}
               />
             )}
           />
         </List>
         <List>
           <ListItemDatePicker
+            ref={(c) => { this._datepicker = c }}
             date={new Date(this.props.match.date)}
             minuteInterval={15}
             onDateChange={(date) => this._update({ date: date.getTime() })}
@@ -53,8 +54,8 @@ export default class MatchForm extends React.Component {
             textInputStyle={styles.infoText}
             textInputContainerStyle={styles.fullInput}
             textInputOnChangeText={(place) => this._update({ place })}
-            onPress={() => this.setState({ showDatePicker: false })}
-            textInputOnFocus={() => this.setState({ showDatePicker: false })}
+            onPress={() => this._datepicker.hide()}
+            textInputOnFocus={() => this._datepicker.hide()}
           />
         </List>
         <List>
@@ -62,13 +63,14 @@ export default class MatchForm extends React.Component {
             hideChevron
             title={Lang.t(`addMatch.notesLabel`)}
             containerStyle={styles.listItemTextAreaContainer}
+            onPress={() => this._datepicker.hide()}
             subtitle={(
               <TextInput
                 value={this.props.match.notes} 
                 style={styles.listItemTextArea}
                 multiline={true}
                 onChangeText={(notes) => this._update({ notes })}
-                onFocus={() => this.setState({ showDatePicker: false })}
+                onFocus={() => this._datepicker.hide()}
               />
             )}
           />

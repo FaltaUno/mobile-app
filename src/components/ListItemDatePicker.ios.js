@@ -9,18 +9,18 @@ import { ListItem } from 'react-native-elements';
 
 export default class ListItemDatePickerIOS extends React.Component {
   state = {
-    showDatePicker: false
+    show: false
   }
 
   render() {
-    if (!this.state.showDatePicker) {
+    if (!this.state.show) {
       return (
         <ListItem
           hideChevron
           title={Lang.t(`addMatch.dateLabel`)}
           rightTitle={moment(this.props.date).format('ddd D/M/YY HH:mm')}
           rightTitleStyle={styles.infoText}
-          onPress={() => this.setState({ showDatePicker: true })}
+          onPress={() => this.show()}
         />
       )
     }
@@ -32,7 +32,7 @@ export default class ListItemDatePickerIOS extends React.Component {
           hideChevron
           title={moment(this.props.date).format('LLLL')}
           titleStyle={styles.datePickerActive}
-          onPress={() => this.setState({ showDatePicker: false })}
+          onPress={() => this.hide()}
         />
         <ListItem
           hideChevron
@@ -48,6 +48,14 @@ export default class ListItemDatePickerIOS extends React.Component {
         />
       </View>
     )
+  }
+
+  show() {
+    this.setState({ show: true })
+  }
+
+  hide() {
+    this.setState({ show: false })
   }
 }
 

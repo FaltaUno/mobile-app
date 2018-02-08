@@ -67,6 +67,11 @@ export default class ListItemDatePickerAndroid extends React.Component {
       console.warn('Cannot open time picker', message);
     }
   }
+
+  // Noop methods used by the iOS component for show/hide the datepicker when
+  // getting into another field
+  show() {}
+  hide() {}
 }
 
 const styles = StyleSheet.create({
