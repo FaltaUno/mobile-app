@@ -60,7 +60,8 @@ export default {
   },
   matches:{
     noAvailable: `You have no available matches`,
-    addMatch: `Add match`
+    addMatch: `Add match`,
+    deleteMatch: `Delete`
   },
   myProfile: {
     title: `Profile`,

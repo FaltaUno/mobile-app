@@ -58,6 +58,7 @@ export default {
   matches:{
     noAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`,
+    deleteMatch: `Eliminar`
   },
   matchList: {
     title: `Mis partidos`,

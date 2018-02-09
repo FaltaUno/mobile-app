@@ -112,8 +112,9 @@ export default class MyMatchesList extends React.Component {
           })}
         </List>
       </ScrollView>
-    )
+    ) 
   }
+  
 }
 
 const styles = StyleSheet.create({
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emptyMatchesText: {
-    alignSelf: 'center',
+    textAlign: 'center',
     fontSize: 24,
     color: Colors.muted
   }

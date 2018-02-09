@@ -138,7 +138,7 @@ export default class HomeScreen extends React.Component {
         )
       }
       return (
-        <View style={styles.container}>
+        <View style={styles.emptyPlayersContainer}>
           <Text style={styles.emptyPlayers}>{Lang.t(`home.noPlayers`)}</Text>
         </View>
       );
@@ -157,9 +157,15 @@ const styles = StyleSheet.create({
   headerRightIconContainer: {
     marginLeft: 15,
     marginRight: 15,
+  },  
+  emptyPlayersContainer: {
+    flex: 1,
+    marginBottom: 60,
+    justifyContent: 'center',
   },
   emptyPlayers: {
-    marginTop: 10,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 24,
+    color: Colors.muted
   }
 })
