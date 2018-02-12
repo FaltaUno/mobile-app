@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { List, ListItem, FormInput } from 'react-native-elements';
+import { List, ListItem, Input } from 'react-native-elements';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
@@ -27,7 +27,7 @@ export default class MatchForm extends React.Component {
             containerStyle={styles.listItemFullInputTextWrapper}
             titleStyle={styles.listItemFullInputText}
             title={(
-              <FormInput
+              <Input
                 value={this.props.match.name} 
                 containerStyle={styles.listItemFullInputTextContainer}
                 inputStyle={styles.listItemFullInputText}
@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItemFullInputTextWrapper: {
-    paddingBottom: 5,
-    paddingTop: 5,
+    paddingBottom: 0,
+    paddingTop: 0,
   },
   listItemFullInputTextContainer: {
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 0,
+    marginRight: 0,
     borderBottomWidth: 0,
   },
   listItemFullInputText: {

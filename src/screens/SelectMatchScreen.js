@@ -22,8 +22,9 @@ export default class MatchListScreen extends React.Component {
         <Text style={styles.label}>{Lang.t(`matchSelector.label`, player)}</Text>
         <MyMatchesList player={player} onPress={(match) =>this.props.navigation.navigate('Invite', { player, match })} />
         <Button
-          title={Lang.t(`matches.addMatch`)}
-          containerViewStyle={styles.addMatchButtonContainer}
+          text={Lang.t(`matches.addMatch`)}
+          buttonStyle={styles.button}
+          style={styles.buttonContainer}
           backgroundColor={Colors.primary}
           onPress={() => this.props.navigation.navigate('AddMatch')} />
       </View>
@@ -34,12 +35,11 @@ export default class MatchListScreen extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 45,
   },
-  addMatchButtonContainer: {
-    bottom: 0,
-    marginLeft: 0,
-    position: 'absolute',
+  button: {
+    borderRadius: 0,
+  },
+  buttonContainer: {
     width: '100%',
   },
   label: {

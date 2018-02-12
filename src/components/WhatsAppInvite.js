@@ -3,23 +3,24 @@ import React from 'react';
 import moment from 'moment'
 import { format } from 'libphonenumber-js'
 
-import { Linking, Alert } from 'react-native';
+import { Linking, Alert, StyleSheet } from 'react-native';
 import { Button } from 'react-native-elements'
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class WhatsAppInvite extends React.Component {
 
   render() {
     return (
       <Button
-        small
-        iconRight={{ name: 'logo-whatsapp', type: 'ionicon' }}
+        text={Lang.t(`whatsapp.buttonTitle`)}
+        icon={<Ionicons name={'logo-whatsapp'} color={'white'} size={24}/>}
+        iconRight
+        buttonStyle={styles.button}
+        style={styles.buttonContainer}
         onPress={() => this.sendNotification()}
-        backgroundColor={Colors.whatsapp}
-        title={Lang.t(`whatsapp.buttonTitle`)}
-        accessibilityLabel={Lang.t(`whatsapp.buttonTitle`)}
       />
     )
   }
@@ -67,14 +68,15 @@ export default class WhatsAppInvite extends React.Component {
     // https://faq.whatsapp.com/es/android/26000030/?category=5245251
     return `https://api.whatsapp.com/send?text=${text}&phone=${phone}`;
   }
-
-  // const buildText = (playerName, date, place, mapUrl) => {
-
-  //   const dateFromNow = moment().calendar(date) + ' hs.';
-  //   //TODO fetch from Lang
-  //   return `Hola soy ${playerName} y te invito a un doparti el ${dateFromNow}, en ${place}
-  // -------
-  // Mensaje enviado desde Falta Uno App
-  // <Pedí tu acceso de prueba $contacto>`
-  // }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: Colors.whatsapp,
+  },
+  buttonContainer:{
+    paddingLeft: 15,
+    paddingRight: 15,
+    width: '100%',
+  }
+})
