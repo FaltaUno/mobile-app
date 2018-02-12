@@ -28,8 +28,11 @@ export default {
   },
   loading: `Cargando...`,
   location: {
+    service: {
+      unkownError: `Ocurrió un error.\n{{error}}`,
+    },
     error: {
-      androidEmulator: `Ups, esto no va a funcionar en Sketch en el emulador de Android. ¡Prueba en tu dispositivo!`,
+      androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
       permissionDenied: `Permisos denegados`
     }
   },
@@ -59,11 +62,6 @@ export default {
     noAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`,
   },
-  matchList: {
-    title: `Mis partidos`,
-    noMatchesAvailable: `No tenés ningún partido`,
-    addMatch: `Agregar partido`
-  },
   myProfile: {
     title: `Perfil`,
     available: `Estoy disponible para jugar`,
@@ -77,9 +75,11 @@ export default {
     email: `Correo`,
     memberSince: `Miembro desde`,
     phoneNumberEmptyPlacholder: `Seleccione país`,
-    invalidPhoneNumber: `El número telefónico ingresado no coincide con ningún formato válido para tu país`
+    invalidPhoneNumber: `El número telefónico ingresado no coincide con ningún formato válido para tu país`,
+    welcomeTourLabel: `Configuración inicial`
   },
   country: {
+    placeholder: `País`,
     list: {
       AR: `Argentina`,
       UY: `Uruguay`,
@@ -112,5 +112,20 @@ export default {
     buttonTitle: `Enviar un WhatsApp`,
     urlNotSupported: `Can't handle url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
+  },
+  welcome: {
+    hi: {
+      headerTitle: 'Bienvenid@',
+      title: `Bienvenid@, {{displayName}}`,
+      description: `Vamos a configurar la aplicación para sacarle el máximo provecho`,
+      buttonLabel: `Comenzar`
+    },
+    phoneVerification: {
+      title: `Ingresá tu teléfono...`,
+      description: `Vamos enviarte un SMS de verificación`,
+      disclaimer: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
+      buttonLabel: `Recibir código de verificación`,
+      inputPlaceholder: `11 2345 6789`
+    },
   }
 }

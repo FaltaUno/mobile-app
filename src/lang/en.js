@@ -36,13 +36,6 @@ export default {
       permissionDenied: `Permission to access location was denied`
     }
   },
-  matchSelector: {
-    title: `Match selection`,
-    label: `What match do you want to invite {{displayName}} to?`,
-  },
-  myMatches: {
-    title: `My matches`,
-  },
   addMatch: {
     title: `New match`,
     nameLabel: `Match's title`,
@@ -57,6 +50,13 @@ export default {
       },
     }),
     notesLabel: `Notas`
+  },
+  matchSelector: {
+    title: `Match selection`,
+    label: `What match do you want to invite {{displayName}} to?`,
+  },
+  myMatches: {
+    title: `My matches`,
   },
   matches:{
     noAvailable: `You have no available matches`,
@@ -75,7 +75,8 @@ export default {
     email: `Email`,
     memberSince: `Member since`,
     phoneNumberEmptyPlacholder: `Select country`,
-    invalidPhoneNumber: `The phone number doesn't match with any valid format for your country`
+    invalidPhoneNumber: `The phone number doesn't match with any valid format for your country`,
+    welcomeTourLabel: `Initial configuration`
   },
   country: {
     list: {
@@ -110,5 +111,11 @@ export default {
     buttonTitle: `Send a WhatsApp message`,
     urlNotSupported: `Can't handle url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
+  },
+  welcome: {
+    hi: {
+      title: `Welcome`,
+      description: ``,
+    }
   }
 }
