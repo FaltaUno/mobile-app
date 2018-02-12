@@ -27,7 +27,7 @@ export default class MatchAddScreen extends React.Component {
 
     return {
       title: Lang.t('addMatch.title'),
-      headerLeft: (<Text style={styles.headerButton} onPress={() => navigation.goBack()}>{Lang.t('action.close')}</Text>),
+      headerLeft: (<Text style={styles.headerButton} onPress={() => navigation.dispatch({ type: 'Navigation/BACK' })}>{Lang.t('action.close')}</Text>),
       headerRight: headerRight
     }
   }

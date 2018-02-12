@@ -15,7 +15,7 @@ export default class MyProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('myProfile.title'),
     headerLeft: (
-      <Text style={styles.headerButton} onPress={() => navigation.goBack()}>{Lang.t('action.close')}</Text>
+      <Text style={styles.headerButton} onPress={() => navigation.dispatch({ type: 'Navigation/BACK' })}>{Lang.t('action.close')}</Text>
     ),
   });
 
@@ -88,6 +88,17 @@ export default class MyProfileScreen extends React.Component {
       <ScrollView>
         <PlayerCard player={user} />
         <PlayerProfileForm player={user} onChange={(player) => this.updatePlayer(player)}/>
+
+        <List>
+          <ListItem
+            title={Lang.t(`myProfile.welcomeTourLabel`)}
+            hideChevron
+            titleStyle={styles.welcome}
+            containerStyle={styles.welcomeWrapper}
+            onPress={() => { this.props.navigation.navigate('Welcome') }}
+          />
+        </List>
+
         <List containerStyle={styles.logoutContainer}>
           <ListItem
             title={Lang.t(`myProfile.logout`)}
@@ -156,5 +167,12 @@ const styles = StyleSheet.create({
   logout: {
     color: Colors.danger,
     textAlign: 'center',
+  },
+  welcome: {
+    textAlign: 'center',
+  },
+  welcomeWrapper: {
+    paddingTop: 15,
+    paddingBottom: 15,
   },
 })
