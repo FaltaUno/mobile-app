@@ -5,11 +5,11 @@ import { Ionicons, FontAwesome } from '@expo/vector-icons';
 import * as Firebase from 'firebase';
 
 import Colors from 'constants/Colors';
-import Config from 'config'
 import I18n from 'lang'
 
 import RootNavigation from 'navigation/RootNavigation';
 import LoginScreen from 'screens/LoginScreen';
+import FirebaseService from 'services/FirebaseService';
 
 function cacheImages(images) {
   return images.map(image => {
@@ -44,7 +44,7 @@ export default class App extends React.Component {
 
   componentWillMount() {
     // Start firebase connection
-    Firebase.initializeApp(Config.firebase);
+    FirebaseService.init();
   }
 
   render() {
