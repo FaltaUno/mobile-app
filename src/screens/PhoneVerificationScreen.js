@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Platform, Picker } from 'react-native';
 import { Text, Button, List, ListItem } from 'react-native-elements';
-import { parse, format, isValidNumber } from 'libphonenumber-js'
+import { isValidNumber } from 'libphonenumber-js'
 
 import UserService from 'services/UserService';
 import Lang from 'lang';
@@ -10,9 +10,9 @@ import { Ionicons } from '@expo/vector-icons';
 import ListItemToggleComponent from 'components/ListItemToggleComponent';
 import Colors from 'constants/Colors';
 
-export default class HiScreen extends React.Component {
+export default class PhoneVerification extends React.Component {
   static navigationOptions = () => ({
-    headerStyle: styles.headerSlide
+    title: Lang.t('welcome.phoneVerification.headerTitle')
   });
 
   countries = ['AR', 'UY']
@@ -21,6 +21,18 @@ export default class HiScreen extends React.Component {
     country: 'AR',
     phone: '',
     valid: false,
+  }
+
+  constructor(props) {
+    super(props)
+
+    const langParts = Lang.locale.split('-')
+    const country = langParts[1]
+
+    // If the device country is in the array, then choose it
+    if (this.countries.indexOf(country) > -1) {
+      this.state.country = country
+    }
   }
 
   async componentWillMount() {
@@ -74,6 +86,7 @@ export default class HiScreen extends React.Component {
           buttonStyle={[styles.button, this.state.valid ? null : styles.buttonDisabled]}
           iconRight
           icon={<Ionicons name={(Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward')} color="white" size={18} />}
+          onPress={() => this.props.navigation.navigate('PhoneConfirmation', this.state) }
         />
         <Text style={styles.disclaimer}>{Lang.t(`welcome.phoneVerification.disclaimer`)}</Text>
       </View>
@@ -101,15 +114,14 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 0,
   },
-  buttonContainer:{
-    marginTop: 20,
+  buttonContainer: {
     paddingLeft: 20,
     paddingRight: 20,
   },
-  buttonDisabled:{
+  buttonDisabled: {
     backgroundColor: Colors.muted,
   },
-  button:{
+  button: {
     justifyContent: 'flex-start',
     paddingTop: 5,
     paddingBottom: 5,

@@ -121,11 +121,16 @@ export default {
       buttonLabel: `Comenzar`
     },
     phoneVerification: {
+      headerTitle: `Verificación`,
       title: `Ingresá tu teléfono...`,
       description: `Vamos enviarte un SMS de verificación`,
       disclaimer: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
       buttonLabel: `Recibir código de verificación`,
-      inputPlaceholder: `11 2345 6789`
     },
+    phoneConfirmation: {
+      headerTitle: `Confirmación`,
+      title: `Revisá tu teléfono`,
+      description: `Ingresá el código que te enviamos al {{phone}}`
+    }
   }
 }
