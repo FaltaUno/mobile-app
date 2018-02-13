@@ -125,12 +125,22 @@ export default {
       title: `Ingresá tu teléfono...`,
       description: `Vamos enviarte un SMS de verificación`,
       disclaimer: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
-      buttonLabel: `Recibir código de verificación`,
+      buttonLabelFinal: `Recibir código de verificación`,
+      buttonLabel: `Ingresar código de invitación`,
     },
-    phoneConfirmation: {
+    phoneConfirmationFinal: {
       headerTitle: `Confirmación`,
       title: `Revisá tu teléfono`,
-      description: `Ingresá el código que te enviamos al {{phone}}`
+      description: `Te enviamos el código al\n{{phone}}`,
+      buttonLabel: `Ingresá tu código`
+    },
+    phoneConfirmation: {
+      headerTitle: `Invitación`,
+      title: `Ingresá tu invitación`,
+      description: `Escribí el código que te proveímos para el número {{phone}}`,
+      buttonLabel: `Ingresá tu código`,
+      phoneNumberDisabled: `El número de teléfono\n{{phone}}\nno está habilitado para ingresar a la beta cerrada.`,
+      codeDoesNotMatch: `El código ingresado no es correcto`
     }
   }
 }

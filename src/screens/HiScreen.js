@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 
 import UserService from 'services/UserService';
@@ -13,15 +13,24 @@ export default class HiScreen extends React.Component {
   });
 
   state = {
-    user: {}
+    loading: true,
+    user: {},
   }
 
   async componentWillMount() {
     const user = await UserService.me();
-    this.setState({ user })
+    this.setState({ user, loading: false })
   }
 
   render() {
+    if (this.state.loading) {
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" />
+        </View>
+      )
+    }
+
     return (
       <View style={styles.container}>
         <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-hand-outline' : 'md-hand')} size={96}/>
