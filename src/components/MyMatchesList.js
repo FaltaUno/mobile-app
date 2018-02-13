@@ -40,7 +40,7 @@ export default class MyMatchesList extends React.Component {
     })
   }
 
-  fillInitialMatches(matchesSnap){
+  fillInitialMatches(matchesSnap) {
     let matches = this.state.matches.slice()
     // Fill the array and mark the load as finished
     for (let matchSnap of matchesSnap) {
@@ -51,16 +51,14 @@ export default class MyMatchesList extends React.Component {
     this.setState({ loading: false, matches })
   }
 
-  subscribeForMatchesEvents(){
+  subscribeForMatchesEvents() {
     this.userMatchesRef.orderByChild('date').on('child_added', (userMatch) => {
       this.matchesRef.child(userMatch.key).once('value', (matchSnap) => {
         let match = matchSnap.val()
         match.key = matchSnap.key; // ID de firebase
 
         let matches = this.state.matches.slice()
-        let matchIndex = matches.findIndex((matchSearch) => {
-          return matchSearch.key === match.key;
-        })
+        let matchIndex = matches.findIndex((matchSearch) => matchSearch.key === match.key)
 
         // If the match is already preset, update it; otherwise push it
         matchIndex > -1 ? matches[matchIndex] = match : matches.push(match);
@@ -99,8 +97,8 @@ export default class MyMatchesList extends React.Component {
     return (
       <ScrollView>
         <List>
-          {matches.map((match, key) => {
-            return (
+          {
+            matches.map((match, key) => (
               <ListItem
                 key={key}
                 title={match.name}
@@ -108,8 +106,8 @@ export default class MyMatchesList extends React.Component {
                 rightTitle={moment(match.date).calendar()}
                 onPress={() => this.props.onPress(match)}
               />
-            )
-          })}
+            ))
+          }
         </List>
       </ScrollView>
     )
