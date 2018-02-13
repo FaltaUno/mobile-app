@@ -9,23 +9,51 @@ import MyMatchesList from 'components/MyMatchesList';
 import { Ionicons } from '@expo/vector-icons';
 
 export default class MatchListScreen extends React.Component {
+ 
+  state = {
+    deleteMode: false
+  }
+  
+  _setDeleteMode = () => {
+    this.setState({ deleteMode: true })
+  }
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      handleDeleteMode: this._setDeleteMode
+  });
+  }
+
   // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = ({ navigation }) => ({
-    title: Lang.t('myMatches.title'),
-    headerRight: (
-      <Ionicons
-        name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-add'}
-        size={36}
-        style={styles.headerRightIconContainer}
-        color={Colors.tintColor}
-        onPress={() => navigation.navigate('AddMatch')}
-      />
+  static navigationOptions = ({ navigation }) => { 
+    const { params = {} } = navigation.state;   
+    return {
+      title: Lang.t('myMatches.title'),
+      headerRight: (
+        <Ionicons
+          name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-add'}
+          size={36}
+          style={styles.headerRightIconContainer}
+          color={Colors.tintColor}
+          onPress={() => navigation.navigate('AddMatch')}
+        />
+      ),    
+      headerLeft: (
+        <Ionicons
+          name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-trash'}
+          size={36}
+          style={styles.headerRightIconContainer}
+          color={Colors.tintColor}
+          onPress={ () => params.handleDeleteMode() }
+        />
     )
-  })
+  } 
+}
 
   render() {
     return (
-      <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", {match: match})} />
+      <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", {match: match})} 
+      deleteMode={ this.state.deleteMode }  />
     )
   }
 }

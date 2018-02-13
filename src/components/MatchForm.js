@@ -22,7 +22,9 @@ export default class MatchForm extends React.Component {
     },
   }
 
+
   render() {
+
     return (
       <View style={styles.container}>
         <List>
@@ -79,12 +81,7 @@ export default class MatchForm extends React.Component {
             )}
           />
         </List>
-        
-        <Button
-          title={Lang.t(`matches.deleteMatch`)}
-           containerViewStyle={styles.deleteMatchButtonContainer}
-           backgroundColor={Colors.danger}
-           onPress={() => { this._delete(this.props.match) }}/>
+
       </View>
     )
   }
@@ -93,18 +90,6 @@ export default class MatchForm extends React.Component {
     const match = Object.assign({}, this.props.match, data);
     // Trigger the onChange event
     this.props.onChange(match);
-  }
-
-  _delete(match) {
-    const uid = Firebase.auth().currentUser.uid
-    const db = Firebase.database();
-    const matchesRef = db.ref('matches');
-    const userMatchesRef = db.ref(`users/${uid}/matches`);
-
-    matchesRef.child(match.key).remove();
-    userMatchesRef.child(match.key).remove();
-
-    this.props.navigation.navigate("MyMatches")
   }
 }
 

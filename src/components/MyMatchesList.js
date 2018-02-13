@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ScrollView, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { ScrollView, View, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { List, ListItem, Text } from 'react-native-elements';
 
 import * as Firebase from 'firebase';
@@ -13,7 +13,8 @@ export default class MyMatchesList extends React.Component {
 
   state = {
     loading: true,
-    matches: []
+    matches: [],
+    deleteMode: false
   }
 
   constructor(props) {
@@ -23,8 +24,7 @@ export default class MyMatchesList extends React.Component {
     const db = Firebase.database()
     this.matchesRef = db.ref('matches')
     this.userMatchesRef = db.ref(`users/${uid}/matches`);
-
-    // First load
+    
     this.userMatchesRef.orderByChild('date').once('value', (userMatchesRef) => {
       // Get all refs promises
       let matches$ = [];
@@ -37,6 +37,15 @@ export default class MyMatchesList extends React.Component {
         .then((matchesSnap) => { this.fillInitialMatches(matchesSnap) })
         // After that, subscribe to child addition/modification events
         .then(() => { this.subscribeForMatchesEvents() })
+    })
+
+    this.userMatchesRef.on('child_removed', (deletedMatch) => {
+      console.log("Entering on delete event listener")
+      console.log(deletedMatch)
+      let matches = this.state.matches;
+      let index = matches.indexOf(deletedMatch)
+      let actualMatches = matches.splice(index, 1)
+      this.setState( {matches: actualMatches} )
     })
   }
 
@@ -88,7 +97,7 @@ export default class MyMatchesList extends React.Component {
       )
     }
 
-    const matches = this.state.matches
+    let matches = this.state.matches
     if (!matches.length) {
       return (
         <View style={styles.emptyMacthesContainer}>
@@ -96,10 +105,21 @@ export default class MyMatchesList extends React.Component {
         </View>
       )
     }
+
+    let leftIcon;
+    if(this.props.deleteMode === true) {
+      leftIcon = { 
+        name: (Platform.OS === 'ios' ? 'ios' : 'md') + '-trash', 
+        type: 'ionicon',
+        style: { fontSize: 36, color: Colors.danger }
+      }
+    }
+
     return (
       <ScrollView>
         <List>
           {matches.map((match, key) => {
+
             return (
               <ListItem
                 key={key}
@@ -107,6 +127,16 @@ export default class MyMatchesList extends React.Component {
                 subtitle={match.place}
                 rightTitle={moment(match.date).calendar()}
                 onPress={() => this.props.onPress(match)}
+                leftIcon={ leftIcon }
+                leftIconOnPress= { () => {
+                  const uid = Firebase.auth().currentUser.uid
+                  const db = Firebase.database();
+                  const matchesRef = db.ref('matches');
+                  const userMatchesRef = db.ref(`users/${uid}/matches`);
+
+                  matchesRef.child(match.key).remove();
+                  userMatchesRef.child(match.key).remove();
+                } }
               />
             )
           })}
