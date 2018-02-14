@@ -29,6 +29,6 @@ export default StackNavigator(
     },
   },
   {
-    initialRouteName: 'LocationPermission',
+    initialRouteName: 'Hi',
   }
 );

@@ -143,8 +143,8 @@ export default {
       codeDoesNotMatch: `El código ingresado no es correcto`
     },
     phoneConfirmation: {
-      headerTitle: `Bienvenid@`,
-      title: `Bienvenid@`,
+      headerTitle: `Confirmada`,
+      title: `Invitación confirmada`,
       description: `Tu teléfono {{phone}} está dentro de los usuario habilitados para la beta cerrada`,
       buttonLabel: `Continuar con la configuración`,
     },
