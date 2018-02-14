@@ -158,7 +158,6 @@ export default class MyMatchesList extends React.Component {
    */
   _deleteFromStateMatches(matches, match) {
     let index = matches.indexOf(match)
-    //delete matches[index]
     matches.splice(index, 1)
     this.setState( {matches: matches} )
   }
