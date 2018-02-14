@@ -100,7 +100,11 @@ class AuthService {
       // Listen for firstTime change
       // and execute the callback when it changes
       return FirebaseService.db().ref(`users`).child(user.key).child(`firstTime`).on('value', (snap) => {
-        callback(true, snap.val());
+        let firstTime = snap.val()
+        if(firstTime === null){
+          firstTime = undefined
+        }
+        callback(true, firstTime);
       })
     })
   }
