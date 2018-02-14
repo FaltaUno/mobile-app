@@ -123,25 +123,46 @@ export default class MyMatchesList extends React.Component {
                 rightTitle={moment(match.date).calendar()}
                 onPress={() => this.props.onPress(match)}
                 leftIcon={ leftIcon }
-                leftIconOnPress= { () => {
-                  const uid = Firebase.auth().currentUser.uid
-                  const db = Firebase.database();
-                  const matchesRef = db.ref('matches');
-                  const userMatchesRef = db.ref(`users/${uid}/matches`);
-
-                  matchesRef.child(match.key).remove();
-                  userMatchesRef.child(match.key).remove();
-
-                  let index = matches.indexOf(match)
-                  delete matches[index]
-                  this.setState( {matches: matches} )
-                } }
+                leftIconOnPress= { () => { this._deleteMatch(matches, match) } }
               />
             )
           })}
         </List>
       </ScrollView>
     ) 
+  }
+
+  /** This method encapsulates the whole process to delete a match 
+   * @param matches: Component state's matches
+   * @param match: Match to delete
+  */
+  _deleteMatch(matches, match) {
+    this._deleteMatchFromFirebase(match)
+    this._deleteFromStateMatches(matches, match)
+  }
+
+  /** This method encapsulates the process to delete a match from Firebase Realtime DB 
+   * @param match: Match to delete
+  */
+  _deleteMatchFromFirebase(match) {
+    const uid = Firebase.auth().currentUser.uid
+    const db = Firebase.database();
+    const matchesRef = db.ref('matches');
+    const userMatchesRef = db.ref(`users/${uid}/matches`);
+
+    matchesRef.child(match.key).remove();
+    userMatchesRef.child(match.key).remove();
+  }
+
+  /** This method encapsulates the process to delete the match from the already loaded matches
+   * and refresh that list.
+   * @param matches: Component state's matches
+   * @param match: Match to delete
+   */
+  _deleteFromStateMatches(matches, match) {
+    let index = matches.indexOf(match)
+    delete matches[index]
+    this.setState( {matches: matches} )
   }
   
 }
