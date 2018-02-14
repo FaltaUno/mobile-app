@@ -123,10 +123,12 @@ export default {
     phoneInput: {
       headerTitle: `Verificación`,
       title: `Ingresá tu teléfono...`,
-      description: `Vamos enviarte un SMS de verificación`,
-      disclaimer: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
-      buttonLabelFinal: `Recibir código de verificación`,
+      description: `Tené a mano tu código de invitación`,
+      disclaimer: '',
       buttonLabel: `Ingresar código de invitación`,
+      descriptionFinal: `Vamos enviarte un SMS de verificación`,
+      disclaimerFinal: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
+      buttonLabelFinal: `Recibir código de verificación`,
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmación`,
