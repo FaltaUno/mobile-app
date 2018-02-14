@@ -40,12 +40,7 @@ export default class MyMatchesList extends React.Component {
     })
 
     this.userMatchesRef.on('child_removed', (deletedMatch) => {
-      console.log("Entering on delete event listener")
-      console.log(deletedMatch)
-      let matches = this.state.matches;
-      let index = matches.indexOf(deletedMatch)
-      let actualMatches = matches.splice(index, 1)
-      this.setState( {matches: actualMatches} )
+
     })
   }
 
@@ -57,7 +52,7 @@ export default class MyMatchesList extends React.Component {
       match.key = matchSnap.key; // ID de firebase
       matches.push(match)
     }
-    this.setState({ loading: false, matches })
+    this.setState({ loading: false, matches: matches})
   }
 
   subscribeForMatchesEvents(){
@@ -98,7 +93,7 @@ export default class MyMatchesList extends React.Component {
     }
 
     let matches = this.state.matches
-    if (!matches.length) {
+    if (matches.length == 0) {
       return (
         <View style={styles.emptyMacthesContainer}>
           <Text style={styles.emptyMatchesText}>{Lang.t(`matches.noAvailable`)}</Text>
@@ -136,6 +131,10 @@ export default class MyMatchesList extends React.Component {
 
                   matchesRef.child(match.key).remove();
                   userMatchesRef.child(match.key).remove();
+
+                  let index = matches.indexOf(match)
+                  delete matches[index]
+                  this.setState( {matches: matches} )
                 } }
               />
             )

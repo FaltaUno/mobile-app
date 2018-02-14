@@ -15,7 +15,12 @@ export default class MatchListScreen extends React.Component {
   }
   
   _setDeleteMode = () => {
-    this.setState({ deleteMode: true })
+    if(this.state.deleteMode === false) {
+      this.setState({ deleteMode: true })
+    } else {
+      this.setState({ deleteMode: false })
+    }
+    
   }
 
   componentDidMount() {

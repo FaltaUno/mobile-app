@@ -122,11 +122,5 @@ const styles = StyleSheet.create({
   infoText: {
     color: Colors.muted,
     fontSize: 16,
-  },
-  deleteMatchButtonContainer: {
-    bottom: 0,
-    marginLeft: 0,
-    position: 'absolute',
-    width: '100%',
   }
 })
