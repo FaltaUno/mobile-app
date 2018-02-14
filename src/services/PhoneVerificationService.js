@@ -12,12 +12,15 @@ class PhoneVerificationService {
     this.code = parseInt(code)
   }
 
-  async isAvailable() {
+  async verificate(){
     this.serverCode = await FirebaseService.db().ref(`codes`).child(this.phoneNumber).once(`value`).then((snap) => snap.val())
+  }
+
+  isAvailable() {
     return this.serverCode !== null;
   }
 
-  async isCodeOk() {
+  isCodeOk() {
     return this.serverCode === this.code;
   }
 }

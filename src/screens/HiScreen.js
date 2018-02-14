@@ -43,7 +43,7 @@ export default class HiScreen extends React.Component {
           buttonStyle={styles.button}
           iconRight
           icon={<Ionicons name={(Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward')} color="white" size={18}/>}
-          onPress={()=>this.props.navigation.navigate('PhoneVerification')}
+          onPress={()=>this.props.navigation.navigate('PhoneInput')}
         />
       </View>
     );

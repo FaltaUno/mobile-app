@@ -115,12 +115,12 @@ export default {
   },
   welcome: {
     hi: {
-      headerTitle: 'Bienvenid@',
-      title: `Bienvenid@, {{displayName}}`,
+      headerTitle: 'Hola',
+      title: `Hola, {{displayName}}`,
       description: `Vamos a configurar la aplicación para sacarle el máximo provecho`,
       buttonLabel: `Comenzar`
     },
-    phoneVerification: {
+    phoneInput: {
       headerTitle: `Verificación`,
       title: `Ingresá tu teléfono...`,
       description: `Vamos enviarte un SMS de verificación`,
@@ -128,19 +128,41 @@ export default {
       buttonLabelFinal: `Recibir código de verificación`,
       buttonLabel: `Ingresar código de invitación`,
     },
-    phoneConfirmationFinal: {
+    phoneVerificationFinal: {
       headerTitle: `Confirmación`,
       title: `Revisá tu teléfono`,
       description: `Te enviamos el código al\n{{phone}}`,
       buttonLabel: `Ingresá tu código`
     },
-    phoneConfirmation: {
+    phoneVerification: {
       headerTitle: `Invitación`,
       title: `Ingresá tu invitación`,
       description: `Escribí el código que te proveímos para el número {{phone}}`,
       buttonLabel: `Ingresá tu código`,
       phoneNumberDisabled: `El número de teléfono\n{{phone}}\nno está habilitado para ingresar a la beta cerrada.`,
       codeDoesNotMatch: `El código ingresado no es correcto`
+    },
+    phoneConfirmation: {
+      headerTitle: `Bienvenid@`,
+      title: `Bienvenid@`,
+      description: `Tu teléfono {{phone}} está dentro de los usuario habilitados para la beta cerrada`,
+      buttonLabel: `Continuar con la configuración`,
+    },
+    locationPermission: {
+      headerTitle: `Localización`,
+      title: `Localización`,
+      description: `Queremos brindarte las mejores coincidencias dentro de la app`,
+      detail1: `Por este motivo, leeremos tu ubicación cada vez que abras la aplicación para poder ofrecerte datos certeros de jugadores cercanos para que completes tus partidos.`,
+      detail2: `De modo similar, actualizaremos en segundo plano tu ubicación una vez al día para ofrecerle a otros jugadores la posibilidad de invitarte a sus partidos.`,
+      buttonLabel: `Habilitar geolocalización`,
+      permissionNotGranted: `ERROR.\nLa aplicación requiere de los permisos de localización para poder funcionar.\nDe lo contrario no se puede continuar.`,
+      permissionDeniedButtonLabel: `Ir a ajustes y habilitar localización`
+    },
+    configFinish: {
+      headerTitle: `Todo listo`,
+      title: `¡Todo listo!`,
+      description: `Ya podés comenzar a buscar jugadores para tus partidos`,
+      buttonLabel: `¡Empezar a utilizar la app!`,
     }
   }
 }

@@ -1,96 +1,75 @@
 import React from 'react';
-import { View, StyleSheet, Platform, Picker } from 'react-native';
-import { Text, Button, List, ListItem } from 'react-native-elements';
-import { isValidNumber } from 'libphonenumber-js'
+import { Alert, View, StyleSheet, Platform } from 'react-native';
+import { Text, Button } from 'react-native-elements';
+import { format } from 'libphonenumber-js';
 
-import UserService from 'services/UserService';
 import Lang from 'lang';
-
-import { Ionicons } from '@expo/vector-icons';
-import ListItemToggleComponent from 'components/ListItemToggleComponent';
 import Colors from 'constants/Colors';
 
-export default class PhoneVerification extends React.Component {
+import { Ionicons } from '@expo/vector-icons';
+import PhoneVerificationService from 'services/PhoneVerificationService';
+import CodeVerificationInput from 'components/CodeVerificationInput';
+
+export default class PhoneVerificationScreen extends React.Component {
   static navigationOptions = () => ({
     title: Lang.t('welcome.phoneVerification.headerTitle')
   });
 
+  state = {
+    checking: false,
+  }
+
   countries = ['AR', 'UY']
 
-  state = {
-    country: 'AR',
-    phone: '',
-    valid: false,
-  }
-
-  constructor(props) {
-    super(props)
-
-    const langParts = Lang.locale.split('-')
-    const country = langParts[1]
-
-    // If the device country is in the array, then choose it
-    if (this.countries.indexOf(country) > -1) {
-      this.state.country = country
-    }
-  }
-
-  async componentWillMount() {
-    const user = await UserService.me();
-    this.setState({ user })
-  }
-
   render() {
+    const { phone, country } = this.props.navigation.state.params
+
     return (
       <View style={styles.container}>
         <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-call-outline' : 'md-call')} size={96} />
-        <Text h2 style={styles.title}>{Lang.t('welcome.phoneVerification.title', this.state.user)}</Text>
-        <List>
-          <ListItemToggleComponent
-            title={Lang.t('country.placeholder')}
-            rightTitle={Lang.t(`country.list.${this.state.country}`)}
-            activeTitle={Lang.t(`country.list.${this.state.country}`)}
-            component={(
-              <Picker
-                selectedValue={this.state.country}
-                onValueChange={(itemValue) => this.setState({ country: itemValue, phone: '', valid: false })}>
-                {
-                  this.countries.map((country) => (
-                    <Picker.Item label={Lang.t(`country.list.${country}`)} value={country} key={country} />
-                  ))
-                }
-              </Picker>
-            )}
-          />
-          <ListItem
-            title={Lang.t(`country.phoneData.${this.state.country}.code`)}
-            hideChevron
-            textInput
-            textInputValue={this.state.phone}
-            textInputPlaceholder={Lang.t(`country.phoneData.${this.state.country}.placeholder`)}
-            textInputOnChangeText={(phone) => {
-              this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
-            }}
-            textInputOnBlur={(event) => {
-              const phone = event.nativeEvent.text
-              this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
-            }}
-          />
-        </List>
-        <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description')}</Text>
+        <Text h2 style={styles.title}>{Lang.t('welcome.phoneVerification.title')}</Text>
+        <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description', { phone: format({ phone, country }, 'International') })}</Text>
+        <CodeVerificationInput ref={(c) => this._codeVerificationInput = c} disabled={this.state.checking} onFinish={(code) => this.checkCode(code)} />
+        {/* <TextInput placeholder={`123456`} maxLength={6} style={styles.input}/> */}
         <Button
-          disabled={!this.state.valid}
           text={Lang.t('welcome.phoneVerification.buttonLabel')}
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
-          buttonStyle={[styles.button, this.state.valid ? null : styles.buttonDisabled]}
-          iconRight
-          icon={<Ionicons name={(Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward')} color="white" size={18} />}
-          onPress={() => this.props.navigation.navigate('PhoneConfirmation', this.state) }
+          buttonStyle={[styles.button, styles.buttonDisabled]}
+          disabled
+          loading={this.state.checking}
+          loadingStyle={styles.loading}
         />
-        <Text style={styles.disclaimer}>{Lang.t(`welcome.phoneVerification.disclaimer`)}</Text>
       </View>
     );
+  }
+
+  async checkCode(code) {
+    this.setState({ checking: true })
+    const { phone, country } = this.props.navigation.state.params
+
+    const phoneData = { phone, country }
+    const phoneNumber = format(phoneData, 'E.164');
+    const phoneNumberInternational = format(phoneData, 'International');
+
+    let phoneVerification = new PhoneVerificationService(phoneNumber, code)
+    await phoneVerification.verificate()
+
+    if (!phoneVerification.isAvailable()) {
+      Alert.alert(Lang.t('welcome.phoneVerification.phoneNumberDisabled', { phone: phoneNumberInternational }))
+      this.setState({ checking: false })
+      this.props.navigation.goBack();
+      return
+    }
+
+    if (!phoneVerification.isCodeOk()) {
+      Alert.alert(Lang.t('welcome.phoneVerification.codeDoesNotMatch'))
+      this.setState({ checking: false })
+      this._codeVerificationInput.clear()
+      return
+    }
+
+    this.props.navigation.navigate('PhoneConfirmation', phoneData)
   }
 
 }
@@ -100,6 +79,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
+  // input: {
+  //   fontSize: 24,
+  //   borderStyle: 'solid',
+  //   borderBottomWidth: 1,
+  //   borderColor: Colors.muted,
+  //   textAlign: 'center',
+  // },
   icon: {
     textAlign: 'center',
   },
@@ -111,10 +97,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     padding: 20,
-    paddingLeft: 0,
-    paddingRight: 0,
   },
   buttonContainer: {
+    marginTop: 40,
     paddingLeft: 20,
     paddingRight: 20,
   },
@@ -122,22 +107,16 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.muted,
   },
   button: {
-    justifyContent: 'flex-start',
     paddingTop: 5,
     paddingBottom: 5,
-    paddingLeft: 30,
-    paddingRight: 10,
-    width: '100%',
   },
   buttonText: {
     width: '100%',
     textAlign: 'center',
   },
-  disclaimer: {
-    margin: 15,
-    marginBottom: 0,
-    textAlign: 'center',
-    fontStyle: 'italic',
-    fontSize: 12,
+  loading: {
+    paddingTop: 9,
+    paddingBottom: 9,
+    width: '100%',
   }
 });
