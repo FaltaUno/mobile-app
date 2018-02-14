@@ -9,6 +9,7 @@ import Colors from 'constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import PhoneVerificationService from 'services/PhoneVerificationService';
 import CodeVerificationInput from 'components/CodeVerificationInput';
+import UserService from 'services/UserService';
 
 export default class PhoneVerificationScreen extends React.Component {
   static navigationOptions = () => ({
@@ -62,13 +63,16 @@ export default class PhoneVerificationScreen extends React.Component {
       return
     }
 
+    this.setState({ checking: false })
+    this._codeVerificationInput.clear()
+    
     if (!phoneVerification.isCodeOk()) {
       Alert.alert(Lang.t('welcome.phoneVerification.codeDoesNotMatch'))
-      this.setState({ checking: false })
-      this._codeVerificationInput.clear()
       return
     }
 
+    UserService.setMyPhone(phoneData);
+    UserService.myPhoneIsVerified()
     this.props.navigation.navigate('PhoneConfirmation', phoneData)
   }
 

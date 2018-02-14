@@ -12,18 +12,18 @@ import WelcomeNavigator from 'navigation/WelcomeNavigator';
 
 const RootStackNavigator = StackNavigator(
   {
-    Welcome: {
-      screen: WelcomeNavigator,
-    },
     Main: {
       screen: MainTabNavigator,
     },
     MyProfile: {
       screen: MyProfileNavigator,
     },
+    Welcome: {
+      screen: WelcomeNavigator,
+    },
     AddMatch: {
       screen: AddMatchNavigator,
-    }
+    },
   },
   {
     mode: 'modal',

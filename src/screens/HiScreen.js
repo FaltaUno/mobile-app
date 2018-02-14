@@ -17,9 +17,8 @@ export default class HiScreen extends React.Component {
     user: {},
   }
 
-  async componentWillMount() {
-    const user = await UserService.me();
-    this.setState({ user, loading: false })
+  componentWillMount() {
+    UserService.me().then((user) => this.setState({ user, loading: false }))
   }
 
   render() {

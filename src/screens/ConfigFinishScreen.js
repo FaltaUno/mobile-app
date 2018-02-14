@@ -5,6 +5,7 @@ import { Text, Button } from 'react-native-elements';
 import Lang from 'lang';
 
 import { Ionicons } from '@expo/vector-icons';
+import UserService from 'services/UserService';
 
 export default class ConfigFinishScreen extends React.Component {
   static navigationOptions = () => ({
@@ -22,7 +23,7 @@ export default class ConfigFinishScreen extends React.Component {
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
           buttonStyle={styles.button}
-          onPress={() => this.props.navigation.navigate('Main')}
+          onPress={() => UserService.firstTimeIsDone()}
         />
       </View>
     );

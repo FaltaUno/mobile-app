@@ -2,14 +2,16 @@ import React from 'react';
 import { Alert, Image, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import * as Firebase from 'firebase';
 
 import Colors from 'constants/Colors';
 import I18n from 'lang'
 
-import RootNavigation from 'navigation/RootNavigation';
-import LoginScreen from 'screens/LoginScreen';
 import FirebaseService from 'services/FirebaseService';
+import AuthService from 'services/AuthService';
+
+import LoginScreen from 'screens/LoginScreen';
+import WelcomeNavigator from 'navigation/WelcomeNavigator';
+import RootNavigation from 'navigation/RootNavigation';
 
 function cacheImages(images) {
   return images.map(image => {
@@ -27,29 +29,27 @@ function cacheFonts(fonts) {
 
 export default class App extends React.Component {
   state = {
-    isLoadingComplete: false,
-    loggedIn: false
+    loaded: false,
+    screen: 'login',
   };
 
   constructor() {
     super();
-    
+
     // Android timer warning message
     // TL;DR Ignore the warning
     // https://github.com/facebook/react-native/issues/12981#issuecomment-347227544
 
     // eslint-disable-next-line no-console
     console.ignoredYellowBox = ['Setting a timer'];
-  }
 
-  componentWillMount() {
     // Start firebase connection
     FirebaseService.init();
   }
 
   render() {
     // While the assets are loading/caching...
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+    if (!this.state.loaded && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
           startAsync={this._loadResourcesAsync}
@@ -58,12 +58,25 @@ export default class App extends React.Component {
         />
       );
     }
+
+    let navigationScreen;
+    switch (this.state.screen) {
+      case 'main':
+        navigationScreen = <RootNavigation />
+        break;
+      case 'welcome':
+        navigationScreen = <WelcomeNavigator />
+        break
+      default:
+        navigationScreen = <LoginScreen />
+    }
+
     // Once all it's loaded...
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-        {this.state.loggedIn ? <RootNavigation /> : <LoginScreen />}
+        {navigationScreen}
       </View>
     );
   }
@@ -106,18 +119,21 @@ export default class App extends React.Component {
     Alert.alert(error);
   };
 
-  _handleFinishLoading = () => {
+  _handleFinishLoading = () => (
     // Check authentication
-    Firebase.auth().onAuthStateChanged((user) => {
+    AuthService.onAuthStateChanged((isRegistered, firstTime = true) => {
       // Loading is totally completed,
-      // trigger the login page or home based on user existence
-      this.setState({
-        isLoadingComplete: true,
-        loggedIn: user != null
-      });
-    });
+      let screen = 'login'
+      if(isRegistered){
+        screen = 'main'
+      }
+      if(firstTime){
+        screen = 'welcome'
+      }
 
-  };
+      this.setState({ screen, loaded: true })
+    })
+  )
 }
 
 const styles = StyleSheet.create({

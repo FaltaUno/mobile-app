@@ -115,7 +115,7 @@ export default {
   },
   welcome: {
     hi: {
-      headerTitle: 'Hola',
+      headerTitle: 'Antes de empezar...',
       title: `Hola, {{displayName}}`,
       description: `Vamos a configurar la aplicación para sacarle el máximo provecho`,
       buttonLabel: `Comenzar`

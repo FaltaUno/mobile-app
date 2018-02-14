@@ -4,14 +4,19 @@ import Config from 'config'
 class FirebaseService {
 
   app = null //Firebase app
+  FacebookAuthProvider = Firebase.auth.FacebookAuthProvider
 
   init() {
     // Start firebase connection
     this.app = Firebase.initializeApp(Config.firebase);
   }
 
+  auth(){
+    return this.app.auth();
+  }
+
   user() {
-    return this.app.auth().currentUser
+    return this.auth().currentUser
   }
 
   db() {

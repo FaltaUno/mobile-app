@@ -6,6 +6,7 @@ import { Text, Button } from 'react-native-elements';
 import Lang from 'lang';
 
 import { Ionicons } from '@expo/vector-icons';
+import UserService from 'services/UserService';
 
 export default class LocationPermissionScreen extends React.Component {
   static navigationOptions = () => ({
@@ -13,7 +14,8 @@ export default class LocationPermissionScreen extends React.Component {
   });
 
   state = {
-    permissionDenied: false
+    permissionDenied: false,
+    asking: false
   }
 
   render() {
@@ -29,20 +31,17 @@ export default class LocationPermissionScreen extends React.Component {
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
           buttonStyle={styles.button}
+          disabled={this.state.asking}
+          loading={this.state.asking}
+          loadingStyle={styles.loading}
           onPress={() => this.state.permissionDenied ? Linking.openURL('app-settings:') : this.askForLocation()}
         />
       </View>
     );
   }
 
-  // @todo locationService
-  async updateLocationPermission(){
-    let { status } = await Permissions.getAsync(Permissions.LOCATION);
-    this.setState({ permissionDenied: status !== 'granted' })
-  }
-
   async askForLocation() {
-
+    this.setState({ asking: true })
     // Check for permission
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     // If not granted, show the message
@@ -56,8 +55,9 @@ export default class LocationPermissionScreen extends React.Component {
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]
 
-    const data = { locationPermission: true, position, location }
+    UserService.setMyLocation(position, location)
     this.props.navigation.navigate('ConfigFinish')
+    this.setState({ asking: false })
   }
 
 }
@@ -99,6 +99,11 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
   },
   buttonText: {
+    width: '100%',
+  },
+  loading: {
+    paddingTop: 9,
+    paddingBottom: 9,
     width: '100%',
   },
 });
