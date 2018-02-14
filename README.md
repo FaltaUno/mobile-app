@@ -36,6 +36,17 @@ Para que el hotreload y los breakpoint sean tomados correctamente es necesario a
 }
 ```
 
+## Beta cerrada
+
+## Invitaciones
+
+- Habilitar usuario de Facebook en la app de login
+- Agregar un par `{ teléfono: códigoSeisDígitos }` en la tabla `/codes` en Firebase
+
+Listo. Ese usuario ya puede ingresar a la beta cerrada.
+
+## Desarrollo
+
 ### Iniciar el desarrollo
 
 1. `Ctrl + Shift + P`
