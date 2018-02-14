@@ -7,6 +7,7 @@ import Lang from 'lang';
 
 import { Ionicons } from '@expo/vector-icons';
 import UserService from 'services/UserService';
+import Colors from 'constants/Colors';
 
 export default class LocationPermissionScreen extends React.Component {
   static navigationOptions = () => ({
@@ -19,6 +20,18 @@ export default class LocationPermissionScreen extends React.Component {
   }
 
   render() {
+    let goToSettingsButton;
+    if (this.state.permissionDenied) {
+      goToSettingsButton = (
+        <Button
+          text={Lang.t('welcome.locationPermission.goToSettingsButtonLabel')}
+          textStyle={[styles.buttonText, styles.buttonGoToSettingsText]}
+          containerStyle={styles.buttonContainer}
+          buttonStyle={[styles.button, styles.buttonGoToSettingsContainer]}
+          onPress={() => Linking.openURL('app-settings:')}
+        />
+      )
+    }
     return (
       <View style={styles.container}>
         <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-map-outline' : 'md-map')} size={96} />
@@ -26,15 +39,16 @@ export default class LocationPermissionScreen extends React.Component {
         <Text h4 style={styles.description}>{Lang.t('welcome.locationPermission.description')}</Text>
         <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail1')}</Text>
         <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail2')}</Text>
+        {goToSettingsButton}
         <Button
-          text={Lang.t(this.state.permissionDenied ? 'welcome.locationPermission.permissionDeniedButtonLabel' : 'welcome.locationPermission.buttonLabel')}
+          text={Lang.t(this.state.permissionDenied ? 'welcome.locationPermission.permissionCheckButtonLabel' : 'welcome.locationPermission.buttonLabel')}
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
           buttonStyle={styles.button}
           disabled={this.state.asking}
           loading={this.state.asking}
           loadingStyle={styles.loading}
-          onPress={() => this.state.permissionDenied ? Linking.openURL('app-settings:') : this.askForLocation()}
+          onPress={() => this.askForLocation()}
         />
       </View>
     );
@@ -47,7 +61,7 @@ export default class LocationPermissionScreen extends React.Component {
     // If not granted, show the message
     if (status !== 'granted') {
       Alert.alert(Lang.t(`welcome.locationPermission.permissionNotGranted`))
-      return this.setState({ permissionDenied: true })
+      return this.setState({ permissionDenied: true, asking: false })
     }
 
     // Get the position and the reversegeolocation
@@ -88,6 +102,12 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingTop: 10,
     paddingBottom: 10,
+  },
+  buttonGoToSettingsText: {
+    color: Colors.text,
+  },
+  buttonGoToSettingsContainer: {
+    backgroundColor: Colors.light,
   },
   buttonContainer: {
     marginTop: 10,

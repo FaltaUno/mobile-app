@@ -156,7 +156,8 @@ export default {
       detail2: `De modo similar, actualizaremos en segundo plano tu ubicación una vez al día para ofrecerle a otros jugadores la posibilidad de invitarte a sus partidos.`,
       buttonLabel: `Habilitar geolocalización`,
       permissionNotGranted: `ERROR.\nLa aplicación requiere de los permisos de localización para poder funcionar.\nDe lo contrario no se puede continuar.`,
-      permissionDeniedButtonLabel: `Ir a ajustes y habilitar localización`
+      goToSettingsButtonLabel: `Ir a ajustes y habilitar localización`,
+      permissionCheckButtonLabel: `Verificar geolocalización`      
     },
     configFinish: {
       headerTitle: `Todo listo`,
