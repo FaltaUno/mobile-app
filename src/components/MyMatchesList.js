@@ -38,10 +38,6 @@ export default class MyMatchesList extends React.Component {
         // After that, subscribe to child addition/modification events
         .then(() => { this.subscribeForMatchesEvents() })
     })
-
-    this.userMatchesRef.on('child_removed', (deletedMatch) => {
-
-    })
   }
 
   fillInitialMatches(matchesSnap){
@@ -93,6 +89,7 @@ export default class MyMatchesList extends React.Component {
     }
 
     let matches = this.state.matches
+    console.log(matches.length)
     if (matches.length == 0) {
       return (
         <View style={styles.emptyMacthesContainer}>
@@ -161,7 +158,8 @@ export default class MyMatchesList extends React.Component {
    */
   _deleteFromStateMatches(matches, match) {
     let index = matches.indexOf(match)
-    delete matches[index]
+    //delete matches[index]
+    matches.splice(index, 1)
     this.setState( {matches: matches} )
   }
   
