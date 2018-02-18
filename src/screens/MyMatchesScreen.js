@@ -28,12 +28,12 @@ export default class MatchListScreen extends React.Component {
     }
 
     if (params.deleteMode) {
-      delete navigationOptions.headerLeft;
-      navigationOptions.headerRight = (
+      navigationOptions.headerLeft = (
         <Text style={styles.headerButton} onPress={() => navigation.setParams({ deleteMode: false })}>
           {Lang.t('action.done')}
         </Text>
       )
+      delete navigationOptions.headerRight;
     }
 
     return navigationOptions
