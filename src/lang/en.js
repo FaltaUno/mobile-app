@@ -9,6 +9,8 @@ export default {
   },
   action: {
     add: `Add`,
+    delete: `Delete`,
+    done: `Done`,
     edit: `Edit`,
     close: `Close`,
   },
