@@ -1,70 +1,58 @@
 import React from 'react';
 
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Text } from 'react-native';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
 
 import MyMatchesList from 'components/MyMatchesList';
-import { Ionicons } from '@expo/vector-icons';
 
 export default class MatchListScreen extends React.Component {
- 
-  state = {
-    deleteMode: false
-  }
-  
-  _setDeleteMode = () => {
-    if(this.state.deleteMode === false) {
-      this.setState({ deleteMode: true })
-    } else {
-      this.setState({ deleteMode: false })
-    }
-    
-  }
-
-  componentDidMount() {
-    this.props.navigation.setParams({
-      handleDeleteMode: this._setDeleteMode
-  });
-  }
 
   // Dynamic definition so we can get the actual Lang locale
-  static navigationOptions = ({ navigation }) => { 
-    const { params = {} } = navigation.state;   
-    return {
+  static navigationOptions = ({ navigation }) => {
+    const { params = {} } = navigation.state;
+
+    let navigationOptions = {
       title: Lang.t('myMatches.title'),
-      headerRight: (
-        <Ionicons
-          name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-add'}
-          size={36}
-          style={styles.headerRightIconContainer}
-          color={Colors.tintColor}
-          onPress={() => navigation.navigate('AddMatch')}
-        />
-      ),    
       headerLeft: (
-        <Ionicons
-          name={(Platform.OS === 'ios' ? 'ios' : 'md') + '-trash'}
-          size={36}
-          style={styles.headerRightIconContainer}
-          color={Colors.tintColor}
-          onPress={ () => params.handleDeleteMode() }
-        />
-    )
-  } 
-}
+        <Text style={styles.headerButton} onPress={() => navigation.setParams({ deleteMode: true })}>
+          {Lang.t('action.edit')}
+        </Text>
+      ),
+      headerRight: (
+        <Text style={styles.headerButton} onPress={() => navigation.navigate('AddMatch')}>
+          {Lang.t('action.add')}
+        </Text>
+      )
+    }
+
+    if (params.deleteMode) {
+      navigationOptions.headerLeft = (
+        <Text style={styles.headerButton} onPress={() => navigation.setParams({ deleteMode: false })}>
+          {Lang.t('action.done')}
+        </Text>
+      )
+      delete navigationOptions.headerRight;
+    }
+
+    return navigationOptions
+  }
 
   render() {
+    let { state } = this.props.navigation;
+    const deleteMode = state.params ? state.params.deleteMode : false;
     return (
-      <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", {match: match})} 
-      deleteMode={ this.state.deleteMode }  />
+      <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", { match: match })}
+        deleteMode={deleteMode} />
     )
   }
 }
 
 const styles = StyleSheet.create({
-  headerRightIconContainer: {
+  headerButton: {
+    color: Colors.tintColor,
+    fontSize: 16,
     marginLeft: 15,
     marginRight: 15,
   },
