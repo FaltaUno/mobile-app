@@ -89,7 +89,6 @@ export default class MyMatchesList extends React.Component {
     }
 
     let matches = this.state.matches
-    console.log(matches.length)
     if (matches.length == 0) {
       return (
         <View style={styles.emptyMacthesContainer}>
@@ -99,11 +98,11 @@ export default class MyMatchesList extends React.Component {
     }
 
     let leftIcon;
-    if(this.props.deleteMode === true) {
+    if(this.props.deleteMode) {
       leftIcon = { 
-        name: (Platform.OS === 'ios' ? 'ios' : 'md') + '-trash', 
+        name: (Platform.OS === 'ios' ? 'ios' : 'md') + '-close-circle', 
         type: 'ionicon',
-        style: { fontSize: 36, color: Colors.danger }
+        style: styles.leftIcon
       }
     }
 
@@ -178,5 +177,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 24,
     color: Colors.muted
+  },
+  leftIcon: {
+    color: Colors.danger, 
+    fontSize: 24, 
+    marginRight: 12 
   }
 })
