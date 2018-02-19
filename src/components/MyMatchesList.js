@@ -156,6 +156,7 @@ export default class MyMatchesList extends React.Component {
     let index = matches.indexOf(match)
     matches.splice(index, 1)
     this.setState( {matches: matches} )
+    this.props.onMatchDelete(matches)
   }
   
 }

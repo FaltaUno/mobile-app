@@ -72,9 +72,12 @@ export default class MatchAddScreen extends React.Component {
     match.location = { lat: null, lng: null }
     match.locationUrl = null;
     if(match.place){
-      match.locationFound = true;
+      match.locationFound = false;
       match.location = await LocationService.locationFromAddress(match.place)
-      match.locationUrl = LocationService.linkFromLocation(match.location) 
+      if(match.location){
+        match.locationFound = true;
+        match.locationUrl = LocationService.linkFromLocation(match.location)
+      }
     }
 
     // Fb connection
@@ -94,7 +97,7 @@ export default class MatchAddScreen extends React.Component {
 
     db.ref().update(updates).then(() => {
       this.props.navigation.setParams({ isSaving: false });
-      this.props.navigation.goBack();
+      this.props.navigation.dispatch({ type: 'Navigation/BACK' });
     })
   }
 
