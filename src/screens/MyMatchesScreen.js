@@ -44,7 +44,11 @@ export default class MatchListScreen extends React.Component {
     const deleteMode = state.params ? state.params.deleteMode : false;
     return (
       <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", { match: match })}
-        deleteMode={deleteMode} />
+        deleteMode={deleteMode} onMatchDelete={(matches) => {
+          if (matches.length === 0) {
+            this.props.navigation.setParams({ deleteMode: false })
+          }
+        }} />
     )
   }
 }
