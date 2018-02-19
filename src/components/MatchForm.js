@@ -19,6 +19,7 @@ export default class MatchForm extends React.Component {
   }
 
   render() {
+
     return (
       <View style={styles.container}>
         <List>
@@ -28,7 +29,7 @@ export default class MatchForm extends React.Component {
             titleStyle={styles.listItemFullInputText}
             title={(
               <Input
-                value={this.props.match.name} 
+                value={this.props.match.name}
                 containerStyle={styles.listItemFullInputTextContainer}
                 inputStyle={styles.listItemFullInputText}
                 placeholder={Lang.t('addMatch.nameLabel')}
@@ -66,7 +67,7 @@ export default class MatchForm extends React.Component {
             onPress={() => this._datepicker.hide()}
             subtitle={(
               <TextInput
-                value={this.props.match.notes} 
+                value={this.props.match.notes}
                 style={styles.listItemTextArea}
                 multiline={true}
                 onChangeText={(notes) => this._update({ notes })}
@@ -75,6 +76,7 @@ export default class MatchForm extends React.Component {
             )}
           />
         </List>
+
       </View>
     )
   }

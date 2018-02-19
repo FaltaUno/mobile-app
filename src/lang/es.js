@@ -9,6 +9,8 @@ export default {
   },
   action: {
     add: `Agregar`,
+    delete: `Eliminar`,
+    done: `OK`,
     edit: `Editar`,
     close: `Cerrar`,
   },
@@ -61,6 +63,7 @@ export default {
   matches:{
     noAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`,
+    deleteMatch: `Eliminar`
   },
   myProfile: {
     title: `Perfil`,

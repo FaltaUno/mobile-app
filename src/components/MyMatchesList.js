@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ScrollView, View, StyleSheet, ActivityIndicator } from 'react-native';
+import { ScrollView, View, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 import { List, ListItem, Text } from 'react-native-elements';
 
 import * as Firebase from 'firebase';
@@ -13,7 +13,8 @@ export default class MyMatchesList extends React.Component {
 
   state = {
     loading: true,
-    matches: []
+    matches: [],
+    deleteMode: false
   }
 
   constructor(props) {
@@ -23,8 +24,7 @@ export default class MyMatchesList extends React.Component {
     const db = Firebase.database()
     this.matchesRef = db.ref('matches')
     this.userMatchesRef = db.ref(`users/${uid}/matches`);
-
-    // First load
+    
     this.userMatchesRef.orderByChild('date').once('value', (userMatchesRef) => {
       // Get all refs promises
       let matches$ = [];
@@ -48,7 +48,7 @@ export default class MyMatchesList extends React.Component {
       match.key = matchSnap.key; // ID de firebase
       matches.push(match)
     }
-    this.setState({ loading: false, matches })
+    this.setState({ loading: false, matches: matches})
   }
 
   subscribeForMatchesEvents() {
@@ -86,14 +86,24 @@ export default class MyMatchesList extends React.Component {
       )
     }
 
-    const matches = this.state.matches
-    if (!matches.length) {
+    let matches = this.state.matches
+    if (matches.length == 0) {
       return (
         <View style={styles.emptyMacthesContainer}>
           <Text style={styles.emptyMatchesText}>{Lang.t(`matches.noAvailable`)}</Text>
         </View>
       )
     }
+
+    let leftIcon;
+    if(this.props.deleteMode) {
+      leftIcon = { 
+        name: (Platform.OS === 'ios' ? 'ios' : 'md') + '-close-circle', 
+        type: 'ionicon',
+        style: styles.leftIcon
+      }
+    }
+
     return (
       <ScrollView>
         <List>
@@ -105,13 +115,49 @@ export default class MyMatchesList extends React.Component {
                 subtitle={match.place}
                 rightTitle={moment(match.date).calendar()}
                 onPress={() => this.props.onPress(match)}
+                leftIcon={ leftIcon }
+                leftIconOnPress= { () => { this._deleteMatch(matches, match) } }
               />
             ))
           }
         </List>
       </ScrollView>
-    )
+    ) 
   }
+
+  /** This method encapsulates the whole process to delete a match 
+   * @param matches: Component state's matches
+   * @param match: Match to delete
+  */
+  _deleteMatch(matches, match) {
+    this._deleteMatchFromFirebase(match)
+    this._deleteFromStateMatches(matches, match)
+  }
+
+  /** This method encapsulates the process to delete a match from Firebase Realtime DB 
+   * @param match: Match to delete
+  */
+  _deleteMatchFromFirebase(match) {
+    const uid = Firebase.auth().currentUser.uid
+    const db = Firebase.database();
+    const matchesRef = db.ref('matches');
+    const userMatchesRef = db.ref(`users/${uid}/matches`);
+
+    matchesRef.child(match.key).remove();
+    userMatchesRef.child(match.key).remove();
+  }
+
+  /** This method encapsulates the process to delete the match from the already loaded matches
+   * and refresh that list.
+   * @param matches: Component state's matches
+   * @param match: Match to delete
+   */
+  _deleteFromStateMatches(matches, match) {
+    let index = matches.indexOf(match)
+    matches.splice(index, 1)
+    this.setState( {matches: matches} )
+  }
+  
 }
 
 const styles = StyleSheet.create({
@@ -125,8 +171,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   emptyMatchesText: {
-    alignSelf: 'center',
+    textAlign: 'center',
     fontSize: 24,
     color: Colors.muted
+  },
+  leftIcon: {
+    color: Colors.danger, 
+    fontSize: 24, 
+    marginRight: 12 
   }
 })

@@ -17,7 +17,7 @@ export default class MatchAddScreen extends React.Component {
     const { params = {} } = navigation.state;
     let headerRight = (
       <Text style={styles.headerButton} onPress={params.handleSave ? (params.handleSave) : () => null}>
-        {Lang.t(params.match ? 'action.edit' : 'action.add')}
+        {Lang.t(params.match ? 'action.edit' : 'action.done')}
       </Text>
     )
 

@@ -9,6 +9,8 @@ export default {
   },
   action: {
     add: `Add`,
+    delete: `Delete`,
+    done: `Done`,
     edit: `Edit`,
     close: `Close`,
   },
@@ -60,7 +62,8 @@ export default {
   },
   matches:{
     noAvailable: `You have no available matches`,
-    addMatch: `Add match`
+    addMatch: `Add match`,
+    deleteMatch: `Delete`
   },
   myProfile: {
     title: `Profile`,
