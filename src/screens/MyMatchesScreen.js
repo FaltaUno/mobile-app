@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { StyleSheet, Platform, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
