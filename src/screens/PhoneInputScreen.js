@@ -73,7 +73,9 @@ export default class PhoneInputScreen extends React.Component {
             }}
             textInputOnBlur={(event) => {
               const phone = event.nativeEvent.text
-              this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
+              if(phone){
+                this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
+              }
             }}
           />
         </List>
