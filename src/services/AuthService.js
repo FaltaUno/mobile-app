@@ -61,7 +61,7 @@ class AuthService {
     const userRef = FirebaseService.db().ref(`users`).child(firebaseUser.uid)
     let snap = await userRef.once('value')
     let user = snap.val()
-    // If the user is new, stamp the creation time
+    // If the user is new, create with default values
     if (user === null) {
       user = firebaseUser.providerData[0]
       user.createdAt = new Date(firebaseUser.metadata.creationTime).getTime();
@@ -71,8 +71,8 @@ class AuthService {
       user.phoneVerified = false
       user.locationPermission = false
 
-      // Op data
-      user.available = true
+      // Operation data
+      user.available = false
       user.filterByDistance = true
       user.distance = 15
 
