@@ -52,7 +52,7 @@ class UserService {
     const uid = FirebaseService.user().uid
     this.users[uid].firstTime = false
     this.users[uid].available = true
-    this.usersRef.child(uid).update({ firstTime: false })
+    this.usersRef.child(uid).update({ firstTime: false, available: true })
   }
 }
 
