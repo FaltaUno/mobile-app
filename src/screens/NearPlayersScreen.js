@@ -59,9 +59,13 @@ export default class HomeScreen extends React.Component {
     const keys = Object.keys(players)
     if (currUser) {
       keys.forEach((key) => {
-        const playerDistance = parseInt(this._calculatePlayerDistance(currUser, players[key]))
-        if (currUser.distance <= playerDistance) {
-          delete players[key]
+        const player = players[key]
+        // If the user did the welcome tour and has coordinates
+        if( ! player.firstTime && player.position.coords){
+          const playerDistance = parseInt(this._calculatePlayerDistance(currUser, player))
+          if (currUser.distance <= playerDistance) {
+            delete players[key]
+          }
         }
       })
       this.setState({ loading: false, players: players })
