@@ -25,8 +25,7 @@ export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
     this.usersRef = Firebase.database().ref(`users`)
-      .orderByChild(`available`)
-      .equalTo(true);
+      .orderByChild(`available`).equalTo(true);
 
     this.state = {
       loading: true,

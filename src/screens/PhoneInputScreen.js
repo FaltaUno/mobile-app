@@ -47,6 +47,7 @@ export default class PhoneInputScreen extends React.Component {
         <Text h2 style={styles.title}>{Lang.t('welcome.phoneInput.title', this.state.user)}</Text>
         <List>
           <ListItemToggleComponent
+            ref={(c) => { this._countrypicker = c }}
             title={Lang.t('country.placeholder')}
             rightTitle={Lang.t(`country.list.${this.state.country}`)}
             activeTitle={Lang.t(`country.list.${this.state.country}`)}
@@ -77,6 +78,8 @@ export default class PhoneInputScreen extends React.Component {
                 this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
               }
             }}
+            onPress={() => this._countrypicker.hide()}
+            textInputOnFocus={() => this._countrypicker.hide()}
           />
         </List>
         <Text style={styles.description}>{Lang.t('welcome.phoneInput.description')}</Text>
