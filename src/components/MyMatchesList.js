@@ -11,6 +11,14 @@ import Colors from 'constants/Colors';
 
 export default class MyMatchesList extends React.Component {
 
+  static defaultProps = {
+    deleteMode: false,
+    onPress: () => {},
+    onMatchesDidLoad: () => {},
+    onMatchDidAdd: () => {},
+    onMatchDidDelete: () => {},
+  }
+
   state = {
     loading: true,
     matches: [],
@@ -49,6 +57,7 @@ export default class MyMatchesList extends React.Component {
       matches.push(match)
     }
     this.setState({ loading: false, matches: matches})
+    this.props.onMatchesDidLoad(matches)
   }
 
   subscribeForMatchesEvents() {
@@ -69,6 +78,7 @@ export default class MyMatchesList extends React.Component {
         });
 
         this.setState({ matches })
+        this.props.onMatchDidAdd(matches, match)
       })
     })
   }
@@ -156,7 +166,7 @@ export default class MyMatchesList extends React.Component {
     let index = matches.indexOf(match)
     matches.splice(index, 1)
     this.setState( {matches: matches} )
-    this.props.onMatchDelete(matches)
+    this.props.onMatchDidDelete(matches, match)
   }
   
 }

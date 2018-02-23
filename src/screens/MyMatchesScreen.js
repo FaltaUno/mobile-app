@@ -27,7 +27,9 @@ export default class MatchListScreen extends React.Component {
       )
     }
 
-    if (params.deleteMode) {
+    if (params.hideDeleteModeButton === true) {
+      navigationOptions.headerLeft = null
+    } else if (params.deleteMode) {
       navigationOptions.headerLeft = (
         <Text style={styles.headerButton} onPress={() => navigation.setParams({ deleteMode: false })}>
           {Lang.t('action.done')}
@@ -43,14 +45,31 @@ export default class MatchListScreen extends React.Component {
     let { state } = this.props.navigation;
     const deleteMode = state.params ? state.params.deleteMode : false;
     return (
-      <MyMatchesList onPress={(match) => this.props.navigation.navigate("AddMatch", { match: match })}
-        deleteMode={deleteMode} onMatchDelete={(matches) => {
-          if (matches.length === 0) {
-            this.props.navigation.setParams({ deleteMode: false })
-          }
-        }} />
+      <MyMatchesList
+        onPress={(match) => this.props.navigation.navigate("AddMatch", { match: match })}
+        deleteMode={deleteMode}
+        onMatchesDidLoad={(matches) => this.updateHeaderState(matches)}
+        onMatchDidAdd={(matches) => this.disableDeleteMode(matches)}
+        onMatchDidDelete={(matches) => this.updateHeaderState(matches)}
+      />
     )
   }
+
+  disableDeleteMode(matches){
+    const deleteMode = false
+    const hideDeleteModeButton = matches.length === 0
+    this.props.navigation.setParams({ deleteMode, hideDeleteModeButton })
+  }
+
+  updateHeaderState(matches) {
+    let deleteMode = true
+    if (matches.length === 0) {
+      deleteMode = false
+    }
+    const hideDeleteModeButton = matches.length === 0
+    this.props.navigation.setParams({ deleteMode, hideDeleteModeButton })
+  }
+
 }
 
 const styles = StyleSheet.create({
