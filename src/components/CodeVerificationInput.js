@@ -12,14 +12,25 @@ export default class CodeVerificationInput extends React.Component {
   }
 
   render() {
+
+    const commonAttributes = {
+      editable: !this.props.disabled,
+      keyboardType: `numeric`,
+      maxLength: 1,
+      returnKeyLabel: `next`,
+      selectTextOnFocus: true,
+      style: styles.input,
+      underlineColorAndroid: 'rgba(0,0,0,0)',
+    }
+
     return (
       <View style={styles.row}>
-        <TextInput value={this.state.input[0]} editable={!this.props.disabled} ref={(input) => { this._input[0] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 0) }} keyboardType={`numeric`} maxLength={1} returnKeyLabel={`next`} selectTextOnFocus={true} style={styles.input} placeholder={"1"} />
-        <TextInput value={this.state.input[1]} editable={!this.props.disabled} ref={(input) => { this._input[1] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 1) }} keyboardType={`numeric`} maxLength={1} returnKeyLabel={`next`} selectTextOnFocus={true} style={styles.input} placeholder={"2"} />
-        <TextInput value={this.state.input[2]} editable={!this.props.disabled} ref={(input) => { this._input[2] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 2) }} keyboardType={`numeric`} maxLength={1} returnKeyLabel={`next`} selectTextOnFocus={true} style={styles.input} placeholder={"3"} />
-        <TextInput value={this.state.input[3]} editable={!this.props.disabled} ref={(input) => { this._input[3] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 3) }} keyboardType={`numeric`} maxLength={1} returnKeyLabel={`next`} selectTextOnFocus={true} style={styles.input} placeholder={"4"} />
-        <TextInput value={this.state.input[4]} editable={!this.props.disabled} ref={(input) => { this._input[4] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 4) }} keyboardType={`numeric`} maxLength={1} returnKeyLabel={`next`} selectTextOnFocus={true} style={styles.input} placeholder={"5"} />
-        <TextInput value={this.state.input[5]} editable={!this.props.disabled} ref={(input) => { this._input[5] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 5) }} keyboardType={`numeric`} maxLength={1} returnKeyLabel={`next`} selectTextOnFocus={true} style={styles.input} placeholder={"6"} />
+        <TextInput {...commonAttributes} value={this.state.input[0]} ref={(input) => { this._input[0] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 0) }} placeholder={"1"} />
+        <TextInput {...commonAttributes} value={this.state.input[1]} ref={(input) => { this._input[1] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 1) }} placeholder={"2"} />
+        <TextInput {...commonAttributes} value={this.state.input[2]} ref={(input) => { this._input[2] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 2) }} placeholder={"3"} />
+        <TextInput {...commonAttributes} value={this.state.input[3]} ref={(input) => { this._input[3] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 3) }} placeholder={"4"} />
+        <TextInput {...commonAttributes} value={this.state.input[4]} ref={(input) => { this._input[4] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 4) }} placeholder={"5"} />
+        <TextInput {...commonAttributes} value={this.state.input[5]} ref={(input) => { this._input[5] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 5) }} placeholder={"6"} />
       </View>
     )
   }
