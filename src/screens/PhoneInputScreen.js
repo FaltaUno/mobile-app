@@ -9,6 +9,7 @@ import Lang from 'lang';
 import { Ionicons } from '@expo/vector-icons';
 import ListItemToggleComponent from 'components/ListItemToggleComponent';
 import Colors from 'constants/Colors';
+import { Tour } from '../styles';
 
 export default class PhoneInputScreen extends React.Component {
   static navigationOptions = () => ({
@@ -101,6 +102,7 @@ export default class PhoneInputScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  ...Tour,
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -119,24 +121,8 @@ const styles = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 0,
   },
-  buttonContainer: {
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
   buttonDisabled: {
     backgroundColor: Colors.muted,
-  },
-  button: {
-    justifyContent: 'flex-start',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 30,
-    paddingRight: 10,
-    width: '100%',
-  },
-  buttonText: {
-    width: '100%',
-    textAlign: 'center',
   },
   disclaimer: {
     margin: 15,
