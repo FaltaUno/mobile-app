@@ -20,14 +20,12 @@ class LocationService {
    * 3 - Get the position
   */
   async getLocationAsync() {
-    // Check for permission
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    // If not granted, show the message
+    
     if (status !== 'granted') {
       return { locationPermission: false, position: {}, location: {} };
     }
-
-    // Get the position and the reversegeolocation
+    
     let position = await Location.getCurrentPositionAsync({});
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]

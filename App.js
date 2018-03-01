@@ -11,6 +11,8 @@ import I18n from 'lang'
 import RootNavigation from 'navigation/RootNavigation';
 import LoginScreen from 'screens/LoginScreen';
 
+import LocationService from 'services/LocationService';
+
 function cacheImages(images) {
   return images.map(image => {
     if (typeof image === 'string') {
@@ -109,15 +111,32 @@ export default class App extends React.Component {
   _handleFinishLoading = () => {
     // Check authentication
     Firebase.auth().onAuthStateChanged((user) => {
-      // Loading is totally completed,
-      // trigger the login page or home based on user existence
-      this.setState({
-        isLoadingComplete: true,
-        loggedIn: user != null
+      //logged succesful, updating position
+      this._updatePlayerPosition().then( () => {
+        // Loading is totally completed,
+        // trigger the login page or home based on user existence
+        this.setState({
+          isLoadingComplete: true,
+          loggedIn: user != null
+        });
       });
-    });
-
+      })
   };
+
+  /** This method encapsulates the process to update the user position 
+   * 1 - Get the user from firebase
+   * 2 - Update the new position, location and locationPermission
+  */
+  async _updatePlayerPosition() {
+    this.userFb = Firebase.auth().currentUser;
+    this.userRef = Firebase.database().ref(`users/${this.userFb.uid}`)
+    let user = this.userRef.on('value', (snapshot) =>  snapshot.val())
+    const { locationPermission, position, location } = await LocationService.getLocationAsync();
+    user = Object.assign({}, user, { locationPermission, position, location });
+    this.userRef.child('locationPermission').set(locationPermission);
+    this.userRef.child('position').set(position);
+    this.userRef.child('location').set(location);
+  }
 }
 
 const styles = StyleSheet.create({
