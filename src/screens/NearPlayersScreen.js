@@ -7,6 +7,8 @@ import Lang from 'lang';
 import { Ionicons } from '@expo/vector-icons';
 import { Text, ListItem, List } from 'react-native-elements';
 
+import LocationService from '../services/LocationService';
+
 export default class HomeScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => ({
@@ -58,38 +60,15 @@ export default class HomeScreen extends React.Component {
   _filterLongDistancePlayers(players) {
     const currUser = this.state.currUser
     const keys = Object.keys(players)
+    
     if (currUser) {
       keys.forEach((key) => {
-        const playerDistance = parseInt(this._calculatePlayerDistance(currUser, players[key]))
-        if (currUser.distance <= playerDistance) {
-          delete players[key]
-        }
+        const playerDistance = parseInt(LocationService.calculatePlayerDistance(currUser, players[key]))
+        if (currUser.distance <= playerDistance) { delete players[key] }
       })
       this.setState({ loading: false, players: players })
     }
   }
-
-  _calculatePlayerDistance(currUser, otherPlayer) {
-    const R = 6371;
-
-    const cuLat = currUser.position.coords.latitude;
-    const cuLong = currUser.position.coords.longitude;
-    const opLat = otherPlayer.position.coords.latitude;
-    const opLong = otherPlayer.position.coords.longitude;
-
-    let dLat = this._deg2rad(opLat - cuLat);
-    let dLon = this._deg2rad(opLong - cuLong);
-    let a =
-      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this._deg2rad(cuLat)) * Math.cos(this._deg2rad(opLat)) *
-      Math.sin(dLon / 2) * Math.sin(dLon / 2);
-
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    let d = R * c;
-    return d;
-  }
-
-  _deg2rad(deg) { return deg * (Math.PI / 180) }
 
   render() {
     if (this.state.loading) {
@@ -117,7 +96,7 @@ export default class HomeScreen extends React.Component {
                 {
                   playersKeys.map((key) => {
                     if (currUser) {
-                      const dist = parseInt(this._calculatePlayerDistance(currUser, players[key]));
+                      const dist = parseInt(LocationService.calculatePlayerDistance(currUser, players[key]));
                       const player = players[key];
                       return (
                         <ListItem
