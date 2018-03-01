@@ -11,6 +11,8 @@ import Lang from 'lang'
 import Colors from 'constants/Colors';
 import * as Firebase from 'firebase';
 
+import LocationService from '../services/LocationService';
+
 export default class MyProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('myProfile.title'),
@@ -54,7 +56,7 @@ export default class MyProfileScreen extends React.Component {
     this.userRef.child('distance').set(user.distance);
 
     // Get the location and position of the device and upate it online
-    const { locationPermission, position, location } = await this._getLocationAsync();
+    const { locationPermission, position, location } = await LocationService.getLocationAsync();
     user = Object.assign({}, user, { locationPermission, position, location });
     this.userRef.child('locationPermission').set(locationPermission);
     this.userRef.child('position').set(position);
@@ -114,23 +116,7 @@ export default class MyProfileScreen extends React.Component {
     // Get this data just one time and return the data (not the promise)
     return await this.userRef.once('value').then((snapshot) => snapshot.val())
   }
-
-  // @todo: Welcome tour
-  async _getLocationAsync() {
-    // Check for permission
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    // If not granted, show the message
-    if (status !== 'granted') {
-      return { locationPermission: false, position: {}, location: {} };
-    }
-
-    // Get the position and the reversegeolocation
-    let position = await Location.getCurrentPositionAsync({});
-    let locationCheck = await Location.reverseGeocodeAsync(position.coords);
-    let location = locationCheck[0]
-
-    return { locationPermission: true, position, location }
-  }
+  
 }
 
 const styles = StyleSheet.create({

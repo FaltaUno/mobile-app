@@ -1,6 +1,5 @@
-
-
 import GoogleMapsService from 'services/GoogleMapsService'
+import { Location, Permissions } from 'expo';
 
 class LocationService {
   
@@ -12,6 +11,31 @@ class LocationService {
       { latitude: locationSrc.lat, longitude: locationSrc.lng },
     )
   }
+
+  ///////// Determining position mehods /////////
+
+  /** This method is in charge to get the current position of the user 
+   * 1 - it will check if the permission is granted
+   * 2 - if it's not it will ask the user if they want to allow it
+   * 3 - Get the position
+  */
+  async getLocationAsync() {
+    // Check for permission
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    // If not granted, show the message
+    if (status !== 'granted') {
+      return { locationPermission: false, position: {}, location: {} };
+    }
+
+    // Get the position and the reversegeolocation
+    let position = await Location.getCurrentPositionAsync({});
+    let locationCheck = await Location.reverseGeocodeAsync(position.coords);
+    let location = locationCheck[0]
+
+    return { locationPermission: true, position, location }
+  }
+
+  ///////// Calculate Distance methods /////////
 
   /** This method will calculate the distance in KM between two players.
    * @param currPlayer is the player who is using the app.
@@ -38,6 +62,8 @@ class LocationService {
   }
 
   deg2rad(deg) { return deg * (Math.PI / 180) }
+
+
 }
 
 export default new LocationService();
