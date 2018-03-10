@@ -44,7 +44,7 @@ export default class HomeScreen extends React.Component {
     // 2 - Update the new position, location and locationPermission
     let me = Firebase.auth().currentUser;
     let userRef = Firebase.database().ref(`users/${me.uid}`)
-    LocationService.().then(({ locationPermission, position, location }) => {
+    LocationService.getLocationAsync().then(({ locationPermission, position, location }) => {
       userRef.child('locationPermission').set(locationPermission);
       userRef.child('position').set(position);
       userRef.child('location').set(location);
