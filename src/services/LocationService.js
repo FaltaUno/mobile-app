@@ -4,7 +4,7 @@ import GoogleMapsService from 'services/GoogleMapsService'
 
 class LocationService {
   locationFromAddress(place) {
-    return GoogleMapsService.geocodeFromAddress(place)
+    return GoogleMapsService.geocodeFromAddress(place).then(res => res, () => null)
   }
   linkFromLocation(locationDest, locationSrc = { lat: null, lng: null }) {
     return GoogleMapsService.link(

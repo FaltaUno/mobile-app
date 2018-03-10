@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { List, ListItem, FormInput, Button } from 'react-native-elements';
-import { withNavigation } from 'react-navigation';
+import { List, ListItem, Input } from 'react-native-elements';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
@@ -9,9 +8,6 @@ import Colors from 'constants/Colors';
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import ListItemDatePicker from './ListItemDatePicker';
 
-import * as Firebase from 'firebase';
-
-@withNavigation
 export default class MatchForm extends React.Component {
   state = {
     match: {
@@ -21,7 +17,6 @@ export default class MatchForm extends React.Component {
       notes: null,
     },
   }
-
 
   render() {
 
@@ -33,8 +28,8 @@ export default class MatchForm extends React.Component {
             containerStyle={styles.listItemFullInputTextWrapper}
             titleStyle={styles.listItemFullInputText}
             title={(
-              <FormInput
-                value={this.props.match.name} 
+              <Input
+                value={this.props.match.name}
                 containerStyle={styles.listItemFullInputTextContainer}
                 inputStyle={styles.listItemFullInputText}
                 placeholder={Lang.t('addMatch.nameLabel')}
@@ -72,7 +67,7 @@ export default class MatchForm extends React.Component {
             onPress={() => this._datepicker.hide()}
             subtitle={(
               <TextInput
-                value={this.props.match.notes} 
+                value={this.props.match.notes}
                 style={styles.listItemTextArea}
                 multiline={true}
                 onChangeText={(notes) => this._update({ notes })}
@@ -98,12 +93,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listItemFullInputTextWrapper: {
-    paddingBottom: 5,
-    paddingTop: 5,
+    paddingBottom: 0,
+    paddingTop: 0,
   },
   listItemFullInputTextContainer: {
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 0,
+    marginRight: 0,
     borderBottomWidth: 0,
   },
   listItemFullInputText: {

@@ -30,8 +30,11 @@ export default {
   },
   loading: `Cargando...`,
   location: {
+    service: {
+      unkownError: `Ocurrió un error.\n{{error}}`,
+    },
     error: {
-      androidEmulator: `Ups, esto no va a funcionar en Sketch en el emulador de Android. ¡Prueba en tu dispositivo!`,
+      androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
       permissionDenied: `Permisos denegados`
     }
   },
@@ -62,11 +65,6 @@ export default {
     addMatch: `Agregar partido`,
     deleteMatch: `Eliminar`
   },
-  matchList: {
-    title: `Mis partidos`,
-    noMatchesAvailable: `No tenés ningún partido`,
-    addMatch: `Agregar partido`
-  },
   myProfile: {
     title: `Perfil`,
     available: `Estoy disponible para jugar`,
@@ -80,9 +78,11 @@ export default {
     email: `Correo`,
     memberSince: `Miembro desde`,
     phoneNumberEmptyPlacholder: `Seleccione país`,
-    invalidPhoneNumber: `El número telefónico ingresado no coincide con ningún formato válido para tu país`
+    invalidPhoneNumber: `El número telefónico ingresado no coincide con ningún formato válido para tu país`,
+    welcomeTourLabel: `Configuración inicial`
   },
   country: {
+    placeholder: `País`,
     list: {
       AR: `Argentina`,
       UY: `Uruguay`,
@@ -115,5 +115,60 @@ export default {
     buttonTitle: `Enviar un WhatsApp`,
     urlNotSupported: `Can't handle url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
+  },
+  welcome: {
+    hi: {
+      headerTitle: 'Antes de empezar...',
+      title: `Hola, {{displayName}}`,
+      description: `Vamos a configurar la aplicación para sacarle el máximo provecho`,
+      buttonLabel: `Comenzar`
+    },
+    phoneInput: {
+      headerTitle: `Verificación`,
+      title: `Ingresá tu teléfono...`,
+      description: `Tené a mano tu código de invitación`,
+      disclaimer: '',
+      buttonLabel: `Ingresar código de invitación`,
+      descriptionFinal: `Vamos enviarte un SMS de verificación`,
+      disclaimerFinal: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
+      buttonLabelFinal: `Recibir código de verificación`,
+    },
+    phoneVerificationFinal: {
+      headerTitle: `Confirmación`,
+      title: `Revisá tu teléfono`,
+      description: `Te enviamos el código al\n{{phone}}`,
+      buttonLabel: `Ingresá tu código`
+    },
+    phoneVerification: {
+      headerTitle: `Invitación`,
+      title: `Ingresá tu invitación`,
+      description: `Escribí el código que te proveímos para el número {{phone}}`,
+      buttonLabel: `Ingresá tu código`,
+      phoneNumberDisabled: `El número de teléfono\n{{phone}}\nno está habilitado para ingresar a la beta cerrada.`,
+      codeDoesNotMatch: `El código ingresado no es correcto`
+    },
+    phoneConfirmation: {
+      headerTitle: `Confirmada`,
+      title: `Invitación confirmada`,
+      description: `Tu teléfono {{phone}} está dentro de los usuario habilitados para la beta cerrada`,
+      buttonLabel: `Continuar con la configuración`,
+    },
+    locationPermission: {
+      headerTitle: `Localización`,
+      title: `Localización`,
+      description: `Queremos brindarte las mejores coincidencias dentro de la app`,
+      detail1: `Por este motivo, leeremos tu ubicación cada vez que abras la aplicación para poder ofrecerte datos certeros de jugadores cercanos para que completes tus partidos.`,
+      detail2: `De modo similar, actualizaremos en segundo plano tu ubicación una vez al día para ofrecerle a otros jugadores la posibilidad de invitarte a sus partidos.`,
+      buttonLabel: `Habilitar geolocalización`,
+      permissionNotGranted: `ERROR.\nLa aplicación requiere de los permisos de localización para poder funcionar.\nDe lo contrario no se puede continuar.`,
+      goToSettingsButtonLabel: `Ir a ajustes y habilitar localización`,
+      permissionCheckButtonLabel: `Verificar geolocalización`      
+    },
+    configFinish: {
+      headerTitle: `Todo listo`,
+      title: `¡Todo listo!`,
+      description: `Ya podés comenzar a buscar jugadores para tus partidos`,
+      buttonLabel: `¡Empezar a utilizar la app!`,
+    }
   }
 }
