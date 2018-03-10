@@ -130,9 +130,7 @@ export default class App extends React.Component {
   async _updatePlayerPosition() {
     this.userFb = Firebase.auth().currentUser;
     this.userRef = Firebase.database().ref(`users/${this.userFb.uid}`)
-    let user = this.userRef.on('value', (snapshot) =>  snapshot.val())
     const { locationPermission, position, location } = await LocationService.getLocationAsync();
-    user = Object.assign({}, user, { locationPermission, position, location });
     this.userRef.child('locationPermission').set(locationPermission);
     this.userRef.child('position').set(position);
     this.userRef.child('location').set(location);
