@@ -44,16 +44,6 @@ export default class MyProfileScreen extends React.Component {
         <PlayerCard player={user} />
         <PlayerProfileForm player={user} onChange={(player) => UserService.update(player)}/>
 
-        {/*<List>
-          <ListItem
-            title={Lang.t(`myProfile.welcomeTourLabel`)}
-            hideChevron
-            titleStyle={styles.welcome}
-            containerStyle={styles.welcomeWrapper}
-            onPress={() => { this.props.navigation.navigate('Welcome') }}
-          />
-        </List>*/}
-
         <List containerStyle={styles.logoutContainer}>
           <ListItem
             title={Lang.t(`myProfile.logout`)}
@@ -91,12 +81,5 @@ const styles = StyleSheet.create({
   logout: {
     color: Colors.danger,
     textAlign: 'center',
-  },
-  welcome: {
-    textAlign: 'center',
-  },
-  welcomeWrapper: {
-    paddingTop: 15,
-    paddingBottom: 15,
   },
 })
