@@ -40,12 +40,20 @@ export default class HomeScreen extends React.Component {
   }
 
   componentWillMount() {
+    // 1 - Get the user from firebase
+    // 2 - Update the new position, location and locationPermission
     let me = Firebase.auth().currentUser;
-    Firebase.database().ref(`users/${me.uid}`)
-      .on('value', (snapshot) => {
+    let userRef = Firebase.database().ref(`users/${me.uid}`)
+    LocationService.().then(({ locationPermission, position, location }) => {
+      userRef.child('locationPermission').set(locationPermission);
+      userRef.child('position').set(position);
+      userRef.child('location').set(location);
+
+      userRef.on('value', (snapshot) => {
         this.setState({ currUser: snapshot.val() });
         this._getNearPlayers(me.uid);
       })
+    })
   }
 
   /** It uses the userKey to remove the user itself in the players List */
@@ -60,7 +68,7 @@ export default class HomeScreen extends React.Component {
   _filterLongDistancePlayers(players) {
     const currUser = this.state.currUser
     const keys = Object.keys(players)
-    
+
     if (currUser) {
       keys.forEach((key) => {
         const playerDistance = parseInt(LocationService.calculatePlayerDistance(currUser, players[key]))
@@ -136,7 +144,7 @@ const styles = StyleSheet.create({
   headerRightIconContainer: {
     marginLeft: 15,
     marginRight: 15,
-  },  
+  },
   emptyPlayersContainer: {
     flex: 1,
     marginBottom: 60,
