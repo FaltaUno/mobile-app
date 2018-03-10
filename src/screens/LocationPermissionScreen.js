@@ -56,6 +56,13 @@ export default class LocationPermissionScreen extends React.Component {
 
   async askForLocation() {
     this.setState({ asking: true })
+    let { locationServicesEnabled } = await Location.getProviderStatusAsync()
+
+    if (!locationServicesEnabled) {
+      Alert.alert(Lang.t(`welcome.locationPermission.noLocationServicesEnabled`))
+      return this.setState({ permissionDenied: true, asking: false })
+    }
+
     // Check for permission
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     // If not granted, show the message
@@ -65,7 +72,7 @@ export default class LocationPermissionScreen extends React.Component {
     }
 
     // Get the position and the reversegeolocation
-    let position = await Location.getCurrentPositionAsync({});
+    let position = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]
 
@@ -91,7 +98,7 @@ const styles = StyleSheet.create({
   description: {
     textAlign: 'center',
     fontSize: 20,
-    padding: 20,
+    padding: 10,
     paddingLeft: 0,
     paddingRight: 0,
   },
