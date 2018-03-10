@@ -33,7 +33,7 @@ export default class App extends React.Component {
 
   constructor() {
     super();
-    
+
     // Android timer warning message
     // TL;DR Ignore the warning
     // https://github.com/facebook/react-native/issues/12981#issuecomment-347227544
@@ -115,8 +115,7 @@ export default class App extends React.Component {
         isLoadingComplete: true,
         loggedIn: user != null
       });
-    });
-
+    })
   };
 }
 
