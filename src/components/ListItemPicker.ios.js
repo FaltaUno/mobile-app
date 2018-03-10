@@ -2,10 +2,20 @@
 import React from 'react';
 import Colors from 'constants/Colors';
 
-import { Keyboard, StyleSheet, View } from 'react-native';
+import { Keyboard, StyleSheet, View, Picker } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
-export default class ListItemToggleComponent extends React.Component {
+export default class ListItemPickerIOS extends React.Component {
+  static defaultProps = {
+    activeTitle: null,
+    items: [],
+    onValueChange: () => {},
+    ref: undefined,
+    rightTitle: null,
+    selectedValue: undefined,
+    title: null,
+  }
+
   state = {
     show: false
   }
@@ -34,7 +44,13 @@ export default class ListItemToggleComponent extends React.Component {
         />
         <ListItem
           hideChevron
-          title={this.props.component}
+          title={(
+            <Picker
+              selectedValue={this.props.selectedValue}
+              onValueChange={(itemValue) => this.props.onValueChange(itemValue)}>
+              {this.props.items.map((item) => (<Picker.Item label={item.label} value={item.value} key={item.key} />))}
+            </Picker>
+          )}
         />
       </View>
     )
