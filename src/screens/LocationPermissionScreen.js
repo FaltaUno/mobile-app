@@ -1,13 +1,14 @@
 import React from 'react';
-import { Permissions, Location } from 'expo';
 import { View, StyleSheet, Platform, Alert, Linking } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 
 import Lang from 'lang';
+import Colors from 'constants/Colors';
 
 import { Ionicons } from '@expo/vector-icons';
+
 import UserService from 'services/UserService';
-import Colors from 'constants/Colors';
+import LocationService from 'services/LocationService';
 
 export default class LocationPermissionScreen extends React.Component {
   static navigationOptions = () => ({
@@ -56,18 +57,19 @@ export default class LocationPermissionScreen extends React.Component {
 
   async askForLocation() {
     this.setState({ asking: true })
-    // Check for permission
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-    // If not granted, show the message
-    if (status !== 'granted') {
-      Alert.alert(Lang.t(`welcome.locationPermission.permissionNotGranted`))
+
+    let { locationServicesEnabled, locationPermission, position, location } = await LocationService.getLocationAsync()
+
+    if (!locationServicesEnabled) {
+      Alert.alert(Lang.t(`welcome.locationPermission.noLocationServicesEnabled`))
       return this.setState({ permissionDenied: true, asking: false })
     }
 
-    // Get the position and the reversegeolocation
-    let position = await Location.getCurrentPositionAsync({});
-    let locationCheck = await Location.reverseGeocodeAsync(position.coords);
-    let location = locationCheck[0]
+    // If not granted, show the message
+    if (!locationPermission) {
+      Alert.alert(Lang.t(`welcome.locationPermission.permissionNotGranted`))
+      return this.setState({ permissionDenied: true, asking: false })
+    }
 
     UserService.setMyLocation(position, location)
     this.props.navigation.navigate('ConfigFinish')
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
   description: {
     textAlign: 'center',
     fontSize: 20,
-    padding: 20,
+    padding: 10,
     paddingLeft: 0,
     paddingRight: 0,
   },

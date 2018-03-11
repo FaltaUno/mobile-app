@@ -1,11 +1,12 @@
 import React from 'react';
 import { View, StyleSheet, Platform, ActivityIndicator } from 'react-native';
 import { Text, Button } from 'react-native-elements';
+import { Ionicons } from '@expo/vector-icons';
+
+import Lang from 'lang';
+import { Tour } from 'styles';
 
 import UserService from 'services/UserService';
-import Lang from 'lang';
-
-import { Ionicons } from '@expo/vector-icons';
 
 export default class HiScreen extends React.Component {
   static navigationOptions = () => ({
@@ -50,6 +51,7 @@ export default class HiScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  ...Tour,
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -65,21 +67,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 20,
   },
-  buttonContainer:{
-    marginTop: 20,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  button:{
-    justifyContent: 'flex-start',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 30,
-    paddingRight: 10,
-    width: '100%',
-  },
-  buttonText: {
-    width: '100%',
-    textAlign: 'center',
-  }
 });

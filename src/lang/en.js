@@ -162,7 +162,8 @@ export default {
       buttonLabel: `Enable localization`,
       permissionNotGranted: `ERROR.\nThe app requires the localization permissions in order to work.\nOtherwise, we cannot continue.`,
       goToSettingsButtonLabel: `Go to settings and enable localization`,
-      permissionCheckButtonLabel: `Verify localization`      
+      permissionCheckButtonLabel: `Verify localization`,
+      noLocationServicesEnabled: `No location services enabled. The app cannot continue.`,
     },
     configFinish: {
       headerTitle: `Ready`,

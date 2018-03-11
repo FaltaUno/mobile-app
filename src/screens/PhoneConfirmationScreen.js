@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { format } from 'libphonenumber-js';
 
 import Lang from 'lang';
+import { Tour } from '../styles';
 
 export default class PhoneConfirmationScreen extends React.Component {
   static navigationOptions = () => ({
@@ -35,6 +36,7 @@ export default class PhoneConfirmationScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  ...Tour,
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -57,21 +59,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 20,
     padding: 20,
-  },
-  buttonContainer: {
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  button: {
-    justifyContent: 'flex-start',
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 30,
-    paddingRight: 10,
-    width: '100%',
-  },
-  buttonText: {
-    width: '100%',
-    textAlign: 'center',
   },
 });

@@ -157,12 +157,13 @@ export default {
       headerTitle: `Localización`,
       title: `Localización`,
       description: `Queremos brindarte las mejores coincidencias dentro de la app`,
-      detail1: `Por este motivo, leeremos tu ubicación cada vez que abras la aplicación para poder ofrecerte datos certeros de jugadores cercanos para que completes tus partidos.`,
-      detail2: `De modo similar, actualizaremos en segundo plano tu ubicación una vez al día para ofrecerle a otros jugadores la posibilidad de invitarte a sus partidos.`,
+      detail1: `Leeremos tu ubicación al abrir la app para poder ofrecerte datos certeros de jugadores cercanos para que completes tus partidos.`,
+      detail2: `También, actualizaremos en segundo plano tu ubicación una vez al día para ofrecerte partidos cercanos.`,
       buttonLabel: `Habilitar geolocalización`,
       permissionNotGranted: `ERROR.\nLa aplicación requiere de los permisos de localización para poder funcionar.\nDe lo contrario no se puede continuar.`,
       goToSettingsButtonLabel: `Ir a ajustes y habilitar localización`,
-      permissionCheckButtonLabel: `Verificar geolocalización`      
+      permissionCheckButtonLabel: `Verificar geolocalización`,
+      noLocationServicesEnabled: `No se detectó ningún servicio de geolocalización habilitado. No se puede continuar`,
     },
     configFinish: {
       headerTitle: `Todo listo`,

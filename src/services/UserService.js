@@ -34,18 +34,18 @@ class UserService {
     this.usersRef.child(uid).update({ phoneVerified: true })
   }
 
-  setMyLocation(position, location){
-    const uid = FirebaseService.user().uid
+  async setMyLocation(position, location){
+    const me = await this.me()
 
     const data = {
       locationPermission: true,
       position,
       location,
     }
-    let user = Object.assign({}, this.users[uid], data)
+    let user = Object.assign({}, me, data)
 
-    this.users[uid] = user
-    this.usersRef.child(uid).update(data)
+    this.users[me.key] = user
+    this.usersRef.child(me.key).update(data)
   }
 
   firstTimeIsDone(){
