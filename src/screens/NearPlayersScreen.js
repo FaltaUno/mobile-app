@@ -46,7 +46,7 @@ export default class HomeScreen extends React.Component {
       UserService.setMyLocation(position, location);
       UserService.me().then(me => {
         this.setState({ currUser: me });
-        this._getNearPlayers(me.uid);
+        this._getNearPlayers(me.key);
       })
     })
   }
