@@ -2,7 +2,7 @@ import development from 'config/development'
 // import staging from 'config/staging'
 // import production from 'config/production'
 
-const env = process.env.NODE_ENV || 'development';
+// const env = process.env.NODE_ENV || 'development';
 
 const config = {
   development,
@@ -10,4 +10,4 @@ const config = {
   // production,
 };
 
-export default config[env];
+export default config['development'];

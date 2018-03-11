@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "falta-uno-app",
-    "description": "Porque siempre está el que te abandona a último momento...",
-    "slug": "falta-uno-app",
+    "name": "Falta Uno!",
+    "description": "La app que no te deja tirado",
+    "slug": "mobile-app",
     "privacy": "public",
-    "sdkVersion": "24.0.0",
+    "sdkVersion": "25.0.0",
     "platforms": [
       "ios",
       "android"

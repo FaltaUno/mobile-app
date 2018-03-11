@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { Text, SocialIcon } from 'react-native-elements';
-import { Facebook } from 'expo';
 import * as Firebase from 'firebase';
 
+import AuthService from 'services/AuthService'
+
 import Colors from 'constants/Colors';
-import Config from 'config'
 import Lang from 'lang'
 
 export default class LoginScreen extends React.Component {
@@ -20,18 +20,11 @@ export default class LoginScreen extends React.Component {
 
     let toast;
     if (this.state.toast) {
-      toast = <View style={{ backgroundColor: Colors[this.state.toastState] }}>
-        <Text style={(styles.toast)}>{this.state.toastMsg}</Text>
-      </View>
-    }
-
-    const buttonProps = {
-      title: Lang.t('login.loginWithFacebook'),
-      disabled: this.state.isLogging
-    }
-
-    if(this.state.isLogging){
-      buttonProps.title = Lang.t('login.logging');
+      toast = (
+        <View style={{ backgroundColor: Colors[this.state.toastState] }}>
+          <Text style={(styles.toast)}>{this.state.toastMsg}</Text>
+        </View>
+      )
     }
 
     return (
@@ -42,7 +35,7 @@ export default class LoginScreen extends React.Component {
           <Text h4>{Lang.t('app.slogan')}</Text>
         </View>
         <View style={[styles.flexible, styles.end]}>
-          <SocialIcon button type="facebook" onPress={this.login} {...buttonProps} />
+          <SocialIcon button type="facebook" title={this.state.isLogging ? Lang.t('login.logging') : Lang.t('login.loginWithFacebook')} disabled={this.state.isLogging} onPress={this.login} />
         </View>
         <View style={[styles.flexible, styles.end]}>
           {toast}
@@ -53,34 +46,35 @@ export default class LoginScreen extends React.Component {
 
   login = async () => {
     this.setState({ isLogging: true });
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId);
-    if (type === 'success') {
+    const loggedIn = await AuthService.logIn();
 
-      this.setState({
-        toast: true,
-        toastState: 'primary',
-        toastMsg: Lang.t('login.success')
-      });
-
-      // Build Firebase credential with the Facebook access token.
-      const credential = Firebase.auth.FacebookAuthProvider.credential(token);
-      // Sign in with credential from the Facebook user.
-      Firebase.auth().signInWithCredential(credential).catch(() => {
-        this.setState({
-          isLogging: false,
-          toast: true,
-          toastState: 'danger',
-          toastMsg: Lang.t('login.error.auth')
-        });
-      });
-    } else if (type === 'cancel') {
+    // Popup login window
+    if (!loggedIn) {
       this.setState({
         isLogging: false,
         toast: true,
         toastState: 'danger',
         toastMsg: Lang.t('login.error.user_cancelled')
       });
+      return
     }
+
+    // Once the user finishes the input
+    this.setState({
+      toast: true,
+      toastState: 'primary',
+      toastMsg: Lang.t('login.success')
+    });
+
+    // Sign in with credential from the Facebook user.
+    AuthService.signIn().catch(() => {
+      this.setState({
+        isLogging: false,
+        toast: true,
+        toastState: 'danger',
+        toastMsg: Lang.t('login.error.auth')
+      });
+    });
   }
 }
 
@@ -88,14 +82,14 @@ const styles = StyleSheet.create({
   flexible: {
     flex: 1
   },
-  title:{
+  title: {
     marginTop: 20
   },
   imageContainer: {
-    flex: 4, 
-    alignItems: 'center', 
+    flex: 4,
+    alignItems: 'center',
   },
-  end:{
+  end: {
     justifyContent: 'flex-end'
   },
   toast: {

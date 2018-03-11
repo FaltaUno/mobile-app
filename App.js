@@ -2,13 +2,16 @@ import React from 'react';
 import { Alert, Image, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font } from 'expo';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
-import * as Firebase from 'firebase';
 
-import Config from 'config'
+import Colors from 'constants/Colors';
 import I18n from 'lang'
 
-import RootNavigation from 'navigation/RootNavigation';
+import FirebaseService from 'services/FirebaseService';
+import AuthService from 'services/AuthService';
+
 import LoginScreen from 'screens/LoginScreen';
+import WelcomeNavigator from 'navigation/WelcomeNavigator';
+import RootNavigation from 'navigation/RootNavigation';
 
 function cacheImages(images) {
   return images.map(image => {
@@ -26,18 +29,27 @@ function cacheFonts(fonts) {
 
 export default class App extends React.Component {
   state = {
-    isLoadingComplete: false,
-    loggedIn: false
+    loaded: false,
+    screen: 'login',
   };
 
-  componentWillMount(){
-    // Inicializo Firebase
-    Firebase.initializeApp(Config.firebase);
+  constructor() {
+    super();
+
+    // Android timer warning message
+    // TL;DR Ignore the warning
+    // https://github.com/facebook/react-native/issues/12981#issuecomment-347227544
+
+    // eslint-disable-next-line no-console
+    console.ignoredYellowBox = ['Setting a timer'];
+
+    // Start firebase connection
+    FirebaseService.init();
   }
 
   render() {
-    // Cargando
-    if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
+    // While the assets are loading/caching...
+    if (!this.state.loaded && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
           startAsync={this._loadResourcesAsync}
@@ -45,12 +57,26 @@ export default class App extends React.Component {
           onFinish={this._handleFinishLoading}
         />
       );
-    } 
+    }
+
+    let navigationScreen;
+    switch (this.state.screen) {
+      case 'main':
+        navigationScreen = <RootNavigation />
+        break;
+      case 'welcome':
+        navigationScreen = <WelcomeNavigator />
+        break
+      default:
+        navigationScreen = <LoginScreen />
+    }
+
+    // Once all it's loaded...
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
         {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-        {this.state.loggedIn ?  <RootNavigation /> : <LoginScreen />}
+        {navigationScreen}
       </View>
     );
   }
@@ -59,7 +85,7 @@ export default class App extends React.Component {
     // Fonts
     const fontAssets = cacheFonts([
       { ...Ionicons.font },
-      { ...FontAwesome.font },
+      { ...FontAwesome.font }
     ]);
 
     // Images cache
@@ -70,7 +96,15 @@ export default class App extends React.Component {
     ]);
 
     // I18n
-    const langAssets = I18n.initAsync()
+    const langAssets = I18n.initAsync().then(() => {
+      const locale = I18n.locale.split('-')[0];
+      switch (locale) {
+        case 'es':
+          require('moment/locale/es');
+          break;
+        default:
+      }
+    })
 
     return Promise.all([
       ...fontAssets,
@@ -85,26 +119,30 @@ export default class App extends React.Component {
     Alert.alert(error);
   };
 
-  _handleFinishLoading = () => {
-    // Listen for authentication state to change.
-    Firebase.auth().onAuthStateChanged((user) => {
-      // Do other things
-      this.setState({ 
-        isLoadingComplete: true,
-        loggedIn: user != null
-      });
-    });
-    
-  };
+  _handleFinishLoading = () => (
+    // Check authentication
+    AuthService.onAuthStateChanged((isRegistered, firstTime = true) => {
+      // Loading is totally completed,
+      let screen = 'login'
+      if(isRegistered){
+        screen = 'main'
+      }
+      if(firstTime){
+        screen = 'welcome'
+      }
+
+      this.setState({ screen, loaded: true })
+    })
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
   },
   statusBarUnderlay: {
     height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: Colors.whiteTransparent,
   },
 });

@@ -9,16 +9,19 @@ const theme = {
   light: '#f4f4f4',
   dark: '#222',
   warning: '#ffd700', //gold
-  muted: '#999999'
+  muted: '#888888'
 }
 
 const social = {
   facebook: '#3b5998',
+  whatsapp: '#128c7e',
 }
 
 export default {
-  // boilerplate
   tintColor,
+  transparent: 'transparent',
+  text: '#444',
+  listBackground: '#fff',
   tabIconDefault: '#ccc',
   tabIconSelected: tintColor,
   tabBar: '#fefefe',
@@ -28,6 +31,8 @@ export default {
   warningText: '#666804',
   noticeBackground: tintColor,
   noticeText: '#fff',
+  white: '#fff',
+  whiteTransparent: 'rgba(0,0,0,0.2)',
   ... theme,
   ... social,
 };
