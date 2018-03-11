@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 0,
+    width: '100%'
   },
   buttonContainer: {
     width: '100%',

@@ -46,6 +46,8 @@ class UserService {
 
     this.users[me.key] = user
     this.usersRef.child(me.key).update(data)
+
+    return this.me()
   }
 
   firstTimeIsDone(){

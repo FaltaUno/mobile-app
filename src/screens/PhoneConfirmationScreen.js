@@ -41,13 +41,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  // input: {
-  //   fontSize: 24,
-  //   borderStyle: 'solid',
-  //   borderBottomWidth: 1,
-  //   borderColor: Colors.muted,
-  //   textAlign: 'center',
-  // },
   icon: {
     textAlign: 'center',
   },

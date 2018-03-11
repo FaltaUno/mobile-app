@@ -18,8 +18,9 @@ export default class WhatsAppInvite extends React.Component {
         text={Lang.t(`whatsapp.buttonTitle`)}
         icon={<Ionicons name={'logo-whatsapp'} color={'white'} size={24}/>}
         iconRight
+        style={styles.buttonRaw}
         buttonStyle={styles.button}
-        style={styles.buttonContainer}
+        containerStyle={styles.buttonContainer}
         onPress={() => this.sendNotification()}
       />
     )
@@ -73,10 +74,13 @@ export default class WhatsAppInvite extends React.Component {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.whatsapp,
+    width: '100%'
   },
   buttonContainer:{
-    paddingLeft: 15,
-    paddingRight: 15,
-    width: '100%',
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  buttonRaw:{
+    width: '100%'
   }
 })
