@@ -42,6 +42,7 @@ export default {
     title: `New match`,
     nameLabel: `Match's title`,
     placeLabel: `Where?`,
+    addressLabel: `Address`,
     ...Platform.select({
       ios: {
         dateLabel: 'When?',

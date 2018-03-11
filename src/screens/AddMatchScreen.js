@@ -57,6 +57,9 @@ export default class MatchAddScreen extends React.Component {
         onChange={(match) =>
           this.setState({ match }
         )}
+        onPlacePress={(match) => {
+          this.props.navigation.navigate('MatchLocation', { match })
+        }}
       />
     )
   }

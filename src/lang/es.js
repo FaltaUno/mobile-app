@@ -42,6 +42,7 @@ export default {
     title: `Nuevo partido`,
     nameLabel: `Título del partido`,
     placeLabel: `¿Dónde?`,
+    addressLabel: `Dirección`,
     ...Platform.select({
       ios: {
         dateLabel: '¿Cuándo?',
