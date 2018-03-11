@@ -7,7 +7,8 @@ import Lang from 'lang';
 import { Ionicons } from '@expo/vector-icons';
 import { Text, ListItem, List } from 'react-native-elements';
 
-import LocationService from '../services/LocationService';
+import LocationService from 'services/LocationService';
+import UserService from 'services/UserService';
 
 export default class HomeScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -41,15 +42,10 @@ export default class HomeScreen extends React.Component {
   componentWillMount() {
     // 1 - Get the user from firebase
     // 2 - Update the new position, location and locationPermission
-    let me = Firebase.auth().currentUser;
-    let userRef = Firebase.database().ref(`users/${me.uid}`)
-    LocationService.getLocationAsync().then(({ locationPermission, position, location }) => {
-      userRef.child('locationPermission').set(locationPermission);
-      userRef.child('position').set(position);
-      userRef.child('location').set(location);
-
-      userRef.on('value', (snapshot) => {
-        this.setState({ currUser: snapshot.val() });
+    LocationService.getLocationAsync().then(({ position, location }) => {
+      UserService.setMyLocation(position, location);
+      UserService.me().then(me => {
+        this.setState({ currUser: me });
         this._getNearPlayers(me.uid);
       })
     })
@@ -72,7 +68,7 @@ export default class HomeScreen extends React.Component {
       keys.forEach((key) => {
         const player = players[key]
         // If the user did the welcome tour and has coordinates
-        if( ! player.firstTime && player.position.coords){
+        if (!player.firstTime && player.position.coords) {
           const playerDistance = parseInt(LocationService.calculatePlayerDistance(currUser, player))
           if (currUser.distance <= playerDistance) {
             delete players[key]

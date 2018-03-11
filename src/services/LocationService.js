@@ -22,17 +22,22 @@ class LocationService {
    * 3 - Get the position
   */
   async getLocationAsync() {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-    if (status !== 'granted') {
-      return { locationPermission: false, position: {}, location: {} };
+    let { locationServicesEnabled } = await Location.getProviderStatusAsync()
+    if (!locationServicesEnabled) {
+      return { locationServicesEnabled: false, locationPermission: false, position: {}, location: {} };
     }
 
-    let position = await Location.getCurrentPositionAsync({});
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      return { locationServicesEnabled: true, locationPermission: false, position: {}, location: {} };
+    }
+
+    // Important: enableHighAccuracy is needed to work fine in Android
+    let position = await Location.getCurrentPositionAsync({ enableHighAccuracy: true });
     let locationCheck = await Location.reverseGeocodeAsync(position.coords);
     let location = locationCheck[0]
 
-    return { locationPermission: true, position, location }
+    return { locationServicesEnabled: true, locationPermission: true, position, location }
   }
 
   ///////// Calculate Distance methods /////////
