@@ -10,7 +10,7 @@ import { Text, ListItem, List } from 'react-native-elements';
 import LocationService from 'services/LocationService';
 import UserService from 'services/UserService';
 
-export default class HomeScreen extends React.Component {
+export default class NearPlayerScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('home.title'),
@@ -43,8 +43,7 @@ export default class HomeScreen extends React.Component {
     // 1 - Get the user from firebase
     // 2 - Update the new position, location and locationPermission
     LocationService.getLocationAsync().then(({ position, location }) => {
-      UserService.setMyLocation(position, location);
-      UserService.me().then(me => {
+      UserService.setMyLocation(position, location).then(me => {
         this.setState({ currUser: me });
         this._getNearPlayers(me.key);
       })
