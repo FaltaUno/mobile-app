@@ -70,6 +70,14 @@ export default {
     addMatch: `Agregar partido`,
     deleteMatch: `Eliminar`
   },
+  match:{
+    inviteButtonText: `Invitar jugadores`,
+    invitationTitle: `Invitar jugadores`,
+    invitationDialogTitle: `Invitar jugadores`,
+    invitationText: `Hola. Te invito a un partido {{matchDateOn}}*{{matchDate}} hs.* en *"{{matchPlace}}"*.\nSi te interesa, respondeme este mensaje por favor.`,
+    invitationFooter: `*{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`,
+    on: `el`,
+  },
   myProfile: {
     title: `Perfil`,
     available: `Estoy disponible para jugar`,

@@ -1,14 +1,16 @@
 import React from 'react';
+import moment from 'moment'
 import * as Firebase from 'firebase';
 
 // UI
 import Colors from 'constants/Colors';
 import Lang from 'lang'
-import { ActivityIndicator, StyleSheet, Alert } from 'react-native';
-import { Text } from 'react-native-elements';
+import { ActivityIndicator, StyleSheet, Alert, Share, View } from 'react-native';
+import { Text, Button } from 'react-native-elements';
 
 // App
 import MatchForm from 'components/MatchForm';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class AddMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -51,30 +53,82 @@ export default class AddMatchScreen extends React.Component {
   }
 
   render() {
+    let sharingButton;
+    if (this.state.match.key) {
+      sharingButton = (
+        <Button
+          text={Lang.t(`match.inviteButtonText`)}
+          icon={<Ionicons name={'ios-share'} color={'white'} size={24} />}
+          iconRight
+          style={styles.buttonRaw}
+          buttonStyle={styles.button}
+          onPress={() => this.share(this.state.match)}
+        />
+      )
+    }
     return (
-      <MatchForm
-        match={this.state.match}
-        onChange={(match) =>
-          this.setState({ match }
-        )}
-        onPlacePress={(match) => {
-          this.props.navigation.navigate('MatchLocation', { 
-            match, 
-            onLocationSave: (location, match) => this.setState({ match }) 
-          })
-        }}
-      />
+      <View style={styles.container}>
+        <MatchForm
+          match={this.state.match}
+          onChange={(match) =>
+            this.setState({ match }
+            )}
+          onPlacePress={(match) => {
+            this.props.navigation.navigate('MatchLocation', {
+              match,
+              onLocationSave: (location, match) => this.setState({ match })
+            })
+          }}
+        />
+        {sharingButton}
+      </View>
+    )
+  }
+
+  share(match) {
+    let now = moment()
+    let matchDate = moment(match.date)
+    let diff = now.diff(matchDate, 'days')
+    let matchDateOn = ''
+    if(diff < -1 || 1 < diff){
+      matchDateOn = Lang.t(`match.on`) + ' '
+    }
+
+    const inviteText = Lang.t('match.invitationText', {
+      appName: Lang.t('app.name'),
+      matchDate: matchDate.calendar(),
+      matchPlace: match.place,
+      matchDateOn: matchDateOn,
+    });
+
+    const inviteFooter = Lang.t('match.invitationFooter', {
+      appName: Lang.t('app.name'),
+      appSlogan: Lang.t('app.slogan'),
+      appContactEmail: Lang.t('app.contactEmail'),
+    })
+
+    const text = `${inviteText}\n\n----------\n${inviteFooter}\n\n`
+
+    Share.share(
+      {
+        title: Lang.t(`match.invitationTitle`),
+        message: text,
+        url: match.locationUrl,
+      },
+      {
+        dialogTitle: Lang.t(`match.invitationDialogTitle`)
+      }
     )
   }
 
   _handleSave = async () => {
     let match = Object.assign({}, this.state.match)
-    
-    if(!match.name){
+
+    if (!match.name) {
       return Alert.alert(Lang.t(`addMatch.noNameDefined`))
     }
-    
-    if(!match.locationFound){
+
+    if (!match.locationFound) {
       return Alert.alert(Lang.t(`addMatch.noLocationDefined`))
     }
 
@@ -90,7 +144,7 @@ export default class AddMatchScreen extends React.Component {
 
     // Match key detection/creation
     let key = match.key
-    if (! key) {
+    if (!key) {
       key = db.ref().child('matches').push().key
     }
     delete match.key // key is not saved as a field
@@ -118,4 +172,14 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15,
   },
+  container: {
+    flex: 1,
+  },
+  button: {
+    width: '100%',
+    borderRadius: 0,
+  },
+  buttonRaw: {
+    width: '100%'
+  }
 })
