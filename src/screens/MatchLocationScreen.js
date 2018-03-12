@@ -34,7 +34,6 @@ export default class MatchLocationScreen extends React.Component {
 
     return {
       title: Lang.t('addMatch.placeLabel'),
-      headerBackTitle: params.match.name,
       headerRight: headerRight
     }
   }
