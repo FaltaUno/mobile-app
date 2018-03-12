@@ -6,12 +6,20 @@ class LocationService {
   locationFromAddress(place) {
     return GoogleMapsService.geocodeFromAddress(place).then(res => res, () => null)
   }
+  
+  reverseGeocode(latitude, longitude) {
+    return Location.reverseGeocodeAsync({latitude, longitude}).then(res => res, () => null)
+  }
 
   linkFromLocation(locationDest, locationSrc = { lat: null, lng: null }) {
     return GoogleMapsService.link(
       { latitude: locationDest.lat, longitude: locationDest.lng },
       { latitude: locationSrc.lat, longitude: locationSrc.lng },
     )
+  }
+
+  makeLink(location){
+    return GoogleMapsService.link(location);
   }
 
   ///////// Determining position mehods /////////

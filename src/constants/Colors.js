@@ -7,6 +7,8 @@ const theme = {
   danger: '#cd5c5c',//indianred
   primaryLight: '#9acd32',
   light: '#f4f4f4',
+  lightGray: '#dedede',
+  gray: '#aaa',
   dark: '#222',
   warning: '#ffd700', //gold
   muted: '#888888'

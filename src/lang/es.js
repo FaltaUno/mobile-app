@@ -13,6 +13,7 @@ export default {
     done: `OK`,
     edit: `Editar`,
     close: `Cerrar`,
+    cancel: `Cancelar`,
   },
   home: {
     title: `Cerca tuyo`,
@@ -42,6 +43,8 @@ export default {
     title: `Nuevo partido`,
     nameLabel: `Título del partido`,
     placeLabel: `¿Dónde?`,
+    placePlaceholder: `Sin definir`,
+    addressLabel: `Dirección`,
     ...Platform.select({
       ios: {
         dateLabel: '¿Cuándo?',
@@ -52,6 +55,8 @@ export default {
       },
     }),
     notesLabel: `Notas`,
+    noNameDefined: `Indica el título del partido`,
+    noLocationDefined: `Debes indicar el lugar donde se jugará el partido`,
   },
   matchSelector: {
     title: `Selección de partido`,

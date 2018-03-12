@@ -4,12 +4,11 @@ import * as Firebase from 'firebase';
 // UI
 import Colors from 'constants/Colors';
 import Lang from 'lang'
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, Alert } from 'react-native';
 import { Text } from 'react-native-elements';
 
 // App
 import MatchForm from 'components/MatchForm';
-import LocationService from 'services/LocationService';
 
 export default class MatchAddScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -36,6 +35,7 @@ export default class MatchAddScreen extends React.Component {
     match: {
       name: null,
       place: null,
+      locationFound: false,
       date: new Date(),
     },
   }
@@ -57,28 +57,32 @@ export default class MatchAddScreen extends React.Component {
         onChange={(match) =>
           this.setState({ match }
         )}
+        onPlacePress={(match) => {
+          this.props.navigation.navigate('MatchLocation', { 
+            match, 
+            onLocationSave: (location, match) => this.setState({ match }) 
+          })
+        }}
       />
     )
   }
 
   _handleSave = async () => {
+    let match = Object.assign({}, this.state.match)
+    
+    if(!match.name){
+      return Alert.alert(Lang.t(`addMatch.noNameDefined`))
+    }
+    
+    if(!match.locationFound){
+      return Alert.alert(Lang.t(`addMatch.noLocationDefined`))
+    }
+
     // Update state, show ActivityIndicator
     this.props.navigation.setParams({ isSaving: true });
 
     // Get match data
-    let match = Object.assign({}, this.state.match)
     match.createdAt = Firebase.database.ServerValue.TIMESTAMP
-    match.locationFound = false;
-    match.location = { lat: null, lng: null }
-    match.locationUrl = null;
-    if(match.place){
-      match.locationFound = false;
-      match.location = await LocationService.locationFromAddress(match.place)
-      if(match.location){
-        match.locationFound = true;
-        match.locationUrl = LocationService.linkFromLocation(match.location)
-      }
-    }
 
     // Fb connection
     const uid = Firebase.auth().currentUser.uid;

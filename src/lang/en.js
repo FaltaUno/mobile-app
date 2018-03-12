@@ -13,6 +13,7 @@ export default {
     done: `Done`,
     edit: `Edit`,
     close: `Close`,
+    cancel: `Cancel`,
   },
   home: {
     title: `Home`,
@@ -42,6 +43,7 @@ export default {
     title: `New match`,
     nameLabel: `Match's title`,
     placeLabel: `Where?`,
+    addressLabel: `Address`,
     ...Platform.select({
       ios: {
         dateLabel: 'When?',
@@ -51,7 +53,9 @@ export default {
         timeLabel: 'Time',
       },
     }),
-    notesLabel: `Notas`
+    notesLabel: `Notas`,
+    noNameDefined: `You have to define the title for the match`,
+    noLocationDefined: `You have to indicate where the match will be played`,
   },
   matchSelector: {
     title: `Match selection`,
