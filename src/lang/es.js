@@ -55,6 +55,7 @@ export default {
       },
     }),
     notesLabel: `Notas`,
+    noNameDefined: `Indica el título del partido`,
     noLocationDefined: `Debes indicar el lugar donde se jugará el partido`,
   },
   matchSelector: {

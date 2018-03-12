@@ -125,8 +125,12 @@ export default class MatchLocationScreen extends React.Component {
         </View>
         <MapView
           style={styles.map}
-          region={this.state.region}
-          onRegionChange={() => this.onRegionChange}>
+          showsUserLocation={true}
+          showsMyLocationButton={true}
+          initialRegion={this.state.region}
+          onLongPress={(event) => {
+            this.parseMarkerPosition(event.nativeEvent.coordinate)
+          }}>
           {marker}
         </MapView>
       </View>

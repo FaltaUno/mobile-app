@@ -54,6 +54,7 @@ export default {
       },
     }),
     notesLabel: `Notas`,
+    noNameDefined: `You have to define the title for the match`,
     noLocationDefined: `You have to indicate where the match will be played`,
   },
   matchSelector: {

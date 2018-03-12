@@ -70,7 +70,11 @@ export default class MatchAddScreen extends React.Component {
   _handleSave = async () => {
     let match = Object.assign({}, this.state.match)
     
-    if(match.locationFound === false){
+    if(!match.name){
+      return Alert.alert(Lang.t(`addMatch.noNameDefined`))
+    }
+    
+    if(!match.locationFound){
       return Alert.alert(Lang.t(`addMatch.noLocationDefined`))
     }
 
