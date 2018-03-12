@@ -10,7 +10,7 @@ import { Text } from 'react-native-elements';
 // App
 import MatchForm from 'components/MatchForm';
 
-export default class MatchAddScreen extends React.Component {
+export default class AddMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
