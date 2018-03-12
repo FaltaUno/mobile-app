@@ -67,7 +67,7 @@ export default class MatchForm extends React.Component {
           */}
           <ListItem
             title={Lang.t(`addMatch.placeLabel`)}
-            rightTitle={this.props.match.place}
+            rightTitle={this.props.match.place ? this.props.match.place : Lang.t(`addMatch.placePlaceholder`)}
             rightTitleStyle={styles.infoText}
             onPress={() => this.props.onPlacePress(this.props.match)}
             textInputOnFocus={() => this._datepicker.hide()}

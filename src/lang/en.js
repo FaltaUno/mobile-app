@@ -13,6 +13,7 @@ export default {
     done: `Done`,
     edit: `Edit`,
     close: `Close`,
+    cancel: `Cancel`,
   },
   home: {
     title: `Home`,
@@ -52,7 +53,8 @@ export default {
         timeLabel: 'Time',
       },
     }),
-    notesLabel: `Notas`
+    notesLabel: `Notas`,
+    noLocationDefined: `You have to indicate where the match will be played`,
   },
   matchSelector: {
     title: `Match selection`,

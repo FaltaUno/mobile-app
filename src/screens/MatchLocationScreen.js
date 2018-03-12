@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapView } from 'expo';
 import { ActivityIndicator, StyleSheet, Text, View, Platform } from 'react-native';
-import { Input } from 'react-native-elements';
+import { SearchBar } from 'react-native-elements';
 import Lang from 'lang'
 
 // UI
@@ -10,7 +10,6 @@ import Colors from 'constants/Colors';
 // App
 import UserService from 'services/UserService';
 import LocationService from 'services/LocationService';
-import { Ionicons } from '@expo/vector-icons';
 
 export default class MatchLocationScreen extends React.Component {
 
@@ -22,6 +21,8 @@ export default class MatchLocationScreen extends React.Component {
     marker: false,
   }
 
+  geocodeTimeout = false
+
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
@@ -30,10 +31,6 @@ export default class MatchLocationScreen extends React.Component {
         {Lang.t('action.done')}
       </Text>
     )
-
-    if (params.isSaving) {
-      headerRight = <ActivityIndicator style={styles.headerActivityIndicator} />;
-    }
 
     return {
       title: Lang.t('addMatch.placeLabel'),
@@ -62,20 +59,36 @@ export default class MatchLocationScreen extends React.Component {
           longitude: region.longitude,
         }
       }
+
+      this.setState({
+        loading: false,
+        region,
+        marker,
+        match,
+      })
     } else {
       UserService.me().then(me => {
         const coords = me.position.coords
         region.latitude = coords.latitude
         region.longitude = coords.longitude
+
+        marker = {
+          coordinate: {
+            latitude: region.latitude,
+            longitude: region.longitude,
+          }
+        }
+
+        this.setState({
+          loading: false,
+          region,
+          marker,
+          match,
+        })
+
+        this.parseMarkerPosition(marker.coordinate)
       })
     }
-
-    this.setState({
-      loading: false,
-      region,
-      marker,
-      match,
-    })
   }
 
   render() {
@@ -96,22 +109,15 @@ export default class MatchLocationScreen extends React.Component {
       )
     }
 
-    //let inputIcon = (<Ionicons name={(Platform.OS === "ios" ? 'ios' : 'md') + '-search'} size={24} />)
-    let inputIcon;
-    if (this.state.searching) {
-      inputIcon = (<ActivityIndicator size={`small`} />)
-    }
-
     return (
       <View style={styles.container}>
         <View>
-          <Input
-            inputStyle={styles.input}
-            containerStyle={styles.inputContainer}
-            rightIconContainerStyle={styles.inputRightIcon}
+          <SearchBar
+            lightTheme
+            platform={Platform.OS}
             placeholder={Lang.t(`addMatch.addressLabel`)}
             value={this.state.match.place}
-            rightIcon={inputIcon}
+            showLoading={this.state.searching}
             returnKeyType={`search`}
             onChangeText={(place) => this.updatePlace(place)}
             onSubmitEditing={() => this.geocode(this.state.match.place)}
@@ -163,7 +169,7 @@ export default class MatchLocationScreen extends React.Component {
     LocationService.reverseGeocode(latitude, longitude).then((address) => {
       const place = [address[0].name, address[0].city, address[0].region, address[0].country].join(', ')
       this.updatePlace(place)
-      this.updateLocation(latitude, longitude)
+      this.updateLocation(address[0], latitude, longitude)
       this.setState({ searching: false })
     })
   }
@@ -174,15 +180,22 @@ export default class MatchLocationScreen extends React.Component {
     this.setState({ match })
   }
 
-  updateLocation(latitude, longitude) {
+  updateLocation(address, latitude, longitude) {
     let match = Object.assign({}, this.state.match)
-    match.location = { lat:latitude, lng: longitude }
+
+    match.address = address
+    match.location = { lat: latitude, lng: longitude }
     match.locationUrl = LocationService.makeLink({ latitude, longitude })
+    match.locationFound = true
 
     this.setState({ match })
   }
 
   _handleSave = async () => {
+    const match = Object.assign({}, this.state.match)
+    const { place, address, location, locationUrl, locationFound } = match
+    this.props.navigation.state.params.onLocationSave({ place, address, location, locationUrl, locationFound }, match)
+    this.props.navigation.dispatch({ type: 'Navigation/BACK' });
   }
 
 }
@@ -200,16 +213,11 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
-  input: {
-    fontSize: 16,
+  searchBar:{
     color: Colors.dark,
-    flex: 1,
+    backgroundColor: Colors.lightGray,
   },
-  inputContainer: {
-    width: '100%',
-    backgroundColor: Colors.white,
+  searchBarContainer:{
+    backgroundColor: Colors.light,
   },
-  inputRightIcon: {
-    padding: 15,
-  }
 })
