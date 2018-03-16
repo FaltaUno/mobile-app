@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, Image, Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font } from 'expo';
+import { AppLoading, Asset, Font, Location } from 'expo';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 import Colors from 'constants/Colors';
@@ -134,6 +134,17 @@ export default class App extends React.Component {
       this.setState({ screen, loaded: true })
     })
   )
+
+  async _setupApp() {
+    this._loadResourcesAsync()
+
+  } 
+
+  async _trackCurrentPosition() {
+    await Location.watchPositionAsync({enableHighAccuracy:true,timeInterval:500,distanceInterval:0.5}, ({coords}) => {
+      this.setState({ location: coords });
+    });
+  }
 }
 
 const styles = StyleSheet.create({
