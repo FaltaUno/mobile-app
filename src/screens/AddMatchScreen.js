@@ -137,6 +137,7 @@ export default class AddMatchScreen extends React.Component {
 
     // Get match data
     match.createdAt = Firebase.database.ServerValue.TIMESTAMP
+    match.creatorKey = uid
 
     // Fb connection
     const uid = Firebase.auth().currentUser.uid;
