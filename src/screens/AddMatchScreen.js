@@ -134,14 +134,14 @@ export default class AddMatchScreen extends React.Component {
 
     // Update state, show ActivityIndicator
     this.props.navigation.setParams({ isSaving: true });
+    
+    // Fb connection
+    const uid = Firebase.auth().currentUser.uid;
+    const db = Firebase.database();
 
     // Get match data
     match.createdAt = Firebase.database.ServerValue.TIMESTAMP
     match.creatorKey = uid
-
-    // Fb connection
-    const uid = Firebase.auth().currentUser.uid;
-    const db = Firebase.database();
 
     // Match key detection/creation
     let key = match.key
