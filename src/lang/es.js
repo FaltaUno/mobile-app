@@ -125,7 +125,7 @@ export default {
     fromDistance: `A {{distance}} km de distancia`
   },
   whatsapp: {
-    buttonTitle: `Enviar un WhatsApp`,
+    buttonTitle: `Enviar un Whatsapp`,
     urlNotSupported: `Can't handle url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
   },

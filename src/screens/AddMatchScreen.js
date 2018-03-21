@@ -57,7 +57,7 @@ export default class AddMatchScreen extends React.Component {
     if (this.state.match.key) {
       sharingButton = (
         <Button
-          text={Lang.t(`match.inviteButtonText`)}
+          title={Lang.t(`match.inviteButtonText`)}
           icon={<Ionicons name={'ios-share'} color={'white'} size={24} />}
           iconRight
           style={styles.buttonRaw}
