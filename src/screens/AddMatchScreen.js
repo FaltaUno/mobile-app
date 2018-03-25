@@ -36,6 +36,11 @@ export default class AddMatchScreen extends React.Component {
   state = {
     match: {
       name: null,
+      players: {
+        needed: 1,
+        requests: [],
+        approved: [],
+      },
       place: null,
       locationFound: false,
       date: new Date(),
@@ -126,6 +131,10 @@ export default class AddMatchScreen extends React.Component {
 
     if (!match.name) {
       return Alert.alert(Lang.t(`addMatch.noNameDefined`))
+    }
+
+    if (!match.players.needed) {
+      return Alert.alert(Lang.t(`addMatch.noPlayersNeededDefined`))
     }
 
     if (!match.locationFound) {

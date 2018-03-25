@@ -42,6 +42,9 @@ export default {
   addMatch: {
     title: `Nuevo partido`,
     nameLabel: `Título del partido`,
+    playersNeededLabel: `Me faltan`,
+    playerNeededLabel: `Me falta`,
+    playersNeededPlaceholder: `Mín: 1`,
     placeLabel: `¿Dónde?`,
     placePlaceholder: `Sin definir`,
     addressLabel: `Dirección`,
@@ -57,6 +60,7 @@ export default {
     notesLabel: `Notas`,
     noNameDefined: `Indica el título del partido`,
     noLocationDefined: `Debes indicar el lugar donde se jugará el partido`,
+    noPlayersNeededDefined: `Debes indicar la cantidad de jugadores que precisás para tu partido`,
   },
   matchSelector: {
     title: `Selección de partido`,

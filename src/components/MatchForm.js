@@ -1,30 +1,21 @@
-import React from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
-import { List, ListItem, Input } from 'react-native-elements';
+import React from "react";
+import { StyleSheet, TextInput, View } from "react-native";
+import { List, ListItem, Input } from "react-native-elements";
 
-import Lang from 'lang'
-import Colors from 'constants/Colors';
+import Lang from "lang";
+import Colors from "constants/Colors";
 
 // eslint-disable-next-line import/extensions, import/no-unresolved
-import ListItemDatePicker from './ListItemDatePicker';
+import ListItemDatePicker from "./ListItemDatePicker";
 
 export default class MatchForm extends React.Component {
   static defaultProps = {
     onChange: () => {},
     onPlacePress: () => {}
-  }
-
-  state = {
-    match: {
-      name: null,
-      place: null,
-      date: new Date(),
-      notes: null,
-    },
-  }
+  };
 
   render() {
-
+    const { match } = this.props;
     return (
       <View style={styles.container}>
         <List>
@@ -32,44 +23,53 @@ export default class MatchForm extends React.Component {
             hideChevron
             containerStyle={styles.listItemFullInputTextWrapper}
             titleStyle={styles.listItemFullInputText}
-            title={(
+            title={
               <Input
-                value={this.props.match.name}
+                value={match.name}
                 containerStyle={styles.listItemFullInputTextContainer}
                 inputStyle={styles.listItemFullInputText}
-                placeholder={Lang.t('addMatch.nameLabel')}
-                onChangeText={(name) => this._update({ name })}
+                placeholder={Lang.t("addMatch.nameLabel")}
+                onChangeText={name => this._update({ name })}
                 onFocus={() => this._datepicker.hide()}
               />
-            )}
+            }
           />
         </List>
         <List>
-          <ListItemDatePicker
-            ref={(c) => { this._datepicker = c }}
-            date={new Date(this.props.match.date)}
-            minuteInterval={15}
-            onDateChange={(date) => this._update({ date: date.getTime() })}
-            locale={Lang.currentLocale()}
-          />
-          {/*
-           <ListItem
+          <ListItem
             hideChevron
-            title={Lang.t(`addMatch.placeLabel`)}
             textInput
-            textInputValue={this.props.match.place}
-            textInputStyle={styles.infoText}
-            textInputContainerStyle={styles.fullInput}
-            textInputOnChangeText={(place) => this._update({ place })}
-            onPress={() => this._datepicker.hide()}
+            textInputValue={
+              match.players.needed > 0 ? match.players.needed.toString() : ""
+            }
+            textInputPlaceholder={Lang.t(`addMatch.playersNeededPlaceholder`)}
+            textInputKeyboardType={`numeric`}
+            title={Lang.t(
+              match.players.needed === 1
+                ? `addMatch.playerNeededLabel`
+                : `addMatch.playersNeededLabel`
+            )}
+            textInputOnChangeText={needed =>
+              this._updatePlayersNeeded({ needed })
+            }
             textInputOnFocus={() => this._datepicker.hide()}
           />
-          */}
+          <ListItemDatePicker
+            ref={c => {
+              this._datepicker = c;
+            }}
+            date={new Date(match.date)}
+            minuteInterval={15}
+            onDateChange={date => this._update({ date: date.getTime() })}
+            locale={Lang.currentLocale()}
+          />
           <ListItem
             title={Lang.t(`addMatch.placeLabel`)}
-            rightTitle={this.props.match.place ? this.props.match.place : Lang.t(`addMatch.placePlaceholder`)}
+            rightTitle={
+              match.place ? match.place : Lang.t(`addMatch.placePlaceholder`)
+            }
             rightTitleStyle={styles.infoText}
-            onPress={() => this.props.onPlacePress(this.props.match)}
+            onPress={() => this.props.onPlacePress(match)}
             textInputOnFocus={() => this._datepicker.hide()}
           />
         </List>
@@ -79,20 +79,19 @@ export default class MatchForm extends React.Component {
             title={Lang.t(`addMatch.notesLabel`)}
             containerStyle={styles.listItemTextAreaContainer}
             onPress={() => this._datepicker.hide()}
-            subtitle={(
+            subtitle={
               <TextInput
-                value={this.props.match.notes}
+                value={match.notes}
                 style={styles.listItemTextArea}
                 multiline={true}
-                onChangeText={(notes) => this._update({ notes })}
+                onChangeText={notes => this._update({ notes })}
                 onFocus={() => this._datepicker.hide()}
               />
-            )}
+            }
           />
         </List>
-
       </View>
-    )
+    );
   }
 
   _update(data) {
@@ -100,36 +99,46 @@ export default class MatchForm extends React.Component {
     // Trigger the onChange event
     this.props.onChange(match);
   }
+
+  _updatePlayersNeeded(players) {
+    const match = Object.assign({}, this.props.match);
+    match.players = Object.assign({}, match.players, players);
+
+    const { needed } = match.players;
+    match.players.needed = needed < 1 ? 0 : parseInt(needed);
+
+    this.props.onChange(match);
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   listItemFullInputTextWrapper: {
     paddingBottom: 0,
-    paddingTop: 0,
+    paddingTop: 0
   },
   listItemFullInputTextContainer: {
     marginLeft: 0,
     marginRight: 0,
-    borderBottomWidth: 0,
+    borderBottomWidth: 0
   },
   listItemFullInputText: {
     color: Colors.text
   },
   listItemTextAreaContainer: {
-    minHeight: 75,
+    minHeight: 75
   },
   listItemTextArea: {
     color: Colors.muted,
     fontSize: 16,
     marginTop: 0,
     marginLeft: 10,
-    marginRight: 10,
+    marginRight: 10
   },
   infoText: {
     color: Colors.muted,
-    fontSize: 16,
+    fontSize: 16
   }
-})
+});

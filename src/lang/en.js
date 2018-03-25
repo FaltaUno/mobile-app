@@ -42,6 +42,9 @@ export default {
   addMatch: {
     title: `New match`,
     nameLabel: `Match's title`,
+    playersNeededLabel: `I need...`,
+    playerNeededLabel: `I need...`,
+    playersNeededPlaceholder: `Min: 1`,
     placeLabel: `Where?`,
     addressLabel: `Address`,
     ...Platform.select({
@@ -56,6 +59,7 @@ export default {
     notesLabel: `Notas`,
     noNameDefined: `You have to define the title for the match`,
     noLocationDefined: `You have to indicate where the match will be played`,
+    noPlayersNeededDefined: `You have to input the players' quantity you need for your match`,
   },
   matchSelector: {
     title: `Match selection`,
