@@ -40,17 +40,17 @@ export default class MatchForm extends React.Component {
             hideChevron
             textInput
             textInputValue={
-              match.players.needed > 0 ? match.players.needed.toString() : ""
+              match.playersNeeded > 0 ? match.playersNeeded.toString() : ""
             }
             textInputPlaceholder={Lang.t(`addMatch.playersNeededPlaceholder`)}
             textInputKeyboardType={`numeric`}
             title={Lang.t(
-              match.players.needed === 1
+              match.playersNeeded === 1
                 ? `addMatch.playerNeededLabel`
                 : `addMatch.playersNeededLabel`
             )}
-            textInputOnChangeText={needed =>
-              this._updatePlayersNeeded({ needed })
+            textInputOnChangeText={playersNeeded =>
+              this._update({ playersNeeded })
             }
             textInputOnFocus={() => this._datepicker.hide()}
           />
@@ -97,16 +97,6 @@ export default class MatchForm extends React.Component {
   _update(data) {
     const match = Object.assign({}, this.props.match, data);
     // Trigger the onChange event
-    this.props.onChange(match);
-  }
-
-  _updatePlayersNeeded(players) {
-    const match = Object.assign({}, this.props.match);
-    match.players = Object.assign({}, match.players, players);
-
-    const { needed } = match.players;
-    match.players.needed = needed < 1 ? 0 : parseInt(needed);
-
     this.props.onChange(match);
   }
 }
