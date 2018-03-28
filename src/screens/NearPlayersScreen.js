@@ -14,12 +14,19 @@ export default class NearPlayerScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('home.title'),
+    headerStyle: {
+        backgroundColor: Colors.primary 
+    },
+    headerTitleStyle: {
+      color: Colors.light,
+      fontWeight: 'bold'
+    },
     headerRight: (
       <Ionicons
-        name={(Platform.OS === 'ios' ? 'ios-settings-outline' : 'md-settings')}
+        name={(Platform.OS === 'ios' ? 'ios-settings' : 'md-settings')}
         size={28}
         style={styles.headerRightIconContainer}
-        color={Colors.tintColor}
+        color={Colors.dark}
         onPress={() => navigation.navigate('MyProfile')}
       />
     ),
