@@ -21,7 +21,7 @@ export default class PhoneConfirmationScreen extends React.Component {
         <Text h2 style={styles.title}>{Lang.t('welcome.phoneConfirmation.title')}</Text>
         <Text style={styles.description}>{Lang.t('welcome.phoneConfirmation.description', { phone: format({ phone, country }, 'International') })}</Text>
         <Button
-          text={Lang.t('welcome.phoneConfirmation.buttonLabel')}
+          title={Lang.t('welcome.phoneConfirmation.buttonLabel')}
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
           buttonStyle={styles.button}

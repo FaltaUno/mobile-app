@@ -67,6 +67,7 @@ export default class PhoneInputScreen extends React.Component {
             hideChevron
             textInput
             textInputValue={this.state.phone}
+            textInputKeyboardType='phone-pad'
             textInputPlaceholder={Lang.t(`country.phoneData.${this.state.country}.placeholder`)}
             textInputOnChangeText={(phone) => {
               this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
@@ -84,7 +85,7 @@ export default class PhoneInputScreen extends React.Component {
         <Text style={styles.description}>{Lang.t('welcome.phoneInput.description')}</Text>
         <Button
           disabled={!this.state.valid}
-          text={Lang.t('welcome.phoneInput.buttonLabel')}
+          title={Lang.t('welcome.phoneInput.buttonLabel')}
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
           buttonStyle={[styles.button, this.state.valid ? null : styles.buttonDisabled]}
