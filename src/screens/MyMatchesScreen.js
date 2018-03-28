@@ -12,9 +12,15 @@ export default class MyMatchesScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
-
     let navigationOptions = {
       title: Lang.t('myMatches.title'),
+      headerStyle: {
+        backgroundColor: Colors.primary 
+      },
+      headerTitleStyle: {
+        color: Colors.light,
+        fontWeight: 'bold'
+      },
       headerLeft: (
         <Text style={styles.headerButton} onPress={() => navigation.setParams({ deleteMode: true })}>
           {Lang.t('action.edit')}
@@ -74,7 +80,7 @@ export default class MyMatchesScreen extends React.Component {
 
 const styles = StyleSheet.create({
   headerButton: {
-    color: Colors.tintColor,
+    color: Colors.dark,
     fontSize: 16,
     marginLeft: 15,
     marginRight: 15,

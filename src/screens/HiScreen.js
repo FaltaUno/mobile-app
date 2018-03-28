@@ -7,6 +7,7 @@ import Lang from 'lang';
 import { Tour } from 'styles';
 
 import UserService from 'services/UserService';
+import Colors from '../constants/Colors';
 
 export default class HiScreen extends React.Component {
   static navigationOptions = () => ({
@@ -37,7 +38,7 @@ export default class HiScreen extends React.Component {
         <Text h1 style={styles.title}>{Lang.t('welcome.hi.title', this.state.user)}</Text>
         <Text h4 style={styles.description}>{Lang.t('welcome.hi.description')}</Text>
         <Button 
-          text={Lang.t('welcome.hi.buttonLabel')}
+          title={Lang.t('welcome.hi.buttonLabel')}
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
           buttonStyle={styles.button}
@@ -55,6 +56,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: Colors.light
   },
   icon: {
     textAlign: 'center'
@@ -66,5 +68,5 @@ const styles = StyleSheet.create({
   description:{
     textAlign: 'center',
     padding: 20,
-  },
+  }
 });
