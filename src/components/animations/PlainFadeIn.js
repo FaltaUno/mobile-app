@@ -1,7 +1,7 @@
 import React from 'react';
-import { Animated, Text, View } from 'react-native';
+import { Animated, Text, View, Easing } from 'react-native';
 
-class FadeInView extends React.Component {
+class PlainFadeIn extends React.Component {
   state = {
     fadeAnim: new Animated.Value(0),
   }
@@ -33,4 +33,4 @@ class FadeInView extends React.Component {
   }
 }
 
-export default FadeInView;
+export default PlainFadeIn;
