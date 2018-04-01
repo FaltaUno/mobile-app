@@ -46,7 +46,7 @@ export default class MyMatchesScreen extends React.Component {
     const deleteMode = state.params ? state.params.deleteMode : false;
     return (
       <MyMatchesList
-        onPress={(match) => this.props.navigation.navigate("AddMatch", { match: match })}
+        onPress={(match) => this.props.navigation.navigate("MyMatch", { match })}
         deleteMode={deleteMode}
         onMatchesDidLoad={(matches) => this.updateHeaderState(matches)}
         onMatchDidAdd={(matches) => this.disableDeleteMode(matches)}

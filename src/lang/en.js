@@ -68,6 +68,11 @@ export default {
   myMatches: {
     title: `My matches`,
   },
+  myMatch: {
+    invitesLabel: `Players`,
+    requestedInvitesLabel: `Pending review`,
+    approvedInvitesLabel: `Approved`
+  },
   matches:{
     noAvailable: `You have no available matches`,
     addMatch: `Add match`,

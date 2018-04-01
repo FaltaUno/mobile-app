@@ -69,6 +69,11 @@ export default {
   myMatches: {
     title: `Mis partidos`,
   },
+  myMatch: {
+    invitesLabel: `Jugadores`,
+    requestedInvitesLabel: `Pendientes de revisión`,
+    approvedInvitesLabel: `Aprobados`
+  },
   matches:{
     noAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`,

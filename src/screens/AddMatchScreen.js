@@ -1,16 +1,14 @@
 import React from 'react';
-import moment from 'moment'
 import * as Firebase from 'firebase';
 
 // UI
 import Colors from 'constants/Colors';
 import Lang from 'lang'
-import { ActivityIndicator, StyleSheet, Alert, Share, View } from 'react-native';
-import { Text, Button } from 'react-native-elements';
+import { ActivityIndicator, StyleSheet, Alert, View } from 'react-native';
+import { Text } from 'react-native-elements';
 
 // App
 import MatchForm from 'components/MatchForm';
-import { Ionicons } from '@expo/vector-icons';
 
 export default class AddMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -54,19 +52,6 @@ export default class AddMatchScreen extends React.Component {
   }
 
   render() {
-    let sharingButton;
-    if (this.state.match.key) {
-      sharingButton = (
-        <Button
-          text={Lang.t(`match.inviteButtonText`)}
-          icon={<Ionicons name={'ios-share'} color={'white'} size={24} />}
-          iconRight
-          style={styles.buttonRaw}
-          buttonStyle={styles.button}
-          onPress={() => this.share(this.state.match)}
-        />
-      )
-    }
     return (
       <View style={styles.container}>
         <MatchForm
@@ -81,44 +66,7 @@ export default class AddMatchScreen extends React.Component {
             })
           }}
         />
-        {sharingButton}
       </View>
-    )
-  }
-
-  share(match) {
-    let now = moment()
-    let matchDate = moment(match.date)
-    let diff = now.diff(matchDate, 'days')
-    let matchDateOn = ''
-    if(diff < -1 || 1 < diff){
-      matchDateOn = Lang.t(`match.on`) + ' '
-    }
-
-    const inviteText = Lang.t('match.invitationText', {
-      appName: Lang.t('app.name'),
-      matchDate: matchDate.calendar(),
-      matchPlace: match.place,
-      matchDateOn: matchDateOn,
-    });
-
-    const inviteFooter = Lang.t('match.invitationFooter', {
-      appName: Lang.t('app.name'),
-      appSlogan: Lang.t('app.slogan'),
-      appContactEmail: Lang.t('app.contactEmail'),
-    })
-
-    const text = `${inviteText}\n\n----------\n${inviteFooter}\n\n`
-
-    Share.share(
-      {
-        title: Lang.t(`match.invitationTitle`),
-        message: text,
-        url: match.locationUrl,
-      },
-      {
-        dialogTitle: Lang.t(`match.invitationDialogTitle`)
-      }
     )
   }
 
@@ -157,7 +105,7 @@ export default class AddMatchScreen extends React.Component {
 
     let updates = {};
     updates['/matches/' + key] = match;
-    updates['/users/' + uid + '/matches/' + key] = { date: new Date(match.date) }
+    updates['/users/' + uid + '/matches/' + key] = { date: match.date }
 
     db.ref().update(updates).then(() => {
       this.props.navigation.setParams({ isSaving: false });
@@ -180,12 +128,5 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  button: {
-    width: '100%',
-    borderRadius: 0,
-  },
-  buttonRaw: {
-    width: '100%'
   }
 })
