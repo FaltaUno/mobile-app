@@ -72,7 +72,11 @@ export default {
   myMatch: {
     invitesLabel: `Jugadores`,
     requestedInvitesLabel: `Pendientes de revisión`,
-    approvedInvitesLabel: `Aprobados`
+    noPendingInvites: `No hay pedidos de invitación pendientes`,
+    approvedInvitesLabel: `Aprobados`,
+    noApprovedInvites: `No hay jugadores aprobados`,
+    rejectedInvitesLabel: `Rechazados`,
+    noRejectedInvites: `No hay jugadores rechazados`,
   },
   matches:{
     noAvailable: `No tenés ningún partido`,

@@ -70,8 +70,12 @@ export default {
   },
   myMatch: {
     invitesLabel: `Players`,
-    requestedInvitesLabel: `Pending review`,
-    approvedInvitesLabel: `Approved`
+    requestedInvitesLabel: `Pending for review`,
+    noPendingInvites: `There are no invite requests for review`,
+    approvedInvitesLabel: `Approved players`,
+    noApprovedInvites: `There are no approved players`,
+    rejectedInvitesLabel: `Rejected players`,
+    noRejectedInvites: `There are no rejected players`,
   },
   matches:{
     noAvailable: `You have no available matches`,

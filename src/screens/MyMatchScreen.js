@@ -2,7 +2,7 @@ import React from "react";
 import * as firebase from "firebase";
 import moment from "moment";
 
-import { ScrollView, Share, StyleSheet, View } from "react-native";
+import { Platform, ScrollView, Share, StyleSheet, View } from "react-native";
 import { List, ListItem, Text } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -18,7 +18,7 @@ export default class MyMatchScreen extends React.Component {
       title: match.name,
       headerRight: (
         <Ionicons
-          name={"ios-share-outline"}
+          name={(Platform.OS === "ios" ? "ios" : "md") + "-share-outline"}
           color={Colors.tintColor}
           size={28}
           style={styles.headerButton}
@@ -31,8 +31,10 @@ export default class MyMatchScreen extends React.Component {
   };
 
   state = {
-    invites: {},
-    users: {}
+    users: {},
+    pendingInvites: {},
+    approvedInvites: {},
+    rejectedInvites: {}
   };
 
   componentDidMount() {
@@ -61,60 +63,194 @@ export default class MyMatchScreen extends React.Component {
             .then(snap => {
               invite.user = snap.val();
               invite.user.key = snap.key;
-              let invites = Object.assign({}, this.state.invites, {
-                [invite.key]: invite
-              });
-              this.setState({ invites });
+
+              this.pushInvite(invite);
             });
         });
     });
   }
 
-  fillInvites(invitesSnap) {
-    let invites = this.state.invites.slice();
-    // Fill the array and mark the load as finished
-    for (let inviteSnap of invitesSnap) {
-      let invite = inviteSnap.val();
-      invite.key = inviteSnap.key; // ID de firebase
-      invites.push(invite);
-    }
-    this.setState({ invites });
-  }
-
   render() {
-    const { match } = this.props.navigation.state.params;
-    const { invites } = this.state;
-    const approved = Object.values(invites).filter(
-      invite => invite.approved === true
-    );
-    const pending = Object.values(invites).filter(
-      invite => invite.approved !== true
-    );
+    //const { match } = this.props.navigation.state.params;
     return (
       <ScrollView>
-        <Text>{Lang.t("myMatch.invitesLabel")}</Text>
-        <List>
-          <ListItem
-            title={Lang.t("myMatch.requestedInvitesLabel")}
-            badge={{ value: pending.length }}
-          />
-        </List>
-        <List>
-          {approved.map(invite => (
-            <ListItem
-              key={invite.key}
-              roundAvatar
-              title={invite.user.displayName}
-              avatar={{ uri: invite.user.photoURL }}
-              subtitle={moment(invite.createdAt).calendar()}
-              hideChevron
-              switchButton
-              switched={invite.approved}
-            />
-          ))}
-        </List>
+        <Text h4>{Lang.t("myMatch.requestedInvitesLabel")}</Text>
+        <List>{this.showPendingPlayers()}</List>
+        <Text h4>{Lang.t("myMatch.approvedInvitesLabel")}</Text>
+        <List>{this.showApprovedPlayers()}</List>
+        <Text h4>{Lang.t("myMatch.rejectedInvitesLabel")}</Text>
+        <List>{this.showRejectedPlayers()}</List>
       </ScrollView>
     );
+  }
+
+  showPendingPlayers() {
+    let pendingPlayers = (
+      <ListItem title={Lang.t(`myMatch.noPendingInvites`)} hideChevron />
+    );
+
+    const { pendingInvites } = this.state;
+    const invites = Object.values(pendingInvites);
+    if (invites.length) {
+      pendingPlayers = invites.map(invite => (
+        <ListItem
+          key={invite.key}
+          roundAvatar
+          title={invite.user.displayName}
+          avatar={{ uri: invite.user.photoURL }}
+          subtitle={moment(invite.createdAt).calendar()}
+          rightIcon={
+            <View style={styles.actionsContainer}>
+              {invite.requestRead === false && invite.approved === false ? (
+                <Ionicons
+                  style={styles.actionButton}
+                  name={
+                    (Platform.OS === "ios" ? "ios" : "md") +
+                    "-close-circle-outline"
+                  }
+                  size={32}
+                  color={Colors.danger}
+                  onPress={() => {
+                    this.handlePendingToRejectedInvite(invite);
+                  }}
+                />
+              ) : null}
+              {invite.requestRead === true && invite.approved === false ? (
+                <Ionicons
+                  style={styles.actionButton}
+                  name={
+                    (Platform.OS === "ios" ? "ios" : "md") + "-close-circle"
+                  }
+                  size={32}
+                  color={Colors.danger}
+                />
+              ) : null}
+              {invite.requestRead === true && invite.approved === true ? (
+                <Ionicons
+                  style={styles.actionButton}
+                  name={
+                    (Platform.OS === "ios" ? "ios" : "md") + "-checkmark-circle"
+                  }
+                  size={32}
+                  color={Colors.primary}
+                />
+              ) : (
+                <Ionicons
+                  style={styles.actionButton}
+                  name={
+                    (Platform.OS === "ios" ? "ios" : "md") +
+                    "-checkmark-circle-outline"
+                  }
+                  size={32}
+                  color={Colors.primary}
+                  onPress={() => {
+                    this.handlePendingToApprovedInvite(invite);
+                  }}
+                />
+              )}
+            </View>
+          }
+        />
+      ));
+    }
+
+    return pendingPlayers;
+  }
+
+  showApprovedPlayers() {
+    let approvedPlayers = (
+      <ListItem title={Lang.t(`myMatch.noApprovedInvites`)} hideChevron />
+    );
+    const { approvedInvites } = this.state;
+    const invites = Object.values(approvedInvites);
+    if (invites.length) {
+      approvedPlayers = invites.map(invite => (
+        <ListItem
+          key={invite.key}
+          roundAvatar
+          title={invite.user.displayName}
+          avatar={{ uri: invite.user.photoURL }}
+          subtitle={moment(invite.createdAt).calendar()}
+          hideChevron
+          switchButton
+          switched={invite.approved}
+        />
+      ));
+    }
+
+    return approvedPlayers;
+  }
+
+  showRejectedPlayers() {
+    let rejectedPlayers = (
+      <ListItem title={Lang.t(`myMatch.noRejectedInvites`)} hideChevron />
+    );
+
+    const { rejectedInvites } = this.state;
+    const invites = Object.values(rejectedInvites);
+    if (invites.length) {
+      rejectedPlayers = invites.map(invite => (
+        <ListItem
+          key={invite.key}
+          roundAvatar
+          title={invite.user.displayName}
+          avatar={{ uri: invite.user.photoURL }}
+          subtitle={moment(invite.createdAt).calendar()}
+          hideChevron
+          switchButton
+          switched={invite.approved}
+        />
+      ));
+    }
+
+    return rejectedPlayers;
+  }
+
+  pushInvite(invite) {
+    // Pending
+    if (invite.requestRead === false) {
+      let pendingInvites = Object.assign({}, this.state.pendingInvites, {
+        [invite.key]: invite
+      });
+
+      return this.setState({ pendingInvites });
+    }
+
+    // Rejected
+    if (invite.requestRead === true && invite.approved === false) {
+      let rejectedInvites = Object.assign({}, this.state.rejectedInvites, {
+        [invite.key]: invite
+      });
+
+      return this.setState({ rejectedInvites });
+    }
+
+    // Approved
+    if (invite.requestRead === true && invite.approved === true) {
+      let approvedInvites = Object.assign({}, this.state.approvedInvites, {
+        [invite.key]: invite
+      });
+
+      return this.setState({ approvedInvites });
+    }
+  }
+
+  handlePendingToRejectedInvite(invite) {
+    const db = firebase.database();
+    db
+      .ref(`invites`)
+      .child(invite.key)
+      .update({ requestRead: true, approved: false })
+      .then(() => {
+        invite.requestRead = true;
+        invite.approved = false;
+
+        let pendingInvites = Object.assign({}, this.state.pendingInvites, {
+          [invite.key]: invite
+        });
+
+        this.setState({ pendingInvites });
+      });
   }
 
   handleShare(match) {
@@ -159,7 +295,10 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15
   },
-  invitesLabel: {
-    marginLeft: 10
+  actionsContainer: {
+    flexDirection: "row"
+  },
+  actionButton: {
+    marginLeft: 15
   }
 });
