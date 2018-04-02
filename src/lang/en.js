@@ -144,6 +144,7 @@ export default {
       descriptionFinal: `You will receive a SMS`,
       disclaimerFinal: `Your telephone company could charge your the common taxes for receiving this SMS`,
       buttonLabelFinal: `Receive verification code`,
+      backText: 'Welcome'
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmation`,

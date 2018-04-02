@@ -82,5 +82,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     padding: 20,
     color: Colors.dark
+  },
+  logo: {
+    height: 'auto',
+    width: 'auto'
   }
 });

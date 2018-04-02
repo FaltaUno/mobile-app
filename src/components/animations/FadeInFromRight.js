@@ -1,10 +1,10 @@
 import React from 'react';
 import { Animated, Text, View, Easing } from 'react-native';
 
-class FadeInFromTop extends React.Component {
+class FadeInFromRight extends React.Component {
   state = {
     fadeAnim: new Animated.Value(0),
-    fromPosition: new Animated.Value(50)
+    fromPosition: new Animated.Value(150) 
   }
 
   componentDidMount() {
@@ -19,6 +19,7 @@ class FadeInFromTop extends React.Component {
         delay: this.props.delay ? this.props.delay : 0 
       })
     ]).start();
+
   }
 
   render() {
@@ -28,7 +29,7 @@ class FadeInFromTop extends React.Component {
         style={{
           ...this.props.style,
           opacity: fadeAnim,
-          bottom: fromPosition
+          left: fromPosition
         }}
       >
         {this.props.children}
@@ -37,4 +38,4 @@ class FadeInFromTop extends React.Component {
   }
 }
 
-export default FadeInFromTop;
+export default FadeInFromRight;

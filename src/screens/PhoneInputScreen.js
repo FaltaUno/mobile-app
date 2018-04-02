@@ -12,6 +12,9 @@ import UserService from 'services/UserService';
 
 // eslint-disable-next-line import/extensions, import/no-unresolved
 import ListItemPicker from '../components/ListItemPicker';
+import FadeInFromRight from '../components/animations/FadeInFromRight';
+import FadeInFromLeft from '../components/animations/FadeInFromLeft';
+import FadeInFromTop from '../components/animations/FadeInFromTop';
 
 export default class PhoneInputScreen extends React.Component {
   static navigationOptions = () => ({
@@ -51,48 +54,52 @@ export default class PhoneInputScreen extends React.Component {
         <Button 
           icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
           type="ionicon" color={Colors.primary} /> }
-          title='Welcome' clear={true} titleStyle={ { color: Colors.primary, fontSize: 20 } }
+          title={Lang.t(`welcome.phoneInput.backText`)} clear={true} 
+          titleStyle={ { color: Colors.primary, fontSize: 20 } }
           containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
         />
-
-        <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-call-outline' : 'md-call')} size={96} />
-        <Text h2 style={styles.title}>{Lang.t('welcome.phoneInput.title', this.state.user)}</Text>
-        <List>
-          <ListItemPicker
-            ref={(c) => { this._countrypicker = c }}
-            title={Lang.t('country.placeholder')}
-            rightTitle={Lang.t(`country.list.${this.state.country}`)}
-            activeTitle={Lang.t(`country.list.${this.state.country}`)}
-            selectedValue={this.state.country}
-            onValueChange={(itemValue) => this.setState({ country: itemValue, phone: '', valid: false })}
-            items={this.countries.map((country) => ({
-              label: Lang.t(`country.list.${country}`), 
-              value: country, 
-              key: country,
-            }))}
-          />
-          <ListItem
-            title={Lang.t(`country.phoneData.${this.state.country}.code`)}
-            hideChevron
-            textInput
-            textInputValue={this.state.phone}
-            textInputKeyboardType='phone-pad'
-            textInputPlaceholder={Lang.t(`country.phoneData.${this.state.country}.placeholder`)}
-            textInputOnChangeText={(phone) => {
-              this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
-            }}
-            textInputOnBlur={(event) => {
-              const phone = event.nativeEvent.text
-              if(phone){
+        <FadeInFromRight delay={300}>
+          <Text h2 style={styles.title}>{Lang.t('welcome.phoneInput.title', this.state.user)}</Text>
+        </FadeInFromRight>
+        <FadeInFromLeft delay={600}>
+          <List>
+            <ListItemPicker
+              ref={(c) => { this._countrypicker = c }}
+              title={Lang.t('country.placeholder')}
+              rightTitle={Lang.t(`country.list.${this.state.country}`)}
+              activeTitle={Lang.t(`country.list.${this.state.country}`)}
+              selectedValue={this.state.country}
+              onValueChange={(itemValue) => this.setState({ country: itemValue, phone: '', valid: false })}
+              items={this.countries.map((country) => ({
+                label: Lang.t(`country.list.${country}`), 
+                value: country, 
+                key: country,
+              }))}
+            />
+            <ListItem
+              title={Lang.t(`country.phoneData.${this.state.country}.code`)}
+              hideChevron
+              textInput
+              textInputValue={this.state.phone}
+              textInputKeyboardType='phone-pad'
+              textInputPlaceholder={Lang.t(`country.phoneData.${this.state.country}.placeholder`)}
+              textInputOnChangeText={(phone) => {
                 this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
-              }
-            }}
-            onPress={() => this._countrypicker.hide()}
-            textInputOnFocus={() => this._countrypicker.hide()}
-          />
-        </List>
-        <Text style={styles.description}>{Lang.t('welcome.phoneInput.description')}</Text>
-        <Button
+              }}
+              textInputOnBlur={(event) => {
+                const phone = event.nativeEvent.text
+                if(phone){
+                  this.setState({ phone, valid: isValidNumber(phone, this.state.country) })
+                }
+              }}
+              onPress={() => this._countrypicker.hide()}
+              textInputOnFocus={() => this._countrypicker.hide()}
+            />
+          </List>
+        </FadeInFromLeft>
+        <FadeInFromTop delay={600}>
+          <Text style={styles.description}>{Lang.t('welcome.phoneInput.description')}</Text>
+          <Button
           disabled={!this.state.valid}
           title={Lang.t('welcome.phoneInput.buttonLabel')}
           textStyle={styles.buttonText}
@@ -102,7 +109,7 @@ export default class PhoneInputScreen extends React.Component {
           icon={<Ionicons name={(Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward')} color="white" size={18} />}
           onPress={() => this.props.navigation.navigate('PhoneVerification', this.state) }
         />
-        <Text style={styles.disclaimer}>{Lang.t(`welcome.phoneInput.disclaimer`)}</Text>
+        </FadeInFromTop>
       </View>
     );
   }
@@ -131,6 +138,7 @@ const styles = StyleSheet.create({
     paddingRight: 0,
   },
   buttonDisabled: {
+    borderRadius: 50,
     backgroundColor: Colors.muted,
   },
   backButtonContainer: {

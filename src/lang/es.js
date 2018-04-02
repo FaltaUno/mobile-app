@@ -145,6 +145,7 @@ export default {
       descriptionFinal: `Vamos enviarte un SMS de verificación`,
       disclaimerFinal: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
       buttonLabelFinal: `Recibir código de verificación`,
+      backText: 'Bienvenida'
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmación`,
