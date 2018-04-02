@@ -23,6 +23,8 @@ export default class PhoneVerificationScreen extends React.Component {
 
   countries = ['AR', 'UY']
 
+  _goBack() { this.props.navigation.goBack() }
+
   render() {
     const { phone, country } = this.props.navigation.state.params
 
@@ -41,15 +43,6 @@ export default class PhoneVerificationScreen extends React.Component {
           <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description', { phone: format({ phone, country }, 'International') })}</Text>
         </FadeInFromTop>
         <CodeVerificationInput ref={(c) => this._codeVerificationInput = c} disabled={this.state.checking} onFinish={(code) => this.checkCode(code)} />
-        <Button
-          title={Lang.t('welcome.phoneVerification.buttonLabel')}
-          textStyle={styles.buttonText}
-          containerStyle={styles.buttonContainer}
-          buttonStyle={[styles.button, styles.buttonDisabled]}
-          disabled
-          loading={this.state.checking}
-          loadingStyle={styles.loading}
-        />
       </KeyboardAvoidingView>
     );
   }
