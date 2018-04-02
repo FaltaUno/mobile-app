@@ -24,6 +24,7 @@ export default {
   tintColor,
   transparent: "transparent",
   text: "#444",
+  text2: "#666",
   listBackground: "#fff",
   tabIconDefault: "#ccc",
   tabIconSelected: tintColor,

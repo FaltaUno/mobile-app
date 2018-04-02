@@ -70,7 +70,12 @@ export default {
     title: `Mis partidos`,
   },
   myMatch: {
+    loadingInvitesInfo: `Cargando info de invitaciones`,
+    noPlayersNeeded: `No se necesitan jugadores para este partido`,
+    approvedPlayersOutOfTotal: `{{approved}} de {{total}} jugadores aprobados`,
     invitesLabel: `Jugadores`,
+    inviteAction: `Invitar`,
+    shareButtonLabel: `Invitar`,
     requestedInvitesLabel: `Pendientes de revisión`,
     noPendingInvites: `No hay pedidos de invitación pendientes`,
     approvedInvitesLabel: `Aprobados`,
@@ -137,9 +142,12 @@ export default {
   playerCard: {
     fromDistance: `A {{distance}} km de distancia`
   },
+  error: {
+    urlNotSupported: `No se puede abrir la url: {{url}}`
+  },
   whatsapp: {
     buttonTitle: `Enviar un WhatsApp`,
-    urlNotSupported: `Can't handle url: {{url}}`,
+    urlNotSupported: `No se puede abrir la url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
   },
   welcome: {
