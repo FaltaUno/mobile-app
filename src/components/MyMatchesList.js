@@ -25,7 +25,8 @@ export default class MyMatchesList extends React.Component {
 
   state = {
     loading: true,
-    matches: {}
+    matches: {},
+    matchInvitesRequestCount: {}
   };
 
   constructor(props) {
@@ -35,6 +36,7 @@ export default class MyMatchesList extends React.Component {
     const db = Firebase.database();
     this.matchesRef = db.ref("matches");
     this.userMatchesRef = db.ref(`users/${uid}/matches`);
+    this.invitesRef = db.ref(`invites`);
   }
 
   componentDidMount() {
@@ -45,41 +47,57 @@ export default class MyMatchesList extends React.Component {
     this.userMatchesRef.orderByChild("date").on("value", userMatchesSnap => {
       let matches$ = [];
       userMatchesSnap.forEach(userMatchSnap => {
-        matches$.push(this.matchesRef.child(userMatchSnap.key).once("value"));
-        // Desarmo el listener anterior para no sobrecargar
-        this.matchesRef.child(userMatchSnap.key).off("child_changed");
-        this.matchesRef.child(userMatchSnap.key).off("child_added");
+        let matchKey = userMatchSnap.key;
+        matches$.push(
+          this.matchesRef
+            .child(matchKey)
+            .once("value")
+            .then(snap => {
+              // Fill the array and mark the load as finished
+              let match = snap.val();
+              match.key = snap.key; // ID de firebase
+              let matches = Object.assign({}, this.state.matches, {
+                [match.key]: match
+              });
+              this.setState({ matches });
+            })
+        );
         // - Al modificar el partido, actualizar la data del mismo
+        this.matchesRef.child(matchKey).off("child_changed");
         this.matchesRef
-          .child(userMatchSnap.key)
+          .child(matchKey)
           .on("child_changed", snap => this.handleChildUpdated(snap));
 
         // - Si se genera un pedido de invitacion
         this.matchesRef
-          .child(userMatchSnap.key)
-          .on("child_added", snap => this.handleChildUpdated(snap));
+          .child(matchKey)
+          .child("invites")
+          .off("child_added");
+        this.matchesRef
+          .child(matchKey)
+          .child("invites")
+          .on("child_added", snap => this.handleInvite(matchKey, snap));
       });
-      Promise.all(matches$).then(matchesSnap => {
-        let matches = {};
-        // Fill the array and mark the load as finished
-        matchesSnap.forEach(matchSnap => {
-          let match = matchSnap.val();
-          match.key = matchSnap.key; // ID de firebase
-          matches[match.key] = match;
-        });
-        this.setState({ loading: false, matches: matches });
-
-        this.props.onMatchesDidLoad(matches);
+      Promise.all(matches$).then(() => {
+        this.setState({ loading: false });
+        this.props.onMatchesDidLoad(this.state.matches);
       });
     });
   }
 
   componentWillUnmount() {
     const { matches } = this.state;
-    matches.forEach((match) => {
-      this.matchesRef.child(match.key).off('child_changed')
-      this.matchesRef.child(match.key).off('child_added')
-    })
+    matches.forEach(match => {
+      this.matchesRef.child(match.key).off("child_changed");
+      this.matchesRef
+        .child(match.key)
+        .child("invites")
+        .off("child_added");
+
+      Object.keys(matches.invites).forEach((inviteKey) => {
+        this.invitesRef.child(inviteKey).off("value");
+      })
+    });
     this.userMatchesRef.off("value");
   }
 
@@ -112,23 +130,71 @@ export default class MyMatchesList extends React.Component {
       };
     }
 
+    const { matchInvitesRequestCount = {} } = this.state;
+
     return (
       <ScrollView>
         <List>
-          {matches.map(match => (
-            <ListItem
-              key={match.key}
-              title={match.name}
-              subtitle={match.place}
-              rightTitle={moment(match.date).calendar()}
-              onPress={() => this.props.onPress(match)}
-              leftIcon={leftIcon}
-              leftIconOnPress={() => this.handleDeleteMatch(match)}
-            />
-          ))}
+          {matches.map(match => {
+            let badge = null;
+            if (matchInvitesRequestCount[match.key]) {
+              const pendingRequests = Object.keys(
+                matchInvitesRequestCount[match.key]
+              ).length;
+              if (pendingRequests > 0) {
+                badge = { value: pendingRequests };
+              }
+            }
+            return (
+              <ListItem
+                key={match.key}
+                title={match.name}
+                subtitle={moment(match.date).calendar()}
+                badge={badge}
+                onPress={() => this.props.onPress(match)}
+                leftIcon={leftIcon}
+                leftIconOnPress={() => this.handleDeleteMatch(match)}
+              />
+            );
+          })}
         </List>
       </ScrollView>
     );
+  }
+
+  handleInvite(matchKey, snap) {
+    const inviteKey = snap.key;
+    let match = Object.assign({}, this.state.matches[matchKey]);
+    let { invites = {} } = match;
+    invites[inviteKey] = snap.val();
+
+    const matches = Object.assign({}, this.state.matches, {
+      [matchKey]: match
+    });
+
+    this.setState({ matches });
+    // Get the invites
+    this.invitesRef.child(inviteKey).off("value");
+    this.invitesRef.child(inviteKey).on("value", snap => {
+      // Only check if the invite is pending
+      let matchInvitesRequestCount = Object.assign(
+        {},
+        this.state.matchInvitesRequestCount
+      );
+
+      if (!matchInvitesRequestCount[matchKey]) {
+        matchInvitesRequestCount[matchKey] = {};
+      }
+
+      const invite = snap.val();
+      if (invite.requestRead) {
+        delete matchInvitesRequestCount[matchKey][inviteKey];
+      } else {
+        matchInvitesRequestCount[matchKey][inviteKey] = true;
+      }
+
+      this.setState({ matchInvitesRequestCount });
+    });
   }
 
   handleChildUpdated(snap) {
