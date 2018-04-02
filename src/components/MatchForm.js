@@ -10,7 +10,9 @@ import ListItemDatePicker from "./ListItemDatePicker";
 
 export default class MatchForm extends React.Component {
   static defaultProps = {
-    match: {},
+    match: {
+      date: (new Date).getTime()
+    },
     onChange: () => {},
     onPlacePress: () => {}
   };
