@@ -35,54 +35,42 @@ export default class MyFutureMatchesList extends React.Component {
     this.matchesRef = db.ref("matches");
     this.userMatchesRef = db.ref(`users/${uid}/matches`);
     this.invitesRef = db.ref(`invites`);
+
+    const fromNow = new Date().getTime();
+    this.userMatchesQuery = this.userMatchesRef
+      .orderByChild("date")
+      .startAt(fromNow);
   }
 
   componentDidMount() {
-    // Con "value" cubro:
-    // - Agregado de partido
-    // - Eliminacion de partido
-    // - Reordenamiento de partido
-    const fromNow = new Date().getTime();
-    this.userMatchesRef
-      .orderByChild("date")
-      .startAt(fromNow)
-      .once("value", userMatchesSnap => {
-        let matches$ = [];
-        const matches = userMatchesSnap.val();
-        Object.keys(matches).forEach(matchKey => {
-          matches$.push(
+    this.userMatchesQuery.once("value", userMatchesSnap => {
+      let matches$ = [];
+      const matches = userMatchesSnap.val();
+      Object.keys(matches).forEach(matchKey => {
+        matches$.push(
+          this.matchesRef
+            .child(matchKey)
+            .once("value")
+            .then(snap => this.handleMatch(snap))
+        );
+      });
+      Promise.all(matches$).then(() => {
+        this.setState({ loading: false });
+        this.props.onMatchesDidLoad(this.state.matches);
+
+        // Listen for new matches
+        this.userMatchesQuery.on("child_added", userMatchSnap => {
+          const matchKey = userMatchSnap.key;
+          if (!this.state.matches[matchKey]) {
             this.matchesRef
               .child(matchKey)
               .once("value")
-              .then(snap => {
-                // Fill the array and mark the load as finished
-                let match = snap.val();
-                match.key = snap.key; // ID de firebase
-                let matches = Object.assign({}, this.state.matches, {
-                  [match.key]: match
-                });
-                this.setState({ matches });
-              })
-          );
-
-          // - Si se genera un pedido de invitacion
-          this.matchesRef
-            .child(matchKey)
-            .child("invites")
-            .once("value", snap => {
-              const invites = snap.val();
-              if (invites) {
-                Object.keys(invites).forEach(inviteKey => {
-                  this.handleInvite(matchKey, inviteKey);
-                });
-              }
-            });
-        });
-        Promise.all(matches$).then(() => {
-          this.setState({ loading: false });
-          this.props.onMatchesDidLoad(this.state.matches);
+              .then(snap => this.handleMatch(snap));
+          }
         });
       });
+    });
+    this;
   }
 
   render() {
@@ -132,6 +120,16 @@ export default class MyFutureMatchesList extends React.Component {
         </List>
       </ScrollView>
     );
+  }
+
+  handleMatch(matchSnap) {
+    // Fill the array and mark the load as finished
+    let match = matchSnap.val();
+    match.key = matchSnap.key; // ID de firebase
+    let matches = Object.assign({}, this.state.matches, {
+      [match.key]: match
+    });
+    this.setState({ matches });
   }
 
   handleInvite(matchKey, inviteKey) {
