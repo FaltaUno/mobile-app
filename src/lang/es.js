@@ -146,7 +146,7 @@ export default {
     urlNotSupported: `No se puede abrir la url: {{url}}`
   },
   whatsapp: {
-    buttonTitle: `Enviar un WhatsApp`,
+    buttonTitle: `Invitar por WhatsApp`,
     urlNotSupported: `No se puede abrir la url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
   },

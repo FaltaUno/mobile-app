@@ -145,7 +145,7 @@ export default {
     urlNotSupported: `Can't handle url: {{url}}`
   },
   whatsapp: {
-    buttonTitle: `Send a WhatsApp message`,
+    buttonTitle: `Invite through WhatsApp`,
     urlNotSupported: `Can't handle url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`
   },

@@ -6,6 +6,14 @@ import Lang from "lang";
 
 class MatchService {
   share(match) {
+    const { title, message, url, dialogTitle } = this.getInvitationMessage(
+      match
+    );
+
+    Share.share({ title, message, url }, { dialogTitle });
+  }
+
+  getInvitationMessage(match) {
     const now = moment();
     const matchDate = moment(match.date);
     const diff = now.diff(matchDate, "days");
@@ -23,16 +31,12 @@ class MatchService {
       matchLink
     });
 
-    Share.share(
-      {
-        title: Lang.t(`match.invitationTitle`),
-        message: inviteText,
-        url: matchLink
-      },
-      {
-        dialogTitle: Lang.t(`match.invitationDialogTitle`)
-      }
-    );
+    return {
+      title: Lang.t(`match.invitationTitle`),
+      message: inviteText,
+      url: matchLink,
+      dialogTitle: Lang.t(`match.invitationDialogTitle`)
+    };
   }
 }
 
