@@ -72,9 +72,9 @@ export default {
     invitesLabel: `Players`,
     requestedInvitesLabel: `Pending for review`,
     noPendingInvites: `There are no invite requests for review`,
-    approvedInvitesLabel: `Approved players`,
+    approvedInvitesLabel: `Approved`,
     noApprovedInvites: `There are no approved players`,
-    rejectedInvitesLabel: `Rejected players`,
+    rejectedInvitesLabel: `Rejected`,
     noRejectedInvites: `There are no rejected players`,
   },
   matches:{
