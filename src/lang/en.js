@@ -134,7 +134,7 @@ export default {
     matchPlaceholder: `It'll be played at {{place}}`,
     invalidPhoneNumber: `This player didn't set up the phone. We can do nothing :(`,
     invalidPhoneNumberTitle: "Invalid phone number. ",
-    invitationText: `Hi, {{playerName}}.\nI contact you through *{{appName}}*.\nI need one player for the match on *{{matchDate}} h* at *"{{matchPlace}}"*.\n{{matchLocationInfo}}\nIf you're interested, let me know please.`,
+    invitationText: `Hi, {{playerName}}.\nI contact you through *{{appName}}*.\nI need one player for the match on *{{matchDate}} h* at *{{matchPlace}}*.\n{{matchLocationInfo}}\nIf you're interested, let me know please.`,
     invitationLocationText: `Just in case, I give you the place location url.\n{{locationUrl}}\n`,
     invitationFooter: `Message sent by *{{appName}}, _{{appSlogan}}_*\nRequest your test access at {{appContactEmail}}`
   },
