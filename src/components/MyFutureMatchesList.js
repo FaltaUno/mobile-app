@@ -73,6 +73,10 @@ export default class MyFutureMatchesList extends React.Component {
     this;
   }
 
+  componentWillUnmount() {
+    this.userMatchesQuery.off("child_added");
+  }
+
   render() {
     if (this.state.loading) {
       return (

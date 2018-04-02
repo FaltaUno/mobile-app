@@ -87,16 +87,17 @@ export default class MyMatchesList extends React.Component {
 
   componentWillUnmount() {
     const { matches } = this.state;
-    matches.forEach(match => {
+    Object.values(matches).forEach(match => {
       this.matchesRef.child(match.key).off("child_changed");
       this.matchesRef
         .child(match.key)
         .child("invites")
         .off("child_added");
 
-      Object.keys(matches.invites).forEach((inviteKey) => {
+      const { invites = {} } = match;
+      Object.keys(invites).forEach(inviteKey => {
         this.invitesRef.child(inviteKey).off("value");
-      })
+      });
     });
     this.userMatchesRef.off("value");
   }
