@@ -180,6 +180,7 @@ export default {
       goToSettingsButtonLabel: `Ir a ajustes y habilitar localización`,
       permissionCheckButtonLabel: `Verificar geolocalización`,
       noLocationServicesEnabled: `No se detectó ningún servicio de geolocalización habilitado. No se puede continuar`,
+      backText: `Confirmación de código`
     },
     configFinish: {
       headerTitle: `Todo listo`,

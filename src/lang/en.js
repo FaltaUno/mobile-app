@@ -179,6 +179,7 @@ export default {
       goToSettingsButtonLabel: `Go to settings and enable localization`,
       permissionCheckButtonLabel: `Verify localization`,
       noLocationServicesEnabled: `No location services enabled. The app cannot continue.`,
+      backText: `Code Confirmation`
     },
     configFinish: {
       headerTitle: `Ready`,
