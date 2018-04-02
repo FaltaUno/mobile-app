@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Platform } from 'react-native';
+import { KeyboardAvoidingView, StyleSheet, Platform } from 'react-native';
 import { Text, Button, List, ListItem, Icon } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { isValidNumber } from 'libphonenumber-js'
@@ -50,7 +50,7 @@ export default class PhoneInputScreen extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Button 
           icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
           type="ionicon" color={Colors.primary} /> }
@@ -110,7 +110,7 @@ export default class PhoneInputScreen extends React.Component {
           onPress={() => this.props.navigation.navigate('PhoneVerification', this.state) }
         />
         </FadeInFromTop>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 

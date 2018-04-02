@@ -10,10 +10,12 @@ import { Ionicons } from '@expo/vector-icons';
 import PhoneVerificationService from 'services/PhoneVerificationService';
 import CodeVerificationInput from 'components/CodeVerificationInput';
 import UserService from 'services/UserService';
+import FadeInFromTop from '../components/animations/FadeInFromTop';
 
 export default class PhoneVerificationScreen extends React.Component {
   static navigationOptions = () => ({
-    title: Lang.t('welcome.phoneVerification.headerTitle')
+    title: Lang.t('welcome.phoneVerification.headerTitle'),
+    header: null
   });
 
   state = {
@@ -27,13 +29,13 @@ export default class PhoneVerificationScreen extends React.Component {
 
     return (
       <View style={styles.container}>
-        <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-call-outline' : 'md-call')} size={96} />
-        <Text h2 style={styles.title}>{Lang.t('welcome.phoneVerification.title')}</Text>
-        <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description', { phone: format({ phone, country }, 'International') })}</Text>
+        <FadeInFromTop delay={500}>
+          <Text h2 style={styles.title}>{Lang.t('welcome.phoneVerification.title')}</Text>
+          <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description', { phone: format({ phone, country }, 'International') })}</Text>
+        </FadeInFromTop>
         <CodeVerificationInput ref={(c) => this._codeVerificationInput = c} disabled={this.state.checking} onFinish={(code) => this.checkCode(code)} />
-        {/* <TextInput placeholder={`123456`} maxLength={6} style={styles.input}/> */}
         <Button
-          text={Lang.t('welcome.phoneVerification.buttonLabel')}
+          title={Lang.t('welcome.phoneVerification.buttonLabel')}
           textStyle={styles.buttonText}
           containerStyle={styles.buttonContainer}
           buttonStyle={[styles.button, styles.buttonDisabled]}
@@ -83,13 +85,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  // input: {
-  //   fontSize: 24,
-  //   borderStyle: 'solid',
-  //   borderBottomWidth: 1,
-  //   borderColor: Colors.muted,
-  //   textAlign: 'center',
-  // },
   icon: {
     textAlign: 'center',
   },
