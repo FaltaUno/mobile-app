@@ -92,8 +92,7 @@ export default {
     inviteButtonText: `Invite players`,
     invitationTitle: `Invite players`,
     invitationDialogTitle: `Invite players`,
-    invitationText: `Hi. I need one player for the match {{matchDateOn}}*{{matchDate}} h* at *"{{matchPlace}}"*.\nIf you're interested, let me know please.`,
-    invitationFooter: `*{{appName}}, _{{appSlogan}}_*\nRequest your test access at {{appContactEmail}}`,
+    invitationText: `Hi. I'm looking for players for my game to be played {{matchDateOn}}*{{matchDate}}* at *"{{matchPlace}}"*.\nFeel free to request an invite through the link below if you're interested\n`,
     on: `on`
   },
   myProfile: {

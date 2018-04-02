@@ -7,20 +7,21 @@ import {
   Alert,
   Linking,
   Platform,
-  ScrollView,
-  Share,
-  StyleSheet
+  StyleSheet,
+  View
 } from "react-native";
-import { ListItem, Text, List } from "react-native-elements";
+import { ListItem, Text, List, Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
 import Lang from "lang";
 import Colors from "constants/Colors";
+import MatchService from "services/MatchService";
 
 export default class MyMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { match, handleOnMatchUpdate = () => {} } = navigation.state.params;
+    let myMatch = Object.assign({}, match);
     let navigationOptions = {
       title: match.name,
       headerRight: (
@@ -28,8 +29,16 @@ export default class MyMatchScreen extends React.Component {
           style={styles.headerButton}
           onPress={() =>
             navigation.navigate("AddMatch", {
-              match,
-              onMatchUpdate: match => handleOnMatchUpdate(match)
+              match: myMatch,
+              onMatchUpdate: match => {
+                // Update the local ref to the new match,
+                // so when the user press "Edit" again
+                // she sees the modified match
+                myMatch = Object.assign({}, match);
+
+                // Bubble the change to the parent screens
+                handleOnMatchUpdate(match);
+              }
             })
           }
         >
@@ -53,7 +62,9 @@ export default class MyMatchScreen extends React.Component {
 
     this.setState({ match });
     const { invites = {} } = match;
-    navigation.setParams({ handleOnMatchUpdate: (match) => this.handleOnMatchUpdate(match) });
+    navigation.setParams({
+      handleOnMatchUpdate: match => this.handleOnMatchUpdate(match)
+    });
 
     const db = firebase.database();
     const invitesRef = db.ref(`invites`);
@@ -90,7 +101,7 @@ export default class MyMatchScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { match } = this.state
+    const { match } = this.state;
     let playersNeededItem = (
       <ListItem
         title={Lang.t("myMatch.loadingInvitesInfo")}
@@ -136,48 +147,68 @@ export default class MyMatchScreen extends React.Component {
       }
     }
     return (
-      <ScrollView style={styles.container}>
-        <List>{playersNeededItem}</List>
-        <List>
-          <ListItem hideChevron title={match.name} />
-          <ListItem
-            hideChevron
-            title={Lang.t("addMatch.notesLabel")}
-            subtitle={
-              <Text style={styles.listItemMultiline}>{match.notes ? match.notes : Lang.t(`myMatch.noNotes`)}</Text>
-            }
-          />
-        </List>
-        <List>
-          <ListItem
-            hideChevron
-            title={Lang.t("addMatch.dateLabel")}
-            rightTitle={moment(match.date).fromNow()}
-            rightTitleStyle={styles.listItemText}
-          />
-          <ListItem
-            title={Lang.t("addMatch.placeLabel")}
-            rightIcon={
-              <Ionicons
-                name={Platform.OS === "ios" ? "ios-map-outline" : "md-map"}
-                size={32}
-                onPress={() => this.handleShare(match)}
-                style={styles.listItemText}
-              />
-            }
-            subtitle={match.place}
-            subtitleStyle={styles.listItemSubtitle}
-            onPress={() => this.handleMapOpen(match.location)}
-          />
-        </List>
-      </ScrollView>
+      <View style={styles.container}>
+        <View>
+          <List>{playersNeededItem}</List>
+          <List>
+            <ListItem hideChevron title={match.name} />
+            <ListItem
+              hideChevron
+              title={Lang.t("addMatch.notesLabel")}
+              subtitle={
+                <Text style={styles.listItemMultiline}>
+                  {match.notes ? match.notes : Lang.t(`myMatch.noNotes`)}
+                </Text>
+              }
+            />
+          </List>
+          <List>
+            <ListItem
+              hideChevron
+              title={Lang.t("addMatch.dateLabel")}
+              rightTitle={moment(match.date).calendar()}
+              rightTitleStyle={styles.listItemText}
+            />
+            <ListItem
+              title={Lang.t("addMatch.placeLabel")}
+              rightIcon={
+                <View style={styles.actionsContainer}>
+                  <Ionicons
+                    name={Platform.OS === "ios" ? "ios-map-outline" : "md-map"}
+                    size={32}
+                    style={styles.actionButton}
+                  />
+                  <Ionicons
+                    name={
+                      (Platform.OS === "ios" ? "ios" : "md") + "-arrow-forward"
+                    }
+                    size={22}
+                    color={Colors.text}
+                    style={styles.actionButton}
+                  />
+                </View>
+              }
+              subtitle={match.place}
+              subtitleStyle={styles.listItemSubtitle}
+              onPress={() => this.handleMapOpen(match.location)}
+            />
+          </List>
+        </View>
+        <Button
+          text={Lang.t(`match.inviteButtonText`)}
+          buttonStyle={styles.button}
+          style={styles.buttonContainer}
+          backgroundColor={Colors.primary}
+          onPress={() => MatchService.share(match)}
+        />
+      </View>
     );
   }
 
   handleOnMatchUpdate(match) {
     const { onMatchUpdate = () => {} } = this.props.navigation.state.params;
     this.setState({ match });
-    onMatchUpdate(match)
+    onMatchUpdate(match);
   }
 
   handleMapOpen({ lat, lng }) {
@@ -189,42 +220,6 @@ export default class MyMatchScreen extends React.Component {
       return Linking.openURL(mapUrl);
     });
   }
-
-  handleShare(match) {
-    let now = moment();
-    let matchDate = moment(match.date);
-    let diff = now.diff(matchDate, "days");
-    let matchDateOn = "";
-    if (diff < -1 || 1 < diff) {
-      matchDateOn = Lang.t(`match.on`) + " ";
-    }
-
-    const inviteText = Lang.t("match.invitationText", {
-      appName: Lang.t("app.name"),
-      matchDate: matchDate.calendar(),
-      matchPlace: match.place,
-      matchDateOn: matchDateOn
-    });
-
-    const inviteFooter = Lang.t("match.invitationFooter", {
-      appName: Lang.t("app.name"),
-      appSlogan: Lang.t("app.slogan"),
-      appContactEmail: Lang.t("app.contactEmail")
-    });
-
-    const text = `${inviteText}\n\n----------\n${inviteFooter}\n\n`;
-
-    Share.share(
-      {
-        title: Lang.t(`match.invitationTitle`),
-        message: text,
-        url: match.locationUrl
-      },
-      {
-        dialogTitle: Lang.t(`match.invitationDialogTitle`)
-      }
-    );
-  }
 }
 
 const styles = StyleSheet.create({
@@ -235,7 +230,8 @@ const styles = StyleSheet.create({
     marginRight: 15
   },
   container: {
-    flex: 1
+    flex: 1,
+    justifyContent: "space-between"
   },
   listItemLoading: {
     marginTop: 4,
@@ -253,5 +249,24 @@ const styles = StyleSheet.create({
     color: Colors.text2,
     marginTop: 5,
     marginLeft: 10
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  actionButton: {
+    marginLeft: 10,
+    marginRight: 10
+  },
+  button: {
+    borderRadius: 0,
+    paddingTop: 5,
+    paddingBottom: 5,
+    width: "100%"
+  },
+  buttonContainer: {
+    marginTop: 15,
+    marginBottom: 15,
+    width: "100%"
   }
 });

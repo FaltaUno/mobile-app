@@ -16,15 +16,17 @@ import { Ionicons } from "@expo/vector-icons";
 import Lang from "lang";
 import Colors from "constants/Colors";
 
+import MatchService from "services/MatchService";
+
 export default class MyMatchPlayersScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
-    const { handleShare, match } = navigation.state.params;
+    const { match } = navigation.state.params;
 
     let navigationOptions = {
       title: Lang.t("myMatch.invitesLabel"),
       headerRight: (
-        <Text style={styles.headerButton} onPress={() => handleShare(match)}>
+        <Text style={styles.headerButton} onPress={() => MatchService.share(match)}>
           {Lang.t("myMatch.inviteAction")}
         </Text>
       )
@@ -47,9 +49,6 @@ export default class MyMatchPlayersScreen extends React.Component {
     const { navigation } = this.props;
     const { match } = navigation.state.params;
     const { invites = {} } = match;
-
-    // We can only set the function after the component has been initialized
-    navigation.setParams({ handleShare: this.handleShare });
 
     const db = firebase.database();
     const invitesRef = db.ref(`invites`);
@@ -416,6 +415,7 @@ const styles = StyleSheet.create({
     flexDirection: "row"
   },
   actionButton: {
-    marginLeft: 15
+    marginLeft: 10,
+    marginRight: 10,
   }
 });

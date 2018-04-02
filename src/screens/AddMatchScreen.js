@@ -14,7 +14,7 @@ export default class AddMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
-    const { handleSave = () => {} } = params;
+    const { match, handleSave = () => {} } = params;
     let headerRight = (
       <Text style={styles.headerButton} onPress={handleSave}>
         {Lang.t("action.done")}
@@ -28,7 +28,7 @@ export default class AddMatchScreen extends React.Component {
     }
 
     return {
-      title: Lang.t("addMatch.title"),
+      title: match ? match.name : Lang.t("addMatch.title"),
       headerLeft: (
         <Text
           style={styles.headerButton}

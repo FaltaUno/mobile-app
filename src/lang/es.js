@@ -93,8 +93,7 @@ export default {
     inviteButtonText: `Invitar jugadores`,
     invitationTitle: `Invitar jugadores`,
     invitationDialogTitle: `Invitar jugadores`,
-    invitationText: `Hola. Te invito a un partido {{matchDateOn}}*{{matchDate}} hs.* en *"{{matchPlace}}"*.\nSi te interesa, respondeme este mensaje por favor.`,
-    invitationFooter: `*{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`,
+    invitationText: `Hola. Me faltan jugadores para mi partido que se juega {{matchDateOn}}*{{matchDate}} hs.* en *"{{matchPlace}}"*.\nSi te interesa, sumate mediante el siguiente enlace.\n`,
     on: `el`,
   },
   myProfile: {
