@@ -159,7 +159,8 @@ export default {
       description: `Escribí el código que te proveímos para el número {{phone}}`,
       buttonLabel: `Ingresá tu código`,
       phoneNumberDisabled: `El número de teléfono\n{{phone}}\nno está habilitado para ingresar a la beta cerrada.`,
-      codeDoesNotMatch: `El código ingresado no es correcto`
+      codeDoesNotMatch: `El código ingresado no es correcto`,
+      backText: `Ingresar Teléfono`
     },
     phoneConfirmation: {
       headerTitle: `Confirmada`,

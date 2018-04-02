@@ -150,7 +150,7 @@ export default {
       headerTitle: `Confirmation`,
       title: `Check your phone`,
       description: `We have sent you the code at\n{{phone}}`,
-      buttonLabel: `Enter your code`
+      buttonLabel: `Enter your code`,
     },
     phoneVerification: {
       headerTitle: `Invitacion`,
@@ -158,7 +158,8 @@ export default {
       description: `Write down the code we gave you for the number {{phone}}`,
       buttonLabel: `Enter your code`,
       phoneNumberDisabled: `The phone number\n{{phone}}\nis not enabled for the closed beta.`,
-      codeDoesNotMatch: `The given code is incorrect`
+      codeDoesNotMatch: `The given code is incorrect`,
+      backText: `Phone input`
     },
     phoneConfirmation: {
       headerTitle: `Confirmed`,

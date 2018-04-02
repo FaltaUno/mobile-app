@@ -1,12 +1,11 @@
 import React from 'react';
-import { Alert, View, StyleSheet, Platform } from 'react-native';
-import { Text, Button } from 'react-native-elements';
+import { Alert, KeyboardAvoidingView, StyleSheet, Platform } from 'react-native';
+import { Text, Button, Icon } from 'react-native-elements';
 import { format } from 'libphonenumber-js';
 
 import Lang from 'lang';
 import Colors from 'constants/Colors';
 
-import { Ionicons } from '@expo/vector-icons';
 import PhoneVerificationService from 'services/PhoneVerificationService';
 import CodeVerificationInput from 'components/CodeVerificationInput';
 import UserService from 'services/UserService';
@@ -28,7 +27,15 @@ export default class PhoneVerificationScreen extends React.Component {
     const { phone, country } = this.props.navigation.state.params
 
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <Button 
+          icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
+          type="ionicon" color={Colors.primary} /> }
+          title={Lang.t(`welcome.phoneVerification.backText`)} clear={true} 
+          titleStyle={ { color: Colors.primary, fontSize: 20 } }
+          containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
+        />
+
         <FadeInFromTop delay={500}>
           <Text h2 style={styles.title}>{Lang.t('welcome.phoneVerification.title')}</Text>
           <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description', { phone: format({ phone, country }, 'International') })}</Text>
@@ -43,7 +50,7 @@ export default class PhoneVerificationScreen extends React.Component {
           loading={this.state.checking}
           loadingStyle={styles.loading}
         />
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
@@ -117,5 +124,16 @@ const styles = StyleSheet.create({
     paddingTop: 9,
     paddingBottom: 9,
     width: '100%',
-  }
+  },
+  backButtonContainer: {
+    /* This is used to move a single element to the left when a whole view is inside a flex display with 
+      justifyContent: 'center' */
+    marginRight: 'auto',
+    paddingLeft: 10,
+    position: 'absolute',
+    top: 25
+  },
+  backButtonIcon: {
+    color: Colors.light
+  },
 });
