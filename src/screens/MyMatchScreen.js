@@ -42,6 +42,7 @@ export default class MyMatchScreen extends React.Component {
     loading: true,
     users: {},
     loadingInvites: {},
+    inviteType: {},
     pendingInvites: {},
     approvedInvites: {},
     rejectedInvites: {}
@@ -166,14 +167,15 @@ export default class MyMatchScreen extends React.Component {
       <ListItem
         key={invite.key}
         roundAvatar
-        title={invite.user.displayName}
         avatar={{ uri: invite.user.photoURL }}
+        avatarStyle={!invite.requestRead || invite.approved ? null : styles.rejectedInviteAvatar}
+        title={invite.user.displayName}
+        titleStyle={!invite.requestRead || invite.approved ? null : styles.rejectedInviteTitle}
         subtitle={moment(invite.createdAt).calendar()}
+        subtitleStyle={!invite.requestRead || invite.approved ? null : styles.rejectedInviteSubtitle}
         rightIcon={this.showActionButtons(
           invite,
-          invite.requestRead
-            ? invite.approved ? "approvedInvites" : "rejectedInvites"
-            : "pendingInvites"
+          this.state.inviteType[invite.key]
         )}
       />
     );
@@ -217,7 +219,7 @@ export default class MyMatchScreen extends React.Component {
   }
 
   showApproveButton(invite, inviteType) {
-    if (invite.approved) {
+    if (invite.requestRead && invite.approved) {
       return (
         <Ionicons
           style={styles.actionButton}
@@ -244,13 +246,14 @@ export default class MyMatchScreen extends React.Component {
   }
 
   pushInvite(invite) {
+    let inviteType = Object.assign({}, this.state.inviteType)
     // Pending
     if (invite.requestRead === false) {
       let pendingInvites = Object.assign({}, this.state.pendingInvites, {
         [invite.key]: invite
       });
-
-      return this.setState({ pendingInvites });
+      inviteType[invite.key] = 'pendingInvites'
+      return this.setState({ pendingInvites, inviteType });
     }
 
     // Rejected
@@ -259,6 +262,7 @@ export default class MyMatchScreen extends React.Component {
         [invite.key]: invite
       });
 
+      inviteType[invite.key] = 'rejectedInvites'
       return this.setState({ rejectedInvites });
     }
 
@@ -268,6 +272,7 @@ export default class MyMatchScreen extends React.Component {
         [invite.key]: invite
       });
 
+      inviteType[invite.key] = 'approvedInvites'
       return this.setState({ approvedInvites });
     }
   }
@@ -381,6 +386,15 @@ const styles = StyleSheet.create({
   },
   emptyInvitesTitle: {
     color: Colors.muted
+  },
+  rejectedInviteAvatar: {
+    opacity: 0.5
+  },
+  rejectedInviteTitle: {
+    color: Colors.muted
+  },
+  rejectedInviteSubtitle: {
+    color: Colors.gray
   },
   actionsContainer: {
     flexDirection: "row"
