@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Platform } from 'react-native';
-import { Text, Button, List, ListItem } from 'react-native-elements';
+import { Text, Button, List, ListItem, Icon } from 'react-native-elements';
 import { Ionicons } from '@expo/vector-icons';
 import { isValidNumber } from 'libphonenumber-js'
 
@@ -15,7 +15,7 @@ import ListItemPicker from '../components/ListItemPicker';
 
 export default class PhoneInputScreen extends React.Component {
   static navigationOptions = () => ({
-    title: Lang.t('welcome.phoneInput.headerTitle')
+    header: null
   });
 
   countries = ['AR', 'UY']
@@ -43,9 +43,18 @@ export default class PhoneInputScreen extends React.Component {
     this.setState({ user })
   }
 
+  _goBack(){ this.props.navigation.goBack() }
+
   render() {
     return (
       <View style={styles.container}>
+        <Button 
+          icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
+          type="ionicon" color={Colors.primary} /> }
+          title='Welcome' clear={true} titleStyle={ { color: Colors.primary, fontSize: 20 } }
+          containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
+        />
+
         <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-call-outline' : 'md-call')} size={96} />
         <Text h2 style={styles.title}>{Lang.t('welcome.phoneInput.title', this.state.user)}</Text>
         <List>
@@ -105,6 +114,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
+    backgroundColor: Colors.light
   },
   icon: {
     textAlign: 'center',
@@ -122,6 +132,17 @@ const styles = StyleSheet.create({
   },
   buttonDisabled: {
     backgroundColor: Colors.muted,
+  },
+  backButtonContainer: {
+    /* This is used to move a single element to the left when a whole view is inside a flex display with 
+      justifyContent: 'center' */
+    marginRight: 'auto',
+    paddingLeft: 10,
+    position: 'absolute',
+    top: 25
+  },
+  backButtonIcon: {
+    color: Colors.light
   },
   disclaimer: {
     margin: 15,

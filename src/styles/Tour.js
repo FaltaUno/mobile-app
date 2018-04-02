@@ -6,7 +6,7 @@ export default {
     paddingBottom: 5,
     paddingLeft: 45,
     paddingRight: 30,
-    backgroundColor: Colors.dark,
+    backgroundColor: Colors.primary,
     borderRadius: 50
   },
   buttonContainer: {
