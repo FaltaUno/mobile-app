@@ -48,18 +48,16 @@ export default class MyMatchesList extends React.Component {
         matches$.push(this.matchesRef.child(userMatchSnap.key).once("value"));
         // Desarmo el listener anterior para no sobrecargar
         this.matchesRef.child(userMatchSnap.key).off("child_changed");
+        this.matchesRef.child(userMatchSnap.key).off("child_added");
         // - Al modificar el partido, actualizar la data del mismo
-        this.matchesRef.child(userMatchSnap.key).on("child_changed", snap => {
-          const matchKey = snap.ref.parent.key;
-          let match = Object.assign({}, this.state.matches[matchKey]);
-          match[snap.key] = snap.val();
+        this.matchesRef
+          .child(userMatchSnap.key)
+          .on("child_changed", snap => this.handleChildUpdated(snap));
 
-          let matches = Object.assign({}, this.state.matches, {
-            [matchKey]: match
-          });
-          this.setState({ matches });
-          this.props.onMatchDidUpdate(matches, match);
-        });
+        // - Si se genera un pedido de invitacion
+        this.matchesRef
+          .child(userMatchSnap.key)
+          .on("child_added", snap => this.handleChildUpdated(snap));
       });
       Promise.all(matches$).then(matchesSnap => {
         let matches = {};
@@ -77,7 +75,12 @@ export default class MyMatchesList extends React.Component {
   }
 
   componentWillUnmount() {
-    this.userMatchesRef.off("child_added");
+    const { matches } = this.state;
+    matches.forEach((match) => {
+      this.matchesRef.child(match.key).off('child_changed')
+      this.matchesRef.child(match.key).off('child_added')
+    })
+    this.userMatchesRef.off("value");
   }
 
   render() {
@@ -126,6 +129,18 @@ export default class MyMatchesList extends React.Component {
         </List>
       </ScrollView>
     );
+  }
+
+  handleChildUpdated(snap) {
+    const matchKey = snap.ref.parent.key;
+    let match = Object.assign({}, this.state.matches[matchKey]);
+    match[snap.key] = snap.val();
+
+    let matches = Object.assign({}, this.state.matches, {
+      [matchKey]: match
+    });
+    this.setState({ matches });
+    this.props.onMatchDidUpdate(matches, match);
   }
 
   /** This method encapsulates the process to delete a match from Firebase Realtime DB

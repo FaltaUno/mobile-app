@@ -26,7 +26,10 @@ export default class MyMatchPlayersScreen extends React.Component {
     let navigationOptions = {
       title: Lang.t("myMatch.invitesLabel"),
       headerRight: (
-        <Text style={styles.headerButton} onPress={() => MatchService.share(match)}>
+        <Text
+          style={styles.headerButton}
+          onPress={() => MatchService.share(match)}
+        >
           {Lang.t("myMatch.inviteAction")}
         </Text>
       )
@@ -82,7 +85,11 @@ export default class MyMatchPlayersScreen extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <ActivityIndicator size={`large`} />;
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size={`large`} />
+        </View>
+      );
     }
 
     const pending = Object.values(this.state.pendingInvites);
@@ -383,6 +390,10 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     marginRight: 15
   },
+  container: {
+    flex: 1,
+    justifyContent: "center"
+  },
   sectionContainer: {
     borderBottomWidth: 1,
     borderBottomColor: Colors.whiteTransparent
@@ -416,6 +427,6 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     marginLeft: 10,
-    marginRight: 10,
+    marginRight: 10
   }
 });

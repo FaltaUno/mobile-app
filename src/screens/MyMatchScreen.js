@@ -53,8 +53,16 @@ export default class MyMatchScreen extends React.Component {
   state = {
     match: {},
     loadingInvites: true,
-    invitesRequestCount: 0
+    invitesRequestCount: 0,
+    invitesApprovedCount: 0
   };
+
+  constructor(props) {
+    super(props);
+    const db = firebase.database();
+    this.invitesRef = db.ref(`invites`);
+    this.matchesRef = db.ref(`matches`);
+  }
 
   componentDidMount() {
     const { navigation } = this.props;
@@ -66,37 +74,43 @@ export default class MyMatchScreen extends React.Component {
       handleOnMatchUpdate: match => this.handleOnMatchUpdate(match)
     });
 
-    const db = firebase.database();
-    const invitesRef = db.ref(`invites`);
-    let invitesRequestCount = 0;
-    let invitesApprovedCount = 0;
-
     let reqs$ = [];
     Object.keys(invites).forEach(inviteKey => {
       // Get the invites
-      const req$ = invitesRef
+      const req$ = this.invitesRef
         .child(inviteKey)
         .once("value")
-        .then(snap => {
-          let invite = snap.val();
-          if (!invite.requestRead) {
-            invitesRequestCount++;
-          }
-
-          if (invite.requestRead && invite.approved) {
-            invitesApprovedCount++;
-          }
-        });
+        .then(snap => this.handleInvite(snap));
       reqs$.push(req$);
     });
 
     Promise.all(reqs$).then(() =>
       this.setState({
-        invitesRequestCount,
-        invitesApprovedCount,
         loadingInvites: false
       })
     );
+
+    // - Si se genera un pedido de invitacion
+    this.matchesRef
+      .child(match.key)
+      .child("invites")
+      .on("child_added", userInviteSnap => {
+        const inviteKey = userInviteSnap.key;
+        if (!invites[inviteKey]) {
+          invites[inviteKey] = userInviteSnap.val();
+          let match = Object.assign({}, this.state.match, { invites });
+          this.setState({ match });
+          this.invitesRef
+            .child(inviteKey)
+            .once("value")
+            .then(snap => this.handleInvite(snap));
+        }
+      });
+  }
+
+  componentWillUnmount() {
+    const { match } = this.state;
+    this.matchesRef.child(match.key).child('invites').off("child_added");
   }
 
   render() {
@@ -205,6 +219,23 @@ export default class MyMatchScreen extends React.Component {
     );
   }
 
+  handleInvite(snap) {
+    let { invitesRequestCount, invitesApprovedCount } = this.state;
+    let invite = snap.val();
+    if (!invite.requestRead) {
+      invitesRequestCount++;
+    }
+
+    if (invite.requestRead && invite.approved) {
+      invitesApprovedCount++;
+    }
+
+    this.setState({
+      invitesRequestCount,
+      invitesApprovedCount
+    });
+  }
+
   handleOnMatchUpdate(match) {
     const { onMatchUpdate = () => {} } = this.props.navigation.state.params;
     this.setState({ match });
@@ -265,8 +296,6 @@ const styles = StyleSheet.create({
     width: "100%"
   },
   buttonContainer: {
-    marginTop: 15,
-    marginBottom: 15,
     width: "100%"
   }
 });
