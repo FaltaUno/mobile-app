@@ -187,6 +187,7 @@ export default {
       title: `¡Todo listo!`,
       description: `Ya podés comenzar a buscar jugadores para tus partidos`,
       buttonLabel: `¡Empezar a utilizar la app!`,
+      backText: `Geolocalización`
     }
   }
 }

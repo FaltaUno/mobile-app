@@ -128,5 +128,5 @@ const styles = StyleSheet.create({
   },
   backButtonIcon: {
     color: Colors.light
-  },
+  }
 });

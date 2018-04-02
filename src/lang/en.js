@@ -186,6 +186,7 @@ export default {
       title: `Ready!`,
       description: `You can now start looking for players for your games`,
       buttonLabel: `Start using the app!`,
+      backText: `Geolocation`
     }
   }
 }

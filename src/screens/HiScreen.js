@@ -39,13 +39,13 @@ export default class HiScreen extends React.Component {
     return (
       <View style={styles.container}>
         {/* <Image source={require("../../assets/images/falta-uno-logo.png")} alt="" style={styles.logo} /> */}
-        <FadeInFromTop duration={1000}>
+        <FadeInFromTop duration={1000} delay={200}>
           <Text h1 style={styles.title}>{Lang.t('welcome.hi.title', this.state.user)}</Text>
         </FadeInFromTop>
-        <FadeInFromTop duration={1000} delay={500}>
+        <FadeInFromTop duration={1000} delay={700}>
           <Text h4 style={styles.description}>{Lang.t('welcome.hi.description')}</Text>
         </FadeInFromTop>
-        <PlainFadeIn duration={1000} delay={1000}>
+        <PlainFadeIn duration={1000} delay={1200}>
           <Button 
             title={Lang.t('welcome.hi.buttonLabel')}
             textStyle={styles.buttonText}
