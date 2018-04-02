@@ -126,7 +126,8 @@ export default class MatchLocationScreen extends React.Component {
           style={styles.map}
           showsUserLocation={true}
           showsMyLocationButton={true}
-          initialRegion={this.state.region}
+          region={this.state.region}
+          onRegionChange={(region)=>this.setState({ region })}
           onLongPress={(event) => {
             this.parseMarkerPosition(event.nativeEvent.coordinate)
           }}>
@@ -134,10 +135,6 @@ export default class MatchLocationScreen extends React.Component {
         </MapView>
       </View>
     )
-  }
-
-  onRegionChange(region) {
-    this.setState({ region });
   }
 
   geocode(address) {
