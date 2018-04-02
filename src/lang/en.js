@@ -166,6 +166,7 @@ export default {
       title: `Invitation confirmed`,
       description: `Your phone {{phone}} is between the enabled users for the closed beta`,
       buttonLabel: `Continue with the setup`,
+      backText:`Check code`
     },
     locationPermission: {
       headerTitle: `Localization`,
