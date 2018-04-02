@@ -41,10 +41,11 @@ export default {
   addMatch: {
     title: `New match`,
     nameLabel: `Match's title`,
-    playersNeededLabel: `I need...`,
-    playerNeededLabel: `I need...`,
+    playersNeededLabel: `Players needed...`,
+    playerNeededLabel: `Player needed...`,
     playersNeededPlaceholder: `Min: 1`,
     placeLabel: `Where?`,
+    placePlaceholder: `Not defined`,
     addressLabel: `Address`,
     ...Platform.select({
       ios: {
@@ -55,7 +56,7 @@ export default {
         timeLabel: "Time"
       }
     }),
-    notesLabel: `Notas`,
+    notesLabel: `Notes`,
     noNameDefined: `You have to define the title for the match`,
     noLocationDefined: `You have to indicate where the match will be played`,
     noPlayersNeededDefined: `You have to input the players' quantity you need for your match`
@@ -71,6 +72,7 @@ export default {
     loadingInvitesInfo: `Loading invites information`,
     noPlayersNeeded: `No players needed for this match`,
     approvedPlayersOutOfTotal: `{{approved}} approved players out of {{total}}`,
+    noNotes: `No notes added`,
     invitesLabel: `Players`,
     inviteAction: `Invite`,
     shareButtonLabel: `Invite`,

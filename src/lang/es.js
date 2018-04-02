@@ -73,6 +73,7 @@ export default {
     loadingInvitesInfo: `Cargando info de invitaciones`,
     noPlayersNeeded: `No se necesitan jugadores para este partido`,
     approvedPlayersOutOfTotal: `{{approved}} de {{total}} jugadores aprobados`,
+    noNotes: `No se agregaron notas`,
     invitesLabel: `Jugadores`,
     inviteAction: `Invitar`,
     shareButtonLabel: `Invitar`,

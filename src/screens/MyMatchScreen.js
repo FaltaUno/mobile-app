@@ -20,14 +20,18 @@ import Colors from "constants/Colors";
 export default class MyMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
-    const { match } = navigation.state.params;
-
+    const { match, handleOnMatchUpdate = () => {} } = navigation.state.params;
     let navigationOptions = {
       title: match.name,
       headerRight: (
         <Text
           style={styles.headerButton}
-          onPress={() => navigation.navigate("AddMatch", { match })}
+          onPress={() =>
+            navigation.navigate("AddMatch", {
+              match,
+              onMatchUpdate: match => handleOnMatchUpdate(match)
+            })
+          }
         >
           {Lang.t("action.edit")}
         </Text>
@@ -38,12 +42,18 @@ export default class MyMatchScreen extends React.Component {
   };
 
   state = {
+    match: {},
     loadingInvites: true,
     invitesRequestCount: 0
   };
 
   componentDidMount() {
-    const { invites = {} } = this.props.navigation.state.params.match;
+    const { navigation } = this.props;
+    const { match } = navigation.state.params;
+
+    this.setState({ match });
+    const { invites = {} } = match;
+    navigation.setParams({ handleOnMatchUpdate: (match) => this.handleOnMatchUpdate(match) });
 
     const db = firebase.database();
     const invitesRef = db.ref(`invites`);
@@ -80,7 +90,7 @@ export default class MyMatchScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { match } = navigation.state.params;
+    const { match } = this.state
     let playersNeededItem = (
       <ListItem
         title={Lang.t("myMatch.loadingInvitesInfo")}
@@ -134,7 +144,7 @@ export default class MyMatchScreen extends React.Component {
             hideChevron
             title={Lang.t("addMatch.notesLabel")}
             subtitle={
-              <Text style={styles.listItemMultiline}>{match.notes}</Text>
+              <Text style={styles.listItemMultiline}>{match.notes ? match.notes : Lang.t(`myMatch.noNotes`)}</Text>
             }
           />
         </List>
@@ -162,6 +172,12 @@ export default class MyMatchScreen extends React.Component {
         </List>
       </ScrollView>
     );
+  }
+
+  handleOnMatchUpdate(match) {
+    const { onMatchUpdate = () => {} } = this.props.navigation.state.params;
+    this.setState({ match });
+    onMatchUpdate(match)
   }
 
   handleMapOpen({ lat, lng }) {
