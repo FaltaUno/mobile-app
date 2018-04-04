@@ -151,6 +151,7 @@ const styles = StyleSheet.create({
   headerRightIconContainer: {
     marginLeft: 15,
     marginRight: 15,
+    color: Colors.light
   },
   emptyPlayersContainer: {
     flex: 1,

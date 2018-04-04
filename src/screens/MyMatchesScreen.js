@@ -80,7 +80,7 @@ export default class MyMatchesScreen extends React.Component {
 
 const styles = StyleSheet.create({
   headerButton: {
-    color: Colors.dark,
+    color: Colors.light,
     fontSize: 16,
     marginLeft: 15,
     marginRight: 15,
