@@ -26,8 +26,8 @@ export default class PhoneConfirmationScreen extends React.Component {
         <Button 
           icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
           type="ionicon" color={Colors.primary} /> }
-          title={Lang.t(`welcome.phoneConfirmation.backText`)} clear={true} 
-          titleStyle={ { color: Colors.primary, fontSize: 20 } }
+          text={Lang.t(`welcome.phoneConfirmation.backText`)} clear={true} 
+          textStyle={ { color: Colors.primary, fontSize: 20 } }
           containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
         />
         <FadeInFromTop delay={200}>
@@ -38,7 +38,7 @@ export default class PhoneConfirmationScreen extends React.Component {
         </FadeInFromTop>
         <PlainFadeIn delay={1200}>
           <Button
-            title={Lang.t('welcome.phoneConfirmation.buttonLabel')}
+            text={Lang.t('welcome.phoneConfirmation.buttonLabel')}
             textStyle={styles.buttonText}
             containerStyle={styles.buttonContainer}
             buttonStyle={styles.button}

@@ -33,8 +33,8 @@ export default class PhoneVerificationScreen extends React.Component {
         <Button 
           icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
           type="ionicon" color={Colors.primary} /> }
-          title={Lang.t(`welcome.phoneVerification.backText`)} clear={true} 
-          titleStyle={ { color: Colors.primary, fontSize: 20 } }
+          text={Lang.t(`welcome.phoneVerification.backText`)} clear={true} 
+          textStyle={ { color: Colors.primary, fontSize: 20 } }
           containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
         />
 

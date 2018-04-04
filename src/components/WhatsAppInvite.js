@@ -15,7 +15,7 @@ export default class WhatsAppInvite extends React.Component {
   render() {
     return (
       <Button
-        title={Lang.t(`whatsapp.buttonTitle`)}
+        text={Lang.t(`whatsapp.buttonTitle`)}
         icon={<Ionicons name={'logo-whatsapp'} color={'white'} size={24}/>}
         iconRight
         style={styles.buttonRaw}

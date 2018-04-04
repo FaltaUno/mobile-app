@@ -22,7 +22,7 @@ export default class SelectMatchScreen extends React.Component {
         <Text style={styles.label}>{Lang.t(`matchSelector.label`, player)}</Text>
         <MyMatchesList player={player} onPress={(match) =>this.props.navigation.navigate('Invite', { player, match })} />
         <Button
-          title={Lang.t(`matches.addMatch`)}
+          text={Lang.t(`matches.addMatch`)}
           buttonStyle={styles.button}
           style={styles.buttonContainer}
           backgroundColor={Colors.primary}

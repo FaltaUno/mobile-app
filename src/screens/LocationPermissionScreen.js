@@ -43,8 +43,8 @@ export default class LocationPermissionScreen extends React.Component {
         <Button 
           icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
           type="ionicon" color={Colors.primary} /> }
-          title={Lang.t(`welcome.locationPermission.backText`)} clear={true} 
-          titleStyle={ { color: Colors.primary, fontSize: 20 } }
+          text={Lang.t(`welcome.locationPermission.backText`)} clear={true} 
+          textStyle={ { color: Colors.primary, fontSize: 20 } }
           containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
         />
         <FadeInFromTop delay={200}>
@@ -58,7 +58,7 @@ export default class LocationPermissionScreen extends React.Component {
         {goToSettingsButton}
         <PlainFadeIn delay={1200}>
           <Button
-            title={Lang.t(this.state.permissionDenied ? 'welcome.locationPermission.permissionCheckButtonLabel' : 'welcome.locationPermission.buttonLabel')}
+            text={Lang.t(this.state.permissionDenied ? 'welcome.locationPermission.permissionCheckButtonLabel' : 'welcome.locationPermission.buttonLabel')}
             textStyle={styles.buttonText}
             containerStyle={styles.buttonContainer}
             buttonStyle={styles.button}

@@ -47,7 +47,7 @@ export default class HiScreen extends React.Component {
         </FadeInFromTop>
         <PlainFadeIn duration={1000} delay={1200}>
           <Button 
-            title={Lang.t('welcome.hi.buttonLabel')}
+            text={Lang.t('welcome.hi.buttonLabel')}
             textStyle={styles.buttonText}
             containerStyle={styles.buttonContainer}
             buttonStyle={styles.button}

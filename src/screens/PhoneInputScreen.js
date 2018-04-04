@@ -54,8 +54,8 @@ export default class PhoneInputScreen extends React.Component {
         <Button 
           icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
           type="ionicon" color={Colors.primary} /> }
-          title={Lang.t(`welcome.phoneInput.backText`)} clear={true} 
-          titleStyle={ { color: Colors.primary, fontSize: 20 } }
+          text={Lang.t(`welcome.phoneInput.backText`)} clear={true} 
+          textStyle={ { color: Colors.primary, fontSize: 20 } }
           containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
         />
         <FadeInFromRight delay={300}>
@@ -100,15 +100,15 @@ export default class PhoneInputScreen extends React.Component {
         <FadeInFromTop delay={600}>
           <Text style={styles.description}>{Lang.t('welcome.phoneInput.description')}</Text>
           <Button
-          disabled={!this.state.valid}
-          title={Lang.t('welcome.phoneInput.buttonLabel')}
-          textStyle={styles.buttonText}
-          containerStyle={styles.buttonContainer}
-          buttonStyle={[styles.button, this.state.valid ? null : styles.buttonDisabled]}
-          iconRight
-          icon={<Ionicons name={(Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward')} color="white" size={18} />}
-          onPress={() => this.props.navigation.navigate('PhoneVerification', this.state) }
-        />
+            disabled={!this.state.valid}
+            text={Lang.t('welcome.phoneInput.buttonLabel')}
+            textStyle={styles.buttonText}
+            containerStyle={styles.buttonContainer}
+            buttonStyle={[styles.button, this.state.valid ? null : styles.buttonDisabled]}
+            iconRight
+            icon={<Ionicons name={(Platform.OS === 'ios' ? 'ios-arrow-forward' : 'md-arrow-forward')} color="white" size={18} />}
+            onPress={() => this.props.navigation.navigate('PhoneVerification', this.state) }
+          />
         </FadeInFromTop>
       </KeyboardAvoidingView>
     );
