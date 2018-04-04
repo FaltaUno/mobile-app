@@ -3,7 +3,7 @@ import moment from 'moment'
 import * as Firebase from 'firebase';
 
 // UI
-import Colors from 'constants/Colors';
+import { headerStyle, headerTitleStyle, headerButtonStyle, headerActivityIndicatorStyle } from 'constants/Theme';
 import Lang from 'lang'
 import { ActivityIndicator, StyleSheet, Alert, Share, View } from 'react-native';
 import { Text, Button } from 'react-native-elements';
@@ -11,6 +11,7 @@ import { Text, Button } from 'react-native-elements';
 // App
 import MatchForm from 'components/MatchForm';
 import { Ionicons } from '@expo/vector-icons';
+import Colors from 'constants/Colors';
 
 /** @classdesc This class represent a screen in the device which let the players. 
  *  1 - Create a Match by tapping in the add button located in upper right corner
@@ -23,18 +24,20 @@ export default class AddMatchScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     let headerRight = (
-      <Text style={styles.headerButton} onPress={params.handleSave ? (params.handleSave) : () => null}>
+      <Text style={headerButtonStyle} onPress={params.handleSave ? (params.handleSave) : () => null}>
         {Lang.t(params.match ? 'action.edit' : 'action.done')}
       </Text>
     )
 
     if (params.isSaving) {
-      headerRight = <ActivityIndicator style={styles.headerActivityIndicator} />;
+      headerRight = <ActivityIndicator style={headerActivityIndicatorStyle} />;
     }
 
     return {
       title: Lang.t('addMatch.title'),
-      headerLeft: (<Text style={styles.headerButton} onPress={() => navigation.dispatch({ type: 'Navigation/BACK' })}>{Lang.t('action.close')}</Text>),
+      ...headerStyle,
+      headerTitleStyle,
+      headerLeft: (<Text style={headerButtonStyle} onPress={() => navigation.dispatch({ type: 'Navigation/BACK' })}>{Lang.t('action.close')}</Text>),
       headerRight: headerRight
     }
   }
@@ -191,20 +194,11 @@ export default class AddMatchScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  headerActivityIndicator: {
-    marginLeft: 15,
-    marginRight: 15,
-  },
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15,
-  },
   container: {
     flex: 1,
   },
   button: {
+    backgroundColor: Colors.primary,
     width: 400,
     borderRadius: 0,
   },

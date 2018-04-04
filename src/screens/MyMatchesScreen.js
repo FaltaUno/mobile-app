@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { StyleSheet, Text } from 'react-native';
+import { Text } from 'react-native';
 
 import Lang from 'lang'
-import Colors from 'constants/Colors';
+import { headerStyle, headerButtonStyle } from 'constants/Theme';
 
 import MyMatchesList from 'components/MyMatchesList';
 
@@ -11,23 +11,17 @@ export default class MyMatchesScreen extends React.Component {
 
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+    const { params = {} } = navigation.state; 
     let navigationOptions = {
       title: Lang.t('myMatches.title'),
-      headerStyle: {
-        backgroundColor: Colors.primary 
-      },
-      headerTitleStyle: {
-        color: Colors.light,
-        fontWeight: 'bold'
-      },
+      ...headerStyle,
       headerLeft: (
-        <Text style={styles.headerButton} onPress={() => navigation.setParams({ deleteMode: true })}>
+        <Text style={headerButtonStyle} onPress={() => navigation.setParams({ deleteMode: true })}>
           {Lang.t('action.edit')}
         </Text>
       ),
       headerRight: (
-        <Text style={styles.headerButton} onPress={() => navigation.navigate('AddMatch')}>
+        <Text style={headerButtonStyle} onPress={() => navigation.navigate('AddMatch')}>
           {Lang.t('action.add')}
         </Text>
       )
@@ -37,7 +31,7 @@ export default class MyMatchesScreen extends React.Component {
       navigationOptions.headerLeft = null
     } else if (params.deleteMode) {
       navigationOptions.headerLeft = (
-        <Text style={styles.headerButton} onPress={() => navigation.setParams({ deleteMode: false })}>
+        <Text style={headerButtonStyle} onPress={() => navigation.setParams({ deleteMode: false })}>
           {Lang.t('action.done')}
         </Text>
       )
@@ -77,12 +71,3 @@ export default class MyMatchesScreen extends React.Component {
   }
 
 }
-
-const styles = StyleSheet.create({
-  headerButton: {
-    color: Colors.light,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15,
-  },
-})
