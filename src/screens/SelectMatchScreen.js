@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 
 import Lang from 'lang'
 import Colors from 'constants/Colors';
+import { headerStyle } from 'constants/Theme';
 
 import MyMatchesList from 'components/MyMatchesList';
 
@@ -12,6 +13,7 @@ export default class SelectMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('matchSelector.title'),
+    ...headerStyle,
     tabBarVisible: false,
   })
 
@@ -38,10 +40,11 @@ const styles = StyleSheet.create({
   },
   button: {
     borderRadius: 0,
-    width: '100%'
+    backgroundColor: Colors.primary,
+    width: 400
   },
   buttonContainer: {
-    width: '100%',
+    width: 400,
   },
   label: {
     textAlign: 'center',

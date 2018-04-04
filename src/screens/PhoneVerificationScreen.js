@@ -1,19 +1,20 @@
 import React from 'react';
-import { Alert, View, StyleSheet, Platform } from 'react-native';
-import { Text, Button } from 'react-native-elements';
+import { Alert, KeyboardAvoidingView, StyleSheet, Platform } from 'react-native';
+import { Text, Button, Icon } from 'react-native-elements';
 import { format } from 'libphonenumber-js';
 
 import Lang from 'lang';
 import Colors from 'constants/Colors';
 
-import { Ionicons } from '@expo/vector-icons';
 import PhoneVerificationService from 'services/PhoneVerificationService';
 import CodeVerificationInput from 'components/CodeVerificationInput';
 import UserService from 'services/UserService';
+import FadeInFromTop from '../components/animations/FadeInFromTop';
 
 export default class PhoneVerificationScreen extends React.Component {
   static navigationOptions = () => ({
-    title: Lang.t('welcome.phoneVerification.headerTitle')
+    title: Lang.t('welcome.phoneVerification.headerTitle'),
+    header: null
   });
 
   state = {
@@ -22,26 +23,27 @@ export default class PhoneVerificationScreen extends React.Component {
 
   countries = ['AR', 'UY']
 
+  _goBack() { this.props.navigation.goBack() }
+
   render() {
     const { phone, country } = this.props.navigation.state.params
 
     return (
-      <View style={styles.container}>
-        <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-call-outline' : 'md-call')} size={96} />
-        <Text h2 style={styles.title}>{Lang.t('welcome.phoneVerification.title')}</Text>
-        <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description', { phone: format({ phone, country }, 'International') })}</Text>
-        <CodeVerificationInput ref={(c) => this._codeVerificationInput = c} disabled={this.state.checking} onFinish={(code) => this.checkCode(code)} />
-        {/* <TextInput placeholder={`123456`} maxLength={6} style={styles.input}/> */}
-        <Button
-          text={Lang.t('welcome.phoneVerification.buttonLabel')}
-          textStyle={styles.buttonText}
-          containerStyle={styles.buttonContainer}
-          buttonStyle={[styles.button, styles.buttonDisabled]}
-          disabled
-          loading={this.state.checking}
-          loadingStyle={styles.loading}
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <Button 
+          icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
+          type="ionicon" color={Colors.primary} /> }
+          text={Lang.t(`welcome.phoneVerification.backText`)} clear={true} 
+          textStyle={ { color: Colors.primary, fontSize: 20 } }
+          containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
         />
-      </View>
+
+        <FadeInFromTop delay={500}>
+          <Text h2 style={styles.title}>{Lang.t('welcome.phoneVerification.title')}</Text>
+          <Text style={styles.description}>{Lang.t('welcome.phoneVerification.description', { phone: format({ phone, country }, 'International') })}</Text>
+        </FadeInFromTop>
+        <CodeVerificationInput ref={(c) => this._codeVerificationInput = c} disabled={this.state.checking} onFinish={(code) => this.checkCode(code)} />
+      </KeyboardAvoidingView>
     );
   }
 
@@ -83,13 +85,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
   },
-  // input: {
-  //   fontSize: 24,
-  //   borderStyle: 'solid',
-  //   borderBottomWidth: 1,
-  //   borderColor: Colors.muted,
-  //   textAlign: 'center',
-  // },
   icon: {
     textAlign: 'center',
   },
@@ -122,5 +117,16 @@ const styles = StyleSheet.create({
     paddingTop: 9,
     paddingBottom: 9,
     width: '100%',
+  },
+  backButtonContainer: {
+    /* This is used to move a single element to the left when a whole view is inside a flex display with 
+      justifyContent: 'center' */
+    marginRight: 'auto',
+    paddingLeft: 10,
+    position: 'absolute',
+    top: 25
+  },
+  backButtonIcon: {
+    color: Colors.light
   }
 });

@@ -7,6 +7,7 @@ import PlayerCard from 'components/PlayerCard';
 import PlayerProfileForm from 'components/PlayerProfileForm';
 
 import Lang from 'lang'
+import { headerStyle, headerButtonStyle } from 'constants/Theme';
 import Colors from 'constants/Colors';
 
 import AuthService from 'services/AuthService';
@@ -15,8 +16,9 @@ import UserService from 'services/UserService';
 export default class MyProfileScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('myProfile.title'),
+    ...headerStyle,
     headerLeft: (
-      <Text style={styles.headerButton} onPress={() => navigation.dispatch({ type: 'Navigation/BACK' })}>{Lang.t('action.close')}</Text>
+      <Text style={headerButtonStyle} onPress={() => navigation.dispatch({ type: 'Navigation/BACK' })}>{Lang.t('action.close')}</Text>
     ),
   });
 
@@ -62,12 +64,6 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
-  },
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15,
   },
   logoutContainer: {
     borderTopColor: Colors.danger,

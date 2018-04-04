@@ -1,24 +1,29 @@
 import React from 'react';
 import { View, StyleSheet, Platform, Alert, Linking } from 'react-native';
-import { Text, Button } from 'react-native-elements';
+import { Text, Button, Icon } from 'react-native-elements';
 
 import Lang from 'lang';
 import Colors from 'constants/Colors';
+import Tour from '../styles/Tour';
 
 import { Ionicons } from '@expo/vector-icons';
 
 import UserService from 'services/UserService';
 import LocationService from 'services/LocationService';
+import PlainFadeIn from '../components/animations/PlainFadeIn';
+import FadeInFromTop from '../components/animations/FadeInFromTop';
 
 export default class LocationPermissionScreen extends React.Component {
   static navigationOptions = () => ({
-    title: Lang.t('welcome.locationPermission.headerTitle')
+    header: null
   });
 
   state = {
     permissionDenied: false,
     asking: false
   }
+
+  goBack() { this.props.navigation.goBack() }
 
   render() {
     let goToSettingsButton;
@@ -35,22 +40,34 @@ export default class LocationPermissionScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <Ionicons style={styles.icon} name={(Platform.OS === 'ios' ? 'ios-map-outline' : 'md-map')} size={96} />
-        <Text h2 style={styles.title}>{Lang.t('welcome.locationPermission.title')}</Text>
-        <Text h4 style={styles.description}>{Lang.t('welcome.locationPermission.description')}</Text>
-        <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail1')}</Text>
-        <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail2')}</Text>
-        {goToSettingsButton}
-        <Button
-          text={Lang.t(this.state.permissionDenied ? 'welcome.locationPermission.permissionCheckButtonLabel' : 'welcome.locationPermission.buttonLabel')}
-          textStyle={styles.buttonText}
-          containerStyle={styles.buttonContainer}
-          buttonStyle={styles.button}
-          disabled={this.state.asking}
-          loading={this.state.asking}
-          loadingStyle={styles.loading}
-          onPress={() => this.askForLocation()}
+        <Button 
+          icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
+          type="ionicon" color={Colors.primary} /> }
+          text={Lang.t(`welcome.locationPermission.backText`)} clear={true} 
+          textStyle={ { color: Colors.primary, fontSize: 20 } }
+          containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
         />
+        <FadeInFromTop delay={200}>
+         <Text h2 style={styles.title}>{Lang.t('welcome.locationPermission.title')}</Text>
+          <Text h4 style={styles.description}>{Lang.t('welcome.locationPermission.description')}</Text>
+        </FadeInFromTop>
+        <FadeInFromTop delay={700}>
+          <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail1')}</Text>
+          <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail2')}</Text>
+        </FadeInFromTop>
+        {goToSettingsButton}
+        <PlainFadeIn delay={1200}>
+          <Button
+            text={Lang.t(this.state.permissionDenied ? 'welcome.locationPermission.permissionCheckButtonLabel' : 'welcome.locationPermission.buttonLabel')}
+            textStyle={styles.buttonText}
+            containerStyle={styles.buttonContainer}
+            buttonStyle={styles.button}
+            disabled={this.state.asking}
+            loading={this.state.asking}
+            loadingStyle={styles.loading}
+            onPress={() => this.askForLocation()}
+          />
+        </PlainFadeIn>
       </View>
     );
   }
@@ -79,6 +96,7 @@ export default class LocationPermissionScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  ...Tour,
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -116,10 +134,6 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
   },
-  button: {
-    paddingTop: 5,
-    paddingBottom: 5,
-  },
   buttonText: {
     width: '100%',
   },
@@ -127,5 +141,17 @@ const styles = StyleSheet.create({
     paddingTop: 9,
     paddingBottom: 9,
     width: '100%',
+    borderRadius: 50
+  },
+  backButtonContainer: {
+    /* This is used to move a single element to the left when a whole view is inside a flex display with 
+      justifyContent: 'center' */
+    marginRight: 'auto',
+    paddingLeft: 10,
+    position: 'absolute',
+    top: 25
+  },
+  backButtonIcon: {
+    color: Colors.light
   },
 });

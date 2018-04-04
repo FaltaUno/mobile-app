@@ -5,6 +5,7 @@ import { Text, Card } from 'react-native-elements';
 import moment from 'moment'
 
 import Colors from 'constants/Colors';
+import { headerStyle } from 'constants/Theme';
 import Lang from 'lang'
 
 import PlayerCard from 'components/PlayerCard';
@@ -14,6 +15,7 @@ export default class InviteScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('invite.title', navigation.state.params.match),
     tabBarVisible: false,
+    ...headerStyle
   });
 
   state = {
