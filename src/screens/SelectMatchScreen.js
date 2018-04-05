@@ -1,56 +1,65 @@
-import React from 'react';
+import React from "react";
 
-import { View, StyleSheet, Text } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, StyleSheet, Text } from "react-native";
+import { Button } from "react-native-elements";
 
-import Lang from 'lang'
-import Colors from 'constants/Colors';
-import { headerStyle } from 'constants/Theme';
+import Lang from "lang";
+import Colors from "constants/Colors";
+import { headerStyle } from "constants/Theme";
 
-import MyMatchesList from 'components/MyMatchesList';
+import MyFutureMatchesList from "components/MyFutureMatchesList";
 
 export default class SelectMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
-    title: Lang.t('matchSelector.title'),
+    title: Lang.t("matchSelector.title"),
     ...headerStyle,
-    tabBarVisible: false,
-  })
+    tabBarVisible: false
+  });
 
   render() {
     const { player } = this.props.navigation.state.params;
     return (
       <View style={styles.container}>
-        <Text style={styles.label}>{Lang.t(`matchSelector.label`, player)}</Text>
-        <MyMatchesList player={player} onPress={(match) =>this.props.navigation.navigate('Invite', { player, match })} />
+        <Text style={styles.label}>
+          {Lang.t(`matchSelector.label`, player)}
+        </Text>
+        <MyFutureMatchesList
+          player={player}
+          onPress={match =>
+            this.props.navigation.navigate("Invite", { player, match })
+          }
+        />
         <Button
           text={Lang.t(`matches.addMatch`)}
           buttonStyle={styles.button}
           style={styles.buttonContainer}
           backgroundColor={Colors.primary}
-          onPress={() => this.props.navigation.navigate('AddMatch')} />
+          onPress={() => this.props.navigation.navigate("AddMatch")}
+        />
       </View>
-    )
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   button: {
     borderRadius: 0,
     backgroundColor: Colors.primary,
-    width: 400
+    padding: 5,
+    width: '100%'
   },
   buttonContainer: {
-    width: 400,
+    width: '100%'
   },
   label: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 15,
     marginLeft: 15,
     marginRight: 15,
-    fontSize: 16,
+    fontSize: 16
   }
-})
+});

@@ -10,6 +10,8 @@ import Lang from 'lang'
 import Colors from 'constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 
+import MatchService from "services/MatchService";
+
 export default class WhatsAppInvite extends React.Component {
 
   render() {
@@ -40,45 +42,28 @@ export default class WhatsAppInvite extends React.Component {
       )
     }
 
-    const inviteText = Lang.t('invite.invitationText', {
-      appName: Lang.t('app.name'),
-      playerName: player.displayName,
-      matchDate: moment(match.date).calendar(),
-      matchPlace: match.place,
-      matchLocationInfo : ! match.locationFound ? null : Lang.t('invite.invitationLocationText', { locationUrl: match.locationUrl })
-    });
+    const { message, url} = MatchService.getInvitationMessage(match)
 
-    const inviteFooter = Lang.t('invite.invitationFooter', {
-      appName: Lang.t('app.name'),
-      appSlogan: Lang.t('app.slogan'),
-      appContactEmail: Lang.t('app.contactEmail'),
-    })
-
-    const text = `${inviteText}\n\n----------\n${inviteFooter}`
-
-    let url = this.buildWhatsAppUrl(phone, text)
-    Linking.canOpenURL(url).then(supported => {
+    let whatsappUrl = this.buildWhatsAppUrl(phone, `${message}${url}`)
+    Linking.canOpenURL(whatsappUrl).then(supported => {
       if (!supported) {
-        return Alert.alert(Lang.t(`whatsapp.urlNotSupported`, { url }));
+        return Alert.alert(Lang.t(`whatsapp.urlNotSupported`, { url: whatsappUrl }));
       }
-      return Linking.openURL(url);
+      return Linking.openURL(whatsappUrl);
     })
   }
 
   buildWhatsAppUrl(phone, text) {
     // https://faq.whatsapp.com/es/android/26000030/?category=5245251
-    return `https://api.whatsapp.com/send?text=${text}&phone=${phone}`;
+    return `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
   }
 }
 
 const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.whatsapp,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 5,
-    paddingRight: 5,
-    width: 300
+    padding: 5,
+    width: '100%'
   },
   buttonContainer:{
     marginLeft: 15,

@@ -2,9 +2,9 @@ import Colors from "./Colors";
 
 export const headerStyle = {
   headerStyle: {
-    backgroundColor: Colors.primary
+    backgroundColor: Colors.headerBackgroundColor
   },
-  headerTintColor: Colors.light
+  headerTintColor: Colors.headerTintColor
 };
 
 export const headerActivityIndicatorStyle = {
@@ -13,15 +13,15 @@ export const headerActivityIndicatorStyle = {
 };
 
 export const headerButtonStyle = {
-  color: Colors.light,
+  color: Colors.white,
   fontSize: 16,
   marginLeft: 15,
   marginRight: 15
 };
 
 export const headerIconButtonStyle = {
-  color: Colors.light,
-  fontSize: 28,
+  color: Colors.white,
+  fontSize: 24,
   marginLeft: 15,
   marginRight: 15
 };

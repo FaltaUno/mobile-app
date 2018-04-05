@@ -1,5 +1,4 @@
-
-import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
 export default {
   app: {
@@ -13,26 +12,26 @@ export default {
     done: `Done`,
     edit: `Edit`,
     close: `Close`,
-    cancel: `Cancel`,
+    cancel: `Cancel`
   },
   home: {
     title: `Home`,
     placeholder: `Write to filter...`,
-    noPlayers: `There are no available players at this time`,
+    noPlayers: `There are no available players at this time`
   },
   login: {
     loginWithFacebook: `Login with Facebook`,
     logging: `Logging in...`,
     error: {
       auth: `An error ocurrend with the authorization..\nTry again later`,
-      user_cancelled: `You cancelled the process.\nIn order to log in you need to authorize our app.`,
+      user_cancelled: `You cancelled the process.\nIn order to log in you need to authorize our app.`
     },
-    success: `Process succeed!`,
+    success: `Process succeed!`
   },
   loading: `Loading...`,
   location: {
     service: {
-      unkownError: `An error occurred.\n{{error}}`,
+      unkownError: `An error occurred.\n{{error}}`
     },
     error: {
       androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
@@ -42,40 +41,59 @@ export default {
   addMatch: {
     title: `New match`,
     nameLabel: `Match's title`,
+    playersNeededLabel: `Players needed...`,
+    playerNeededLabel: `Player needed...`,
+    playersNeededPlaceholder: `Min: 1`,
     placeLabel: `Where?`,
+    placePlaceholder: `Not defined`,
     addressLabel: `Address`,
     ...Platform.select({
       ios: {
-        dateLabel: 'When?',
+        dateLabel: "When?"
       },
       android: {
-        dateLabel: 'Date',
-        timeLabel: 'Time',
-      },
+        dateLabel: "Date",
+        timeLabel: "Time"
+      }
     }),
-    notesLabel: `Notas`,
+    notesLabel: `Notes`,
     noNameDefined: `You have to define the title for the match`,
     noLocationDefined: `You have to indicate where the match will be played`,
+    noPlayersNeededDefined: `You have to input the players' quantity you need for your match`
   },
   matchSelector: {
     title: `Match selection`,
-    label: `What match do you want to invite {{displayName}} to?`,
+    label: `What match do you want to invite {{displayName}} to?`
   },
   myMatches: {
-    title: `My matches`,
+    title: `My matches`
   },
-  matches:{
+  myMatch: {
+    loadingInvitesInfo: `Loading invites information`,
+    noPlayersNeeded: `No players needed for this match`,
+    approvedPlayersOutOfTotal: `{{approved}} approved players out of {{total}}`,
+    noNotes: `No notes added`,
+    invitesLabel: `Players`,
+    inviteAction: `Invite`,
+    shareButtonLabel: `Invite`,
+    requestedInvitesLabel: `Pending for review`,
+    noPendingInvites: `There are no invite requests for review`,
+    approvedInvitesLabel: `Approved`,
+    noApprovedInvites: `There are no approved players`,
+    rejectedInvitesLabel: `Rejected`,
+    noRejectedInvites: `There are no rejected players`
+  },
+  matches: {
     noAvailable: `You have no available matches`,
     addMatch: `Add match`,
     deleteMatch: `Delete`
   },
-  match:{
+  match: {
     inviteButtonText: `Invite players`,
     invitationTitle: `Invite players`,
     invitationDialogTitle: `Invite players`,
-    invitationText: `Hi. I need one player for the match {{matchDateOn}}*{{matchDate}} h* at *"{{matchPlace}}"*.\nIf you're interested, let me know please.`,
-    invitationFooter: `*{{appName}}, _{{appSlogan}}_*\nRequest your test access at {{appContactEmail}}`,
-    on: `on`,
+    invitationText: `Hi. I'm looking for players for my game to be played {{matchDateOn}}*{{matchDate}}* at *"{{matchPlace}}"*.\nFeel free to request an invite through the link below if you're interested\n`,
+    on: `on`
   },
   myProfile: {
     title: `Profile`,
@@ -97,17 +115,17 @@ export default {
     placeholder: `Country`,
     list: {
       AR: `Argentina`,
-      UY: `Uruguay`,
+      UY: `Uruguay`
     },
     phoneData: {
       AR: {
         code: `+54 9`,
-        placeholder: `11 2345-6789`,
+        placeholder: `11 2345-6789`
       },
       UY: {
         code: `+598`,
-        placeholder: '99 123 456',
-      },
+        placeholder: "99 123 456"
+      }
     }
   },
   invite: {
@@ -116,21 +134,24 @@ export default {
     matchPlaceholder: `It'll be played at {{place}}`,
     invalidPhoneNumber: `This player didn't set up the phone. We can do nothing :(`,
     invalidPhoneNumberTitle: "Invalid phone number. ",
-    invitationText: `Hi, {{playerName}}.\nI contact you through *{{appName}}*.\nI need one player for the match on *{{matchDate}} h* at *"{{matchPlace}}"*.\n{{matchLocationInfo}}\nIf you're interested, let me know please.`,
+    invitationText: `Hi, {{playerName}}.\nI contact you through *{{appName}}*.\nI need one player for the match on *{{matchDate}} h* at *{{matchPlace}}*.\n{{matchLocationInfo}}\nIf you're interested, let me know please.`,
     invitationLocationText: `Just in case, I give you the place location url.\n{{locationUrl}}\n`,
-    invitationFooter: `Message sent by *{{appName}}, _{{appSlogan}}_*\nRequest your test access at {{appContactEmail}}`,
+    invitationFooter: `Message sent by *{{appName}}, _{{appSlogan}}_*\nRequest your test access at {{appContactEmail}}`
   },
   playerCard: {
     fromDistance: `At {{distance}} km away`
   },
+  error: {
+    urlNotSupported: `Can't handle url: {{url}}`
+  },
   whatsapp: {
-    buttonTitle: `Send a `,
+    buttonTitle: `Invite through WhatsApp`,
     urlNotSupported: `Can't handle url: {{url}}`,
-    urlUnkownError: `An error occurred.\n{{err}}`,
+    urlUnkownError: `An error occurred.\n{{err}}`
   },
   welcome: {
     hi: {
-      headerTitle: 'Before we start...',
+      headerTitle: "Before we start...",
       title: `Hi, {{displayName}}`,
       description: `Let's set up the app to get the most out of it`,
       buttonLabel: `Let's start`
@@ -139,7 +160,7 @@ export default {
       headerTitle: `Verification`,
       title: `Enter your phone...`,
       description: `Have your invitation code handy`,
-      disclaimer: '',
+      disclaimer: "",
       buttonLabel: `Enter invitation code`,
       descriptionFinal: `You will receive a SMS`,
       disclaimerFinal: `Your telephone company could charge your the common taxes for receiving this SMS`,
@@ -189,4 +210,4 @@ export default {
       backText: `Geolocation`
     }
   }
-}
+};

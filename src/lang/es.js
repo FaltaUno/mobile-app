@@ -42,6 +42,9 @@ export default {
   addMatch: {
     title: `Nuevo partido`,
     nameLabel: `Título del partido`,
+    playersNeededLabel: `Me faltan`,
+    playerNeededLabel: `Me falta`,
+    playersNeededPlaceholder: `Mín: 1`,
     placeLabel: `¿Dónde?`,
     placePlaceholder: `Sin definir`,
     addressLabel: `Dirección`,
@@ -57,6 +60,7 @@ export default {
     notesLabel: `Notas`,
     noNameDefined: `Indica el título del partido`,
     noLocationDefined: `Debes indicar el lugar donde se jugará el partido`,
+    noPlayersNeededDefined: `Debes indicar la cantidad de jugadores que precisás para tu partido`,
   },
   matchSelector: {
     title: `Selección de partido`,
@@ -64,6 +68,21 @@ export default {
   },  
   myMatches: {
     title: `Mis partidos`,
+  },
+  myMatch: {
+    loadingInvitesInfo: `Cargando info de invitaciones`,
+    noPlayersNeeded: `No se necesitan jugadores para este partido`,
+    approvedPlayersOutOfTotal: `{{approved}} de {{total}} jugadores aprobados`,
+    noNotes: `No se agregaron notas`,
+    invitesLabel: `Jugadores`,
+    inviteAction: `Invitar`,
+    shareButtonLabel: `Invitar`,
+    requestedInvitesLabel: `Pendientes de revisión`,
+    noPendingInvites: `No hay pedidos de invitación pendientes`,
+    approvedInvitesLabel: `Aprobados`,
+    noApprovedInvites: `No hay jugadores aprobados`,
+    rejectedInvitesLabel: `Rechazados`,
+    noRejectedInvites: `No hay jugadores rechazados`,
   },
   matches:{
     noAvailable: `No tenés ningún partido`,
@@ -74,8 +93,7 @@ export default {
     inviteButtonText: `Invitar jugadores`,
     invitationTitle: `Invitar jugadores`,
     invitationDialogTitle: `Invitar jugadores`,
-    invitationText: `Hola. Te invito a un partido {{matchDateOn}}*{{matchDate}} hs.* en *"{{matchPlace}}"*.\nSi te interesa, respondeme este mensaje por favor.`,
-    invitationFooter: `*{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`,
+    invitationText: `Hola. Me faltan jugadores para mi partido que se juega {{matchDateOn}}*{{matchDate}} hs.* en *"{{matchPlace}}"*.\nSi te interesa, sumate mediante el siguiente enlace.\n`,
     on: `el`,
   },
   myProfile: {
@@ -117,16 +135,19 @@ export default {
     matchPlaceholder: `Se juega en {{place}}`,
     invalidPhoneNumber: "El jugador no cargó su teléfono. Probá con señales de humo. ",
     invalidPhoneNumberTitle: "Número inválido. ",
-    invitationText: `Hola, {{playerName}}.\nTe contacto a través de *{{appName}}*.\nTe invito a un partido el *{{matchDate}} hs.* en *"{{matchPlace}}"*.\n{{matchLocationInfo}}\nSi te interesa, respondeme este mensaje por favor.`,
+    invitationText: `Hola, {{playerName}}.\nTe contacto a través de *{{appName}}*.\nTe invito a un partido el *{{matchDate}} hs* en *{{matchPlace}}*.\n{{matchLocationInfo}}\nSi te interesa, respondeme este mensaje por favor.`,
     invitationLocationText: `Por las dudas, te dejo el link de la ubicación del lugar.\n{{locationUrl}}\n`,
     invitationFooter: `Mensaje enviado desde *{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`,
   },
   playerCard: {
     fromDistance: `A {{distance}} km de distancia`
   },
+  error: {
+    urlNotSupported: `No se puede abrir la url: {{url}}`
+  },
   whatsapp: {
-    buttonTitle: `Enviar un Whatsapp`,
-    urlNotSupported: `Can't handle url: {{url}}`,
+    buttonTitle: `Invitar por WhatsApp`,
+    urlNotSupported: `No se puede abrir la url: {{url}}`,
     urlUnkownError: `An error occurred.\n{{err}}`,
   },
   welcome: {
