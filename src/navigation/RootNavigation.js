@@ -1,9 +1,9 @@
 import { Notifications } from "expo";
 import React from "react";
 import { StackNavigator } from "react-navigation";
-import { Alert, StatusBar, StyleSheet, View } from "react-native";
+import { StatusBar, StyleSheet, View } from "react-native";
 
-import registerForPushNotificationsAsync from "api/registerForPushNotificationsAsync";
+import PushService from "services/PushService";
 
 import AddMatchNavigator from "navigation/AddMatchNavigator";
 import MainTabNavigator from "navigation/MainTabNavigator";
@@ -49,19 +49,13 @@ class RootNavigatorContent extends React.Component {
     // You can comment the following line out if you want to stop receiving
     // a notification every time you open the app. Check out the source
     // for this function in api/registerForPushNotificationsAsync.js
-    registerForPushNotificationsAsync();
+    PushService.registerForPushNotificationsAsync();
 
     // Watch for incoming notifications
     this._notificationSubscription = Notifications.addListener(
-      this._handleNotification
+      PushService.handleNotification
     );
   }
-
-  _handleNotification = ({ origin, data }) => {
-    Alert.alert(
-      `Push notification ${origin} with data: ${JSON.stringify(data)}`
-    );
-  };
 }
 
 const RootNavigator = () => (
