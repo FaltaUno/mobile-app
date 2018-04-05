@@ -1,9 +1,9 @@
 import React from "react";
 
-import { StyleSheet, Text } from "react-native";
+import { Text } from "react-native";
 
 import Lang from "lang";
-import Colors from "constants/Colors";
+import { headerStyle, headerButtonStyle } from "constants/Theme";
 
 import MyMatchesList from "components/MyMatchesList";
 
@@ -11,12 +11,12 @@ export default class MyMatchesScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
-
     let navigationOptions = {
       title: Lang.t("myMatches.title"),
+      ...headerStyle,
       headerLeft: (
         <Text
-          style={styles.headerButton}
+          style={headerButtonStyle}
           onPress={() => navigation.setParams({ deleteMode: true })}
         >
           {Lang.t("action.edit")}
@@ -24,7 +24,7 @@ export default class MyMatchesScreen extends React.Component {
       ),
       headerRight: (
         <Text
-          style={styles.headerButton}
+          style={headerButtonStyle}
           onPress={() => navigation.navigate("AddMatch")}
         >
           {Lang.t("action.add")}
@@ -37,7 +37,7 @@ export default class MyMatchesScreen extends React.Component {
     } else if (params.deleteMode) {
       navigationOptions.headerLeft = (
         <Text
-          style={styles.headerButton}
+          style={headerButtonStyle}
           onPress={() => navigation.setParams({ deleteMode: false })}
         >
           {Lang.t("action.done")}
@@ -87,12 +87,3 @@ export default class MyMatchesScreen extends React.Component {
     this.props.navigation.setParams({ deleteMode, hideDeleteModeButton });
   }
 }
-
-const styles = StyleSheet.create({
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15
-  }
-});

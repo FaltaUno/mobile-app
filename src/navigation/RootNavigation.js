@@ -1,37 +1,37 @@
-import { Notifications } from 'expo';
-import React from 'react';
-import { StackNavigator } from 'react-navigation';
-import { Alert } from 'react-native';
+import { Notifications } from "expo";
+import React from "react";
+import { StackNavigator } from "react-navigation";
+import { Alert, StatusBar, StyleSheet, View } from "react-native";
 
-import registerForPushNotificationsAsync from 'api/registerForPushNotificationsAsync';
+import registerForPushNotificationsAsync from "api/registerForPushNotificationsAsync";
 
-import AddMatchNavigator from 'navigation/AddMatchNavigator';
-import MainTabNavigator from 'navigation/MainTabNavigator';
-import MyProfileNavigator from 'navigation/MyProfileNavigator';
-import WelcomeNavigator from 'navigation/WelcomeNavigator';
+import AddMatchNavigator from "navigation/AddMatchNavigator";
+import MainTabNavigator from "navigation/MainTabNavigator";
+import MyProfileNavigator from "navigation/MyProfileNavigator";
+import WelcomeNavigator from "navigation/WelcomeNavigator";
 
 const RootStackNavigator = StackNavigator(
   {
     Main: {
-      screen: MainTabNavigator,
+      screen: MainTabNavigator
     },
     MyProfile: {
-      screen: MyProfileNavigator,
+      screen: MyProfileNavigator
     },
     Welcome: {
-      screen: WelcomeNavigator,
+      screen: WelcomeNavigator
     },
     AddMatch: {
-      screen: AddMatchNavigator,
-    },
+      screen: AddMatchNavigator
+    }
   },
   {
-    mode: 'modal',
-    headerMode: 'none'
+    mode: "modal",
+    headerMode: "none"
   }
 );
 
-export default class RootNavigator extends React.Component {
+class RootNavigatorContent extends React.Component {
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
   }
@@ -52,10 +52,27 @@ export default class RootNavigator extends React.Component {
     registerForPushNotificationsAsync();
 
     // Watch for incoming notifications
-    this._notificationSubscription = Notifications.addListener(this._handleNotification);
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification
+    );
   }
 
   _handleNotification = ({ origin, data }) => {
-    Alert.alert(`Push notification ${origin} with data: ${JSON.stringify(data)}`);
+    Alert.alert(
+      `Push notification ${origin} with data: ${JSON.stringify(data)}`
+    );
   };
 }
+
+const RootNavigator = () => (
+  <View style={styles.container}>
+    <StatusBar barStyle="light-content" />
+    <RootNavigatorContent />
+  </View>
+);
+
+const styles = StyleSheet.create({
+  container: { flex: 1 }
+});
+
+export default RootNavigator;

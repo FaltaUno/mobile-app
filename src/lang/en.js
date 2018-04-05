@@ -164,13 +164,14 @@ export default {
       buttonLabel: `Enter invitation code`,
       descriptionFinal: `You will receive a SMS`,
       disclaimerFinal: `Your telephone company could charge your the common taxes for receiving this SMS`,
-      buttonLabelFinal: `Receive verification code`
+      buttonLabelFinal: `Receive verification code`,
+      backText: 'Welcome'
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmation`,
       title: `Check your phone`,
       description: `We have sent you the code at\n{{phone}}`,
-      buttonLabel: `Enter your code`
+      buttonLabel: `Enter your code`,
     },
     phoneVerification: {
       headerTitle: `Invitacion`,
@@ -178,13 +179,15 @@ export default {
       description: `Write down the code we gave you for the number {{phone}}`,
       buttonLabel: `Enter your code`,
       phoneNumberDisabled: `The phone number\n{{phone}}\nis not enabled for the closed beta.`,
-      codeDoesNotMatch: `The given code is incorrect`
+      codeDoesNotMatch: `The given code is incorrect`,
+      backText: `Phone input`
     },
     phoneConfirmation: {
       headerTitle: `Confirmed`,
       title: `Invitation confirmed`,
       description: `Your phone {{phone}} is between the enabled users for the closed beta`,
-      buttonLabel: `Continue with the setup`
+      buttonLabel: `Continue with the setup`,
+      backText:`Check code`
     },
     locationPermission: {
       headerTitle: `Localization`,
@@ -196,13 +199,15 @@ export default {
       permissionNotGranted: `ERROR.\nThe app requires the localization permissions in order to work.\nOtherwise, we cannot continue.`,
       goToSettingsButtonLabel: `Go to settings and enable localization`,
       permissionCheckButtonLabel: `Verify localization`,
-      noLocationServicesEnabled: `No location services enabled. The app cannot continue.`
+      noLocationServicesEnabled: `No location services enabled. The app cannot continue.`,
+      backText: `Code Confirmation`
     },
     configFinish: {
       headerTitle: `Ready`,
       title: `Ready!`,
       description: `You can now start looking for players for your games`,
-      buttonLabel: `Start using the app!`
+      buttonLabel: `Start using the app!`,
+      backText: `Geolocation`
     }
   }
 };

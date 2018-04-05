@@ -37,7 +37,7 @@ const iconResolver = (navigation, focused) => {
       name={iconName}
       size={28}
       style={styles.icon}
-      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+      color={focused ? Colors.dark : Colors.tabIconDefault}
     />
   );
 };
@@ -70,7 +70,10 @@ export default TabNavigator(
     navigationOptions: navigationResolver,
     swipeEnabled: false,
     tabBarComponent: TabBarBottom,
-    tabBarPosition: "bottom"
+    tabBarPosition: "bottom",
+    tabBarOptions: {
+      activeTintColor: Colors.dark
+    }
   }
 );
 

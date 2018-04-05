@@ -62,7 +62,11 @@ export default class WhatsAppInvite extends React.Component {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: Colors.whatsapp,
-    width: '100%'
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 5,
+    paddingRight: 5,
+    width: 300
   },
   buttonContainer:{
     marginLeft: 15,

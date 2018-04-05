@@ -5,7 +5,7 @@ import { SearchBar } from 'react-native-elements';
 import Lang from 'lang'
 
 // UI
-import Colors from 'constants/Colors';
+import { headerStyle, headerButtonStyle } from 'constants/Theme';
 
 // App
 import UserService from 'services/UserService';
@@ -27,14 +27,15 @@ export default class MatchLocationScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
     let headerRight = (
-      <Text style={styles.headerButton} onPress={params.handleSave ? (params.handleSave) : () => null}>
+      <Text style={headerButtonStyle} onPress={params.handleSave ? (params.handleSave) : () => null}>
         {Lang.t('action.done')}
       </Text>
     )
 
     return {
       title: Lang.t('addMatch.placeLabel'),
-      headerRight: headerRight
+      headerRight,
+      ...headerStyle
     }
   }
 
@@ -201,23 +202,10 @@ export default class MatchLocationScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15,
-  },
   container: {
     flex: 1,
   },
   map: {
     flex: 1,
-  },
-  searchBar:{
-    color: Colors.dark,
-    backgroundColor: Colors.lightGray,
-  },
-  searchBarContainer:{
-    backgroundColor: Colors.light,
   },
 })

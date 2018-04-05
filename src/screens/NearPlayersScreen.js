@@ -3,6 +3,7 @@ import { ActivityIndicator, ScrollView, View, StyleSheet, Platform } from 'react
 import * as Firebase from 'firebase';
 
 import Colors from 'constants/Colors';
+import { headerStyle, headerIconButtonStyle } from 'constants/Theme';
 import Lang from 'lang';
 import { Ionicons } from '@expo/vector-icons';
 import { Text, ListItem, List } from 'react-native-elements';
@@ -14,12 +15,11 @@ export default class NearPlayerScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('home.title'),
+    ...headerStyle,
     headerRight: (
       <Ionicons
-        name={(Platform.OS === 'ios' ? 'ios-settings-outline' : 'md-settings')}
-        size={28}
-        style={styles.headerRightIconContainer}
-        color={Colors.tintColor}
+        name={(Platform.OS === 'ios' ? 'ios-settings' : 'md-settings')}
+        style={headerIconButtonStyle}
         onPress={() => navigation.navigate('MyProfile')}
       />
     ),
@@ -140,10 +140,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  headerRightIconContainer: {
-    marginLeft: 15,
-    marginRight: 15,
   },
   emptyPlayersContainer: {
     flex: 1,

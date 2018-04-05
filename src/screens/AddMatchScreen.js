@@ -2,7 +2,12 @@ import React from "react";
 import * as Firebase from "firebase";
 
 // UI
-import Colors from "constants/Colors";
+import {
+  headerStyle,
+  headerTitleStyle,
+  headerButtonStyle,
+  headerActivityIndicatorStyle
+} from "constants/Theme";
 import Lang from "lang";
 import { ActivityIndicator, StyleSheet, Alert, View } from "react-native";
 import { Text } from "react-native-elements";
@@ -10,11 +15,17 @@ import { Text } from "react-native-elements";
 // App
 import MatchForm from "components/MatchForm";
 
+/** @classdesc This class represent a screen in the device which let the players.
+ *  1 - Create a Match by tapping in the add button located in upper right corner
+ *  2 - Edit a Match by tapping in the match that the want
+ *  3 - Remove a match by tapping in the remove button located in the upper left corner.
+ */
+
 export default class AddMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
     const { params = {} } = navigation.state;
-    const { match, handleSave = () => {} } = params;
+    const { handleSave = () => {} } = params;
     let headerRight = (
       <Text style={styles.headerButton} onPress={handleSave}>
         {Lang.t("action.done")}
@@ -22,16 +33,16 @@ export default class AddMatchScreen extends React.Component {
     );
 
     if (params.isSaving) {
-      headerRight = (
-        <ActivityIndicator style={styles.headerActivityIndicator} />
-      );
+      headerRight = <ActivityIndicator style={headerActivityIndicatorStyle} />;
     }
 
     return {
-      title: match ? match.name : Lang.t("addMatch.title"),
+      title: Lang.t("addMatch.title"),
+      ...headerStyle,
+      headerTitleStyle,
       headerLeft: (
         <Text
-          style={styles.headerButton}
+          style={headerButtonStyle}
           onPress={() => navigation.dispatch({ type: "Navigation/BACK" })}
         >
           {Lang.t("action.close")}
@@ -137,16 +148,6 @@ export default class AddMatchScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  headerActivityIndicator: {
-    marginLeft: 15,
-    marginRight: 15
-  },
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15
-  },
   container: {
     flex: 1
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 
 import Colors from 'constants/Colors';
+import PlainFadeIn from './animations/PlainFadeIn';
 
 export default class CodeVerificationInput extends React.Component {
 
@@ -23,14 +24,30 @@ export default class CodeVerificationInput extends React.Component {
       underlineColorAndroid: 'rgba(0,0,0,0)',
     }
 
+    /** TODO: About the animation: Should be a component that handle the whole animation in a sequence 
+     * and receive a prop whit the fisrt delay and then add 100 to that delay. Instad of a multiple
+     * plain fades. 
+     */
     return (
       <View style={styles.row}>
-        <TextInput {...commonAttributes} value={this.state.input[0]} ref={(input) => { this._input[0] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 0) }} placeholder={"1"} />
-        <TextInput {...commonAttributes} value={this.state.input[1]} ref={(input) => { this._input[1] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 1) }} placeholder={"2"} />
-        <TextInput {...commonAttributes} value={this.state.input[2]} ref={(input) => { this._input[2] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 2) }} placeholder={"3"} />
-        <TextInput {...commonAttributes} value={this.state.input[3]} ref={(input) => { this._input[3] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 3) }} placeholder={"4"} />
-        <TextInput {...commonAttributes} value={this.state.input[4]} ref={(input) => { this._input[4] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 4) }} placeholder={"5"} />
-        <TextInput {...commonAttributes} value={this.state.input[5]} ref={(input) => { this._input[5] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 5) }} placeholder={"6"} />
+        <PlainFadeIn delay={400}>
+          <TextInput {...commonAttributes} value={this.state.input[0]} ref={(input) => { this._input[0] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 0) }} placeholder={"1"} />
+        </PlainFadeIn>
+        <PlainFadeIn delay={550}>
+          <TextInput {...commonAttributes} value={this.state.input[1]} ref={(input) => { this._input[1] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 1) }} placeholder={"2"} />
+        </PlainFadeIn>
+        <PlainFadeIn delay={700}>
+          <TextInput {...commonAttributes} value={this.state.input[2]} ref={(input) => { this._input[2] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 2) }} placeholder={"3"} />
+        </PlainFadeIn>
+        <PlainFadeIn delay={850}>
+          <TextInput {...commonAttributes} value={this.state.input[3]} ref={(input) => { this._input[3] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 3) }} placeholder={"4"} />
+        </PlainFadeIn>
+        <PlainFadeIn delay={1000}>
+          <TextInput {...commonAttributes} value={this.state.input[4]} ref={(input) => { this._input[4] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 4) }} placeholder={"5"} />
+        </PlainFadeIn>
+        <PlainFadeIn delay={1150}>
+          <TextInput {...commonAttributes} value={this.state.input[5]} ref={(input) => { this._input[5] = input }} onChangeText={(text) => { this.checkTextAndFocus(text, 5) }} placeholder={"6"} />
+        </PlainFadeIn>
       </View>
     )
   }

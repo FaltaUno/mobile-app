@@ -166,6 +166,7 @@ export default {
       descriptionFinal: `Vamos enviarte un SMS de verificación`,
       disclaimerFinal: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
       buttonLabelFinal: `Recibir código de verificación`,
+      backText: 'Bienvenida'
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmación`,
@@ -179,13 +180,15 @@ export default {
       description: `Escribí el código que te proveímos para el número {{phone}}`,
       buttonLabel: `Ingresá tu código`,
       phoneNumberDisabled: `El número de teléfono\n{{phone}}\nno está habilitado para ingresar a la beta cerrada.`,
-      codeDoesNotMatch: `El código ingresado no es correcto`
+      codeDoesNotMatch: `El código ingresado no es correcto`,
+      backText: `Ingresar Teléfono`
     },
     phoneConfirmation: {
       headerTitle: `Confirmada`,
       title: `Invitación confirmada`,
       description: `Tu teléfono {{phone}} está dentro de los usuario habilitados para la beta cerrada`,
       buttonLabel: `Continuar configurando`,
+      backText: `Código de confirmación`
     },
     locationPermission: {
       headerTitle: `Localización`,
@@ -198,12 +201,14 @@ export default {
       goToSettingsButtonLabel: `Ir a ajustes y habilitar localización`,
       permissionCheckButtonLabel: `Verificar geolocalización`,
       noLocationServicesEnabled: `No se detectó ningún servicio de geolocalización habilitado. No se puede continuar`,
+      backText: `Confirmación de código`
     },
     configFinish: {
       headerTitle: `Todo listo`,
       title: `¡Todo listo!`,
       description: `Ya podés comenzar a buscar jugadores para tus partidos`,
       buttonLabel: `¡Empezar a utilizar la app!`,
+      backText: `Geolocalización`
     }
   }
 }
