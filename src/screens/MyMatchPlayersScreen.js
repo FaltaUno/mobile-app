@@ -15,6 +15,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 import Lang from "lang";
 import Colors from "constants/Colors";
+import {
+  headerStyle,
+  headerButtonStyle
+} from "constants/Theme";
 
 import MatchService from "services/MatchService";
 
@@ -25,9 +29,10 @@ export default class MyMatchPlayersScreen extends React.Component {
 
     let navigationOptions = {
       title: Lang.t("myMatch.invitesLabel"),
+      ...headerStyle,
       headerRight: (
         <Text
-          style={styles.headerButton}
+          style={headerButtonStyle}
           onPress={() => MatchService.share(match)}
         >
           {Lang.t("myMatch.inviteAction")}
@@ -384,12 +389,6 @@ export default class MyMatchPlayersScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15
-  },
   container: {
     flex: 1,
     justifyContent: "center"

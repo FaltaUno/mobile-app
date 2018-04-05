@@ -4,7 +4,6 @@ import * as Firebase from "firebase";
 // UI
 import {
   headerStyle,
-  headerTitleStyle,
   headerButtonStyle,
   headerActivityIndicatorStyle
 } from "constants/Theme";
@@ -27,7 +26,7 @@ export default class AddMatchScreen extends React.Component {
     const { params = {} } = navigation.state;
     const { handleSave = () => {} } = params;
     let headerRight = (
-      <Text style={styles.headerButton} onPress={handleSave}>
+      <Text style={headerButtonStyle} onPress={handleSave}>
         {Lang.t("action.done")}
       </Text>
     );
@@ -39,7 +38,6 @@ export default class AddMatchScreen extends React.Component {
     return {
       title: Lang.t("addMatch.title"),
       ...headerStyle,
-      headerTitleStyle,
       headerLeft: (
         <Text
           style={headerButtonStyle}

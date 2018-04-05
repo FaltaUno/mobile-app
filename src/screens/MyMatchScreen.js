@@ -14,6 +14,10 @@ import { ListItem, Text, List, Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
 import Lang from "lang";
+import {
+  headerStyle,
+  headerButtonStyle
+} from "constants/Theme";
 import Colors from "constants/Colors";
 import MatchService from "services/MatchService";
 
@@ -24,9 +28,10 @@ export default class MyMatchScreen extends React.Component {
     let myMatch = Object.assign({}, match);
     let navigationOptions = {
       title: match.name,
+      ...headerStyle,
       headerRight: (
         <Text
-          style={styles.headerButton}
+          style={headerButtonStyle}
           onPress={() =>
             navigation.navigate("AddMatch", {
               match: myMatch,
@@ -254,12 +259,6 @@ export default class MyMatchScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  headerButton: {
-    color: Colors.tintColor,
-    fontSize: 16,
-    marginLeft: 15,
-    marginRight: 15
-  },
   container: {
     flex: 1,
     justifyContent: "space-between"
@@ -290,6 +289,7 @@ const styles = StyleSheet.create({
     marginRight: 10
   },
   button: {
+    backgroundColor: Colors.primary,
     borderRadius: 0,
     paddingTop: 5,
     paddingBottom: 5,

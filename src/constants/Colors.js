@@ -22,6 +22,8 @@ const social = {
 
 export default {
   tintColor,
+  headerBackgroundColor: "#3cb371",
+  headerTintColor: "#fff",
   transparent: "transparent",
   text: "#444",
   text2: "#666",

@@ -49,10 +49,11 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 0,
     backgroundColor: Colors.primary,
-    width: 400
+    padding: 5,
+    width: '100%'
   },
   buttonContainer: {
-    width: 400
+    width: '100%'
   },
   label: {
     textAlign: "center",
