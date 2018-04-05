@@ -8,7 +8,7 @@ import Colors from 'constants/Colors';
 
 import MyMatchesList from 'components/MyMatchesList';
 
-export default class MatchListScreen extends React.Component {
+export default class SelectMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = () => ({
     title: Lang.t('matchSelector.title'),

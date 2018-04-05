@@ -7,7 +7,7 @@ import Colors from 'constants/Colors';
 
 import MyMatchesList from 'components/MyMatchesList';
 
-export default class MatchListScreen extends React.Component {
+export default class MyMatchesScreen extends React.Component {
 
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {

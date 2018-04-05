@@ -9,6 +9,11 @@ import Colors from 'constants/Colors';
 import ListItemDatePicker from './ListItemDatePicker';
 
 export default class MatchForm extends React.Component {
+  static defaultProps = {
+    onChange: () => {},
+    onPlacePress: () => {}
+  }
+
   state = {
     match: {
       name: null,
@@ -47,7 +52,8 @@ export default class MatchForm extends React.Component {
             onDateChange={(date) => this._update({ date: date.getTime() })}
             locale={Lang.currentLocale()}
           />
-          <ListItem
+          {/*
+           <ListItem
             hideChevron
             title={Lang.t(`addMatch.placeLabel`)}
             textInput
@@ -56,6 +62,14 @@ export default class MatchForm extends React.Component {
             textInputContainerStyle={styles.fullInput}
             textInputOnChangeText={(place) => this._update({ place })}
             onPress={() => this._datepicker.hide()}
+            textInputOnFocus={() => this._datepicker.hide()}
+          />
+          */}
+          <ListItem
+            title={Lang.t(`addMatch.placeLabel`)}
+            rightTitle={this.props.match.place ? this.props.match.place : Lang.t(`addMatch.placePlaceholder`)}
+            rightTitleStyle={styles.infoText}
+            onPress={() => this.props.onPlacePress(this.props.match)}
             textInputOnFocus={() => this._datepicker.hide()}
           />
         </List>
