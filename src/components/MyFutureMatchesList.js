@@ -1,11 +1,6 @@
 import React from "react";
 
-import {
-  ScrollView,
-  View,
-  StyleSheet,
-  ActivityIndicator
-} from "react-native";
+import { ScrollView, View, StyleSheet, ActivityIndicator } from "react-native";
 import { List, ListItem, Text } from "react-native-elements";
 
 import * as Firebase from "firebase";
@@ -45,14 +40,16 @@ export default class MyFutureMatchesList extends React.Component {
     this.userMatchesQuery.once("value", userMatchesSnap => {
       let matches$ = [];
       const matches = userMatchesSnap.val();
-      Object.keys(matches).forEach(matchKey => {
-        matches$.push(
-          this.matchesRef
-            .child(matchKey)
-            .once("value")
-            .then(snap => this.handleMatch(snap))
-        );
-      });
+      if (matches) {
+        Object.keys(matches).forEach(matchKey => {
+          matches$.push(
+            this.matchesRef
+              .child(matchKey)
+              .once("value")
+              .then(snap => this.handleMatch(snap))
+          );
+        });
+      }
       Promise.all(matches$).then(() => {
         this.setState({ loading: false });
         this.props.onMatchesDidLoad(this.state.matches);
@@ -109,7 +106,7 @@ export default class MyFutureMatchesList extends React.Component {
                 matchInvitesApprovedCount[match.key]
               ).length;
             }
-            const { playersNeeded = 0 } = match
+            const { playersNeeded = 0 } = match;
             badge = { value: `${approvedRequests}/${playersNeeded}` };
             return (
               <ListItem
