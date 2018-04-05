@@ -1,17 +1,17 @@
-import React from 'react';
-import { View, StyleSheet, Platform, Alert, Linking } from 'react-native';
-import { Text, Button, Icon } from 'react-native-elements';
+import React from "react";
+import { View, StyleSheet, Platform, Alert, Linking } from "react-native";
+import { Text, Button, Icon } from "react-native-elements";
 
-import Lang from 'lang';
-import Colors from 'constants/Colors';
-import Tour from '../styles/Tour';
+import Lang from "lang";
+import Colors from "constants/Colors";
+import Tour from "../styles/Tour";
 
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
-import UserService from 'services/UserService';
-import LocationService from 'services/LocationService';
-import PlainFadeIn from '../components/animations/PlainFadeIn';
-import FadeInFromTop from '../components/animations/FadeInFromTop';
+import UserService from "services/UserService";
+import LocationService from "services/LocationService";
+import PlainFadeIn from "../components/animations/PlainFadeIn";
+import FadeInFromTop from "../components/animations/FadeInFromTop";
 
 export default class LocationPermissionScreen extends React.Component {
   static navigationOptions = () => ({
@@ -21,44 +21,68 @@ export default class LocationPermissionScreen extends React.Component {
   state = {
     permissionDenied: false,
     asking: false
-  }
+  };
 
-  goBack() { this.props.navigation.goBack() }
+  goBack() {
+    this.props.navigation.goBack();
+  }
 
   render() {
     let goToSettingsButton;
     if (this.state.permissionDenied) {
       goToSettingsButton = (
         <Button
-          text={Lang.t('welcome.locationPermission.goToSettingsButtonLabel')}
+          text={Lang.t("welcome.locationPermission.goToSettingsButtonLabel")}
           textStyle={[styles.buttonText, styles.buttonGoToSettingsText]}
           containerStyle={styles.buttonContainer}
           buttonStyle={[styles.button, styles.buttonGoToSettingsContainer]}
-          onPress={() => Linking.openURL('app-settings:')}
+          onPress={() => Linking.openURL("app-settings:")}
         />
-      )
+      );
     }
     return (
       <View style={styles.container}>
-        <Button 
-          icon={ <Icon name={(Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back')} size={20}
-          type="ionicon" color={Colors.primary} /> }
-          text={Lang.t(`welcome.locationPermission.backText`)} clear={true} 
-          textStyle={ { color: Colors.primary, fontSize: 20 } }
-          containerStyle={ styles.backButtonContainer } onPress={ () => { this._goBack() } }
+        <Button
+          icon={
+            <Icon
+              name={Platform.OS === "ios" ? "ios-arrow-back" : "md-arrow-back"}
+              size={20}
+              type="ionicon"
+              color={Colors.primary}
+            />
+          }
+          text={Lang.t(`welcome.locationPermission.backText`)}
+          clear={true}
+          textStyle={styles.backText}
+          containerStyle={styles.backButtonContainer}
+          onPress={() => {
+            this.goBack();
+          }}
         />
         <FadeInFromTop delay={200}>
-         <Text h2 style={styles.title}>{Lang.t('welcome.locationPermission.title')}</Text>
-          <Text h4 style={styles.description}>{Lang.t('welcome.locationPermission.description')}</Text>
+          <Text h2 style={styles.title}>
+            {Lang.t("welcome.locationPermission.title")}
+          </Text>
+          <Text h4 style={styles.description}>
+            {Lang.t("welcome.locationPermission.description")}
+          </Text>
         </FadeInFromTop>
         <FadeInFromTop delay={700}>
-          <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail1')}</Text>
-          <Text style={styles.detail}>{Lang.t('welcome.locationPermission.detail2')}</Text>
+          <Text style={styles.detail}>
+            {Lang.t("welcome.locationPermission.detail1")}
+          </Text>
+          <Text style={styles.detail}>
+            {Lang.t("welcome.locationPermission.detail2")}
+          </Text>
         </FadeInFromTop>
         {goToSettingsButton}
         <PlainFadeIn delay={1200}>
           <Button
-            text={Lang.t(this.state.permissionDenied ? 'welcome.locationPermission.permissionCheckButtonLabel' : 'welcome.locationPermission.buttonLabel')}
+            text={Lang.t(
+              this.state.permissionDenied
+                ? "welcome.locationPermission.permissionCheckButtonLabel"
+                : "welcome.locationPermission.buttonLabel"
+            )}
             textStyle={styles.buttonText}
             containerStyle={styles.buttonContainer}
             buttonStyle={styles.button}
@@ -73,85 +97,92 @@ export default class LocationPermissionScreen extends React.Component {
   }
 
   async askForLocation() {
-    this.setState({ asking: true })
+    this.setState({ asking: true });
 
-    let { locationServicesEnabled, locationPermission, position, location } = await LocationService.getLocationAsync()
+    let {
+      locationServicesEnabled,
+      locationPermission,
+      position,
+      location
+    } = await LocationService.getLocationAsync();
 
     if (!locationServicesEnabled) {
-      Alert.alert(Lang.t(`welcome.locationPermission.noLocationServicesEnabled`))
-      return this.setState({ permissionDenied: true, asking: false })
+      Alert.alert(
+        Lang.t(`welcome.locationPermission.noLocationServicesEnabled`)
+      );
+      return this.setState({ permissionDenied: true, asking: false });
     }
 
     // If not granted, show the message
     if (!locationPermission) {
-      Alert.alert(Lang.t(`welcome.locationPermission.permissionNotGranted`))
-      return this.setState({ permissionDenied: true, asking: false })
+      Alert.alert(Lang.t(`welcome.locationPermission.permissionNotGranted`));
+      return this.setState({ permissionDenied: true, asking: false });
     }
 
-    UserService.setMyLocation(position, location)
-    this.props.navigation.navigate('ConfigFinish')
-    this.setState({ asking: false })
+    UserService.setMyLocation(position, location);
+    this.props.navigation.navigate("ConfigFinish");
+    this.setState({ asking: false });
   }
-
 }
 
 const styles = StyleSheet.create({
   ...Tour,
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center"
   },
-  icon: {
-    textAlign: 'center',
+  backText: {
+    color: Colors.primary,
+    fontSize: 20
   },
   title: {
     marginTop: 20,
-    textAlign: 'center'
+    textAlign: "center"
   },
   description: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
     padding: 10,
     paddingLeft: 0,
-    paddingRight: 0,
+    paddingRight: 0
   },
   detail: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
     paddingLeft: 20,
     paddingRight: 20,
     paddingTop: 10,
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   buttonGoToSettingsText: {
-    color: Colors.text,
+    color: Colors.text
   },
   buttonGoToSettingsContainer: {
-    backgroundColor: Colors.light,
+    backgroundColor: Colors.light
   },
   buttonContainer: {
     marginTop: 10,
     paddingLeft: 20,
-    paddingRight: 20,
+    paddingRight: 20
   },
   buttonText: {
-    width: '100%',
+    width: "100%"
   },
   loading: {
     paddingTop: 9,
     paddingBottom: 9,
-    width: '100%',
+    width: "100%",
     borderRadius: 50
   },
   backButtonContainer: {
     /* This is used to move a single element to the left when a whole view is inside a flex display with 
       justifyContent: 'center' */
-    marginRight: 'auto',
+    marginRight: "auto",
     paddingLeft: 10,
-    position: 'absolute',
+    position: "absolute",
     top: 25
   },
   backButtonIcon: {
     color: Colors.light
-  },
+  }
 });
