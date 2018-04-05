@@ -4,8 +4,7 @@ import {
   ScrollView,
   View,
   StyleSheet,
-  ActivityIndicator,
-  Platform
+  ActivityIndicator
 } from "react-native";
 import { List, ListItem, Text } from "react-native-elements";
 
@@ -110,7 +109,8 @@ export default class MyFutureMatchesList extends React.Component {
                 matchInvitesApprovedCount[match.key]
               ).length;
             }
-            badge = { value: `${approvedRequests}/${match.playersNeeded}` };
+            const { playersNeeded = 0 } = match
+            badge = { value: `${approvedRequests}/${playersNeeded}` };
             return (
               <ListItem
                 key={match.key}
