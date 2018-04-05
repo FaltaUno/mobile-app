@@ -46,6 +46,8 @@ export default class MyMatchesList extends React.Component {
     // - Reordenamiento de partido
     this.userMatchesRef.orderByChild("date").on("value", userMatchesSnap => {
       let matches$ = [];
+      // matches update array
+      let matches = {};
       userMatchesSnap.forEach(userMatchSnap => {
         let matchKey = userMatchSnap.key;
         matches$.push(
@@ -56,10 +58,7 @@ export default class MyMatchesList extends React.Component {
               // Fill the array and mark the load as finished
               let match = snap.val();
               match.key = snap.key; // ID de firebase
-              let matches = Object.assign({}, this.state.matches, {
-                [match.key]: match
-              });
-              this.setState({ matches });
+              matches[match.key] = match;
             })
         );
         // - Al modificar el partido, actualizar la data del mismo
@@ -79,7 +78,7 @@ export default class MyMatchesList extends React.Component {
           .on("child_added", snap => this.handleInvite(matchKey, snap));
       });
       Promise.all(matches$).then(() => {
-        this.setState({ loading: false });
+        this.setState({ loading: false, matches });
         this.props.onMatchesDidLoad(this.state.matches);
       });
     });
