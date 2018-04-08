@@ -88,6 +88,9 @@ export default {
     addMatch: `Add match`,
     deleteMatch: `Delete`
   },
+  nearMatches: {
+    title:`Partidos cerca`
+  },
   match: {
     inviteButtonText: `Invite players`,
     invitationTitle: `Invite players`,
