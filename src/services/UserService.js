@@ -56,6 +56,13 @@ class UserService {
     this.users[uid].available = true
     this.usersRef.child(uid).update({ firstTime: false, available: true })
   }
+
+  async setPushToken(pushToken){
+    const me = await this.me()
+    let user = Object.assign({}, this.users[me.key], { pushToken })
+    this.users[me.key] = user
+    this.usersRef.child(me.key).update({ pushToken })
+  }
 }
 
 export default new UserService();
