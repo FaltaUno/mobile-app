@@ -3,6 +3,10 @@ export default {
     "uri" : ""
   },
 
+  push: {
+    uri: ""
+  },
+
   // Facebook
   "facebook": {
     appId: "",
