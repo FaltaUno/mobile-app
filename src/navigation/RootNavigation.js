@@ -3,6 +3,7 @@ import React from "react";
 import { StackNavigator } from "react-navigation";
 import { StatusBar, StyleSheet, View } from "react-native";
 
+import NavigationService from 'services/NavigationService';
 import PushService from "services/PushService";
 
 import AddMatchNavigator from "navigation/AddMatchNavigator";
@@ -31,7 +32,7 @@ const RootStackNavigator = StackNavigator(
   }
 );
 
-class RootNavigatorContent extends React.Component {
+class RootNavigator extends React.Component {
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
   }
@@ -41,7 +42,16 @@ class RootNavigatorContent extends React.Component {
   }
 
   render() {
-    return <RootStackNavigator />;
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <RootStackNavigator
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+      </View>
+    );
   }
 
   _registerForPushNotifications() {
@@ -57,13 +67,6 @@ class RootNavigatorContent extends React.Component {
     );
   }
 }
-
-const RootNavigator = () => (
-  <View style={styles.container}>
-    <StatusBar barStyle="light-content" />
-    <RootNavigatorContent />
-  </View>
-);
 
 const styles = StyleSheet.create({
   container: { flex: 1 }

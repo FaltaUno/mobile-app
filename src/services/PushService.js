@@ -1,7 +1,8 @@
 import { Constants, Permissions, Notifications } from "expo";
 
-import { Alert } from "react-native";
+import { NavigationActions } from "react-navigation";
 
+import NavigationService from "./NavigationService";
 import UserService from "./UserService";
 
 class PushService {
@@ -29,9 +30,22 @@ class PushService {
 
   handleNotification = ({ origin, data }) => {
     // Do something inside the app
-    Alert.alert(
-      `Push notification ${origin} with data: ${JSON.stringify(data)}`
-    );
+    // Alert.alert(
+    //   `Push notification ${origin} with data: ${JSON.stringify(data)}`
+    // );
+
+    if (origin === "selected") {
+      if (data.action === "myMatch.inviteRequest") {
+        //const { matchKey } = data;
+        // For navigating here I need the match data first, so...
+        NavigationService.dispatch(
+          NavigationActions.navigate({
+            type: NavigationActions.NAVIGATE,
+            routeName: "MyMatches"
+          })
+        );
+      }
+    }
   };
 }
 

@@ -54,13 +54,17 @@ export default class MyMatchesScreen extends React.Component {
     const { deleteMode = false } = params;
     return (
       <MyMatchesList
-        onPress={match => this.props.navigation.navigate("MyMatch", { match })}
+        onPress={match => this.handlePress(match)}
         deleteMode={deleteMode}
         onMatchDidUpdate={matches => this.disableDeleteMode(matches)}
         onMatchesDidLoad={matches => this.handleMatchesLoad(matches)}
       />
     );
   }
+
+  handlePress = match => {
+    this.props.navigation.navigate("MyMatch", { match });
+  };
 
   handleMatchesLoad(matches) {
     const listIsEmpty = Object.values(matches).length === 0;
