@@ -21,6 +21,7 @@ import {
 } from "constants/Theme";
 
 import MatchService from "services/MatchService";
+import PushService from "../services/PushService";
 
 export default class MyMatchPlayersScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -352,6 +353,8 @@ export default class MyMatchPlayersScreen extends React.Component {
         loadingInvites[invite.key] = false;
 
         this.setState({ [inviteType]: invites, loadingInvites });
+        // Update the unread notifications
+        PushService.updateNotificationsCount()
         this.triggerInvitesUpdate();
       });
   }

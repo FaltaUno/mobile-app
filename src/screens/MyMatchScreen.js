@@ -120,7 +120,7 @@ export default class MyMatchScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { match } = this.state;
+    const { match, loadingInvites } = this.state;
     let playersNeededItem = (
       <ListItem
         title={Lang.t("myMatch.loadingInvitesInfo")}
@@ -129,7 +129,7 @@ export default class MyMatchScreen extends React.Component {
       />
     );
 
-    if (!this.state.loadingInvites) {
+    if (!loadingInvites) {
       const { playersNeeded = 0 } = match;
 
       if (!playersNeeded) {

@@ -1,34 +1,42 @@
-import React from 'react';
-import { ActivityIndicator, ScrollView, View, StyleSheet, Platform } from 'react-native';
-import * as Firebase from 'firebase';
+import React from "react";
+import {
+  ActivityIndicator,
+  ScrollView,
+  View,
+  StyleSheet,
+  Platform
+} from "react-native";
+import * as Firebase from "firebase";
 
-import Colors from 'constants/Colors';
-import { headerStyle, headerIconButtonStyle } from 'constants/Theme';
-import Lang from 'lang';
-import { Ionicons } from '@expo/vector-icons';
-import { Text, ListItem, List } from 'react-native-elements';
+import Colors from "constants/Colors";
+import { headerStyle, headerIconButtonStyle } from "constants/Theme";
+import Lang from "lang";
+import { Ionicons } from "@expo/vector-icons";
+import { Text, ListItem, List } from "react-native-elements";
 
-import LocationService from 'services/LocationService';
-import UserService from 'services/UserService';
+import LocationService from "services/LocationService";
+import UserService from "services/UserService";
 
 export default class NearPlayerScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => ({
-    title: Lang.t('home.title'),
+    title: Lang.t("home.title"),
     ...headerStyle,
     headerRight: (
       <Ionicons
-        name={(Platform.OS === 'ios' ? 'ios-settings' : 'md-settings')}
+        name={Platform.OS === "ios" ? "ios-settings" : "md-settings"}
         style={headerIconButtonStyle}
-        onPress={() => navigation.navigate('MyProfile')}
+        onPress={() => navigation.navigate("MyProfile")}
       />
-    ),
-  })
+    )
+  });
 
   constructor(props) {
     super(props);
-    this.usersRef = Firebase.database().ref(`users`)
-      .orderByChild(`available`).equalTo(true);
+    this.usersRef = Firebase.database()
+      .ref(`users`)
+      .orderByChild(`available`)
+      .equalTo(true);
 
     this.state = {
       loading: true,
@@ -36,57 +44,67 @@ export default class NearPlayerScreen extends React.Component {
       currentPosition: {},
       players: {},
       currUser: {}
-    }
+    };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     // 1 - Get the user from firebase
     // 2 - Update the new position, location and locationPermission
     LocationService.getLocationAsync().then(({ position, location }) => {
       UserService.setMyLocation(position, location).then(me => {
         this.setState({ currUser: me });
         this._getNearPlayers(me.key);
-      })
-    })
+      });
+    });
+  }
+
+  componentWillUnmount() {
+    this.usersRef.off("value");
   }
 
   /** It uses the userKey to remove the user itself in the players List */
   _getNearPlayers(userKey) {
-    this.usersRef.on('value', (snapshot) => {
-      let playerList = snapshot.val()
-      delete playerList[userKey]
-      this._filterLongDistancePlayers(playerList)
+    this.usersRef.on("value", snapshot => {
+      let playerList = snapshot.val();
+      delete playerList[userKey];
+      this._filterLongDistancePlayers(playerList);
     });
   }
 
   _filterLongDistancePlayers(players) {
-    const currUser = this.state.currUser
-    const keys = Object.keys(players)
+    const currUser = this.state.currUser;
+    const keys = Object.keys(players);
 
-    if (currUser) {
-      keys.forEach((key) => {
-        const player = players[key]
+    if (currUser.key) {
+      keys.forEach(key => {
+        const player = players[key];
         // If the user did the welcome tour and has coordinates
-        if (!player.firstTime && player.position.coords) {
-          const playerDistance = parseInt(LocationService.calculatePlayerDistance(currUser, player))
+        if (!player.position || !player.position.coords) {
+          delete players[key];
+        } else if (!player.firstTime) {
+          const playerDistance = parseInt(
+            LocationService.calculatePlayerDistance(currUser, player)
+          );
           if (currUser.distance <= playerDistance) {
-            delete players[key]
+            delete players[key];
           }
         }
-      })
-      this.setState({ loading: false, players: players })
+      });
+      this.setState({ loading: false, players: players });
     }
   }
 
   render() {
     if (this.state.loading) {
-      return <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" />
-      </View>
+      return (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
     } else {
-      const players = this.state.players
-      const playersKeys = Object.keys(players)
-      const currUser = this.state.currUser
+      const players = this.state.players;
+      const playersKeys = Object.keys(players);
+      const currUser = this.state.currUser;
 
       // <SearchBar
       //   clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
@@ -101,28 +119,37 @@ export default class NearPlayerScreen extends React.Component {
           <View style={styles.container}>
             <ScrollView>
               <List>
-                {
-                  playersKeys.map((key) => {
-                    if (currUser) {
-                      const dist = parseInt(LocationService.calculatePlayerDistance(currUser, players[key]));
-                      const player = players[key];
-                      return (
-                        <ListItem
-                          key={player.uid}
-                          roundAvatar
-                          title={player.displayName}
-                          avatar={{ uri: player.photoURL }}
-                          subtitle={Lang.t(`playerCard.fromDistance`, { distance: dist })}
-                          onPress={() => this.props.navigation.navigate('SelectMatch', { player })}
-                        />
+                {playersKeys.map(key => {
+                  if (currUser) {
+                    const dist = parseInt(
+                      LocationService.calculatePlayerDistance(
+                        currUser,
+                        players[key]
                       )
-                    }
-                  })
-                }
+                    );
+                    const player = players[key];
+                    return (
+                      <ListItem
+                        key={player.uid}
+                        roundAvatar
+                        title={player.displayName}
+                        avatar={{ uri: player.photoURL }}
+                        subtitle={Lang.t(`playerCard.fromDistance`, {
+                          distance: dist
+                        })}
+                        onPress={() =>
+                          this.props.navigation.navigate("SelectMatch", {
+                            player
+                          })
+                        }
+                      />
+                    );
+                  }
+                })}
               </List>
             </ScrollView>
           </View>
-        )
+        );
       }
       return (
         <View style={styles.emptyPlayersContainer}>
@@ -136,19 +163,19 @@ export default class NearPlayerScreen extends React.Component {
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center"
   },
   container: {
-    flex: 1,
+    flex: 1
   },
   emptyPlayersContainer: {
     flex: 1,
     marginBottom: 60,
-    justifyContent: 'center',
+    justifyContent: "center"
   },
   emptyPlayers: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 24,
     color: Colors.muted
   }
-})
+});

@@ -3,14 +3,31 @@ import { Share } from "react-native";
 
 import Config from "config";
 import Lang from "lang";
+import FirebaseService from "./FirebaseService";
+
+let ref = null;
 
 class MatchService {
+  getRef = () => {
+    if (!ref) {
+      ref = FirebaseService.db().ref(`matches`);
+    }
+    return ref;
+  };
+
   share(match) {
     const { title, message, url, dialogTitle } = this.getInvitationMessage(
       match
     );
 
     Share.share({ title, message, url }, { dialogTitle });
+  }
+
+  getMatch(key) {
+    return this.getRef()
+      .child(key)
+      .once("value")
+      .then(snap => FirebaseService.normalizeSnap(snap));
   }
 
   getInvitationMessage(match) {

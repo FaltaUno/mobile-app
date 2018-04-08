@@ -3,6 +3,7 @@ import React from "react";
 import { StackNavigator } from "react-navigation";
 import { StatusBar, StyleSheet, View } from "react-native";
 
+import NavigationService from 'services/NavigationService';
 import PushService from "services/PushService";
 
 import AddMatchNavigator from "navigation/AddMatchNavigator";
@@ -31,7 +32,7 @@ const RootStackNavigator = StackNavigator(
   }
 );
 
-class RootNavigatorContent extends React.Component {
+class RootNavigator extends React.Component {
   componentDidMount() {
     this._notificationSubscription = this._registerForPushNotifications();
   }
@@ -41,14 +42,19 @@ class RootNavigatorContent extends React.Component {
   }
 
   render() {
-    return <RootStackNavigator />;
+    return (
+      <View style={styles.container}>
+        <StatusBar barStyle="light-content" />
+        <RootStackNavigator
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+      </View>
+    );
   }
 
   _registerForPushNotifications() {
-    // Send our push token over to our backend so we can receive notifications
-    // You can comment the following line out if you want to stop receiving
-    // a notification every time you open the app. Check out the source
-    // for this function in api/registerForPushNotificationsAsync.js
     PushService.registerForPushNotificationsAsync();
 
     // Watch for incoming notifications
@@ -57,13 +63,6 @@ class RootNavigatorContent extends React.Component {
     );
   }
 }
-
-const RootNavigator = () => (
-  <View style={styles.container}>
-    <StatusBar barStyle="light-content" />
-    <RootNavigatorContent />
-  </View>
-);
 
 const styles = StyleSheet.create({
   container: { flex: 1 }
