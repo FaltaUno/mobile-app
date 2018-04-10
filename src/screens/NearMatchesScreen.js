@@ -71,7 +71,8 @@ export default class NearMatchesScreen extends React.Component {
   _getNearMatches() {
     this.matchesRef.on("value", snapshot => {
       const matchesListObj = snapshot.val();
-      const matchesList = Object.keys(matchesListObj).map((key) => matchesListObj[key])
+      const matchesList = Object.keys(matchesListObj)
+                            .map((key) => Object.assign({}, matchesListObj[key], { key: key } ) )
       const displayMatches = this._filterLongDistanceMatches(matchesList);
       this.setState({loading: false, displayMatches: displayMatches })
     });
@@ -126,7 +127,7 @@ export default class NearMatchesScreen extends React.Component {
                     ;
                     return (
                       <ListItem
-                        key={match.id}
+                        key={match.key}
                         roundAvatar
                         title={match.name}
                       />
