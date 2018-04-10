@@ -50,31 +50,58 @@ class LocationService {
 
   ///////// Calculate Distance methods /////////
 
-  /** This method will calculate the distance in KM between two players.
-   * @param currPlayer is the player who is using the app.
-   * @param otherPlayer can be any user.
+    /**
+   * Calculates the distance of two pair of latitude and longitude numbers, expressed in kilometers
+   * @param { Number } fromLat from point latitude
+   * @param { Number } fromLong to point longitude
+   * @param { Number } toLat from point latitude 
+   * @param { Number } toLong to point longitude
    */
-  calculatePlayerDistance(currPlayer, otherPlayer) {
+  calculateDistance(fromLat, fromLong, toLat, toLong) {
     const R = 6371;
 
-    const cuLat = currPlayer.position.coords.latitude;
-    const cuLong = currPlayer.position.coords.longitude;
-    const opLat = otherPlayer.position.coords.latitude;
-    const opLong = otherPlayer.position.coords.longitude;
-
-    let dLat = this.deg2rad(opLat - cuLat);
-    let dLon = this.deg2rad(opLong - cuLong);
-    let a =
+    const dLat = this.deg2rad(toLat - fromLat);
+    const dLon = this.deg2rad(toLong - fromLong);
+    const a =
       Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-      Math.cos(this.deg2rad(cuLat)) * Math.cos(this.deg2rad(opLat)) *
+      Math.cos(this.deg2rad(fromLat)) * Math.cos(this.deg2rad(fromLat)) *
       Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    let d = R * c;
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c;
     return d;
   }
 
   deg2rad(deg) { return deg * (Math.PI / 180) }
+
+  /** Returns the distance in KM between two players.
+   * @param { User } currPlayer is the player who is using the app.
+   * @param { User } otherPlayer can be any user.
+   * @return { Number } kilometers between them
+   */
+  calculatePlayerDistance(currPlayer, otherPlayer) {
+    const cuLat = currPlayer.position.coords.latitude;
+    const cuLong = currPlayer.position.coords.longitude;
+    const opLat = otherPlayer.position.coords.latitude;
+    const opLong = otherPlayer.position.coords.longitude;
+    return calculateDistance(cuLat, cuLong, opLat, opLong)
+  }
+
+  /**
+   * Returns the distance between a player and a match location.
+   * @param { User } user 
+   * @param { Match } match
+   * @return { Number } kilometers between them 
+   */
+  calculateMatchDistance(user, match) {
+    const uLat = user.position.coords.latitude
+    const uLong = user.position.coords.longitude
+    const mLat = match.location.lat
+    const mLong = match.location.lng
+    return this.calculateDistance(uLat, uLong, mLat, mLong)
+  }
+
+  
 
 }
 

@@ -33,16 +33,19 @@ export default class NearMatchesScreen extends React.Component {
 
   constructor(props) {
     super(props);
-    this.usersRef = Firebase.database()
-      .ref(`users`)
-      .orderByChild(`available`)
-      .equalTo(true);
+    /** WARNING: This will bring the whole matches, filtering in the app could be very expensive
+     * we need to consider a strategy that brings the matches by near location: ie: 
+     * if I'm Lomas de Zamora player this can retrive Lomas, Banfield, Temperley matches as default.
+     */
+    this.matchesRef = Firebase.database()
+      .ref(`matches`)
 
     this.state = {
       loading: true,
       search: "",
       currentPosition: {},
-      players: {},
+      matches: {},
+      displayMatches: {},
       currUser: {}
     };
   }
@@ -53,7 +56,7 @@ export default class NearMatchesScreen extends React.Component {
     LocationService.getLocationAsync().then(({ position, location }) => {
       UserService.setMyLocation(position, location).then(me => {
         this.setState({ currUser: me });
-        this._getNearPlayers(me.key);
+        this._getNearMatches();
       });
     });
   }
@@ -62,36 +65,38 @@ export default class NearMatchesScreen extends React.Component {
     this.usersRef.off("value");
   }
 
-  /** It uses the userKey to remove the user itself in the players List */
-  _getNearPlayers(userKey) {
-    this.usersRef.on("value", snapshot => {
-      let playerList = snapshot.val();
-      delete playerList[userKey];
-      this._filterLongDistancePlayers(playerList);
+  /** 
+   * Return the near matches.
+   */
+  _getNearMatches() {
+    this.matchesRef.on("value", snapshot => {
+      const matchesListObj = snapshot.val();
+      const matchesList = Object.keys(matchesListObj).map((key) => matchesListObj[key])
+      const displayMatches = this._filterLongDistanceMatches(matchesList);
+      this.setState({loading: false, displayMatches: displayMatches })
     });
   }
 
-  _filterLongDistancePlayers(players) {
+  /** 
+   * Sets the matches that are in the locationg range allowed by the player configuration
+   * distance.  
+   * 1 - It gets from the state the current user
+   * 2 - Filter the matches list by distance
+   *  2.1 - Calculates the match distance using the @type { LocationService }
+   * @param matches a list of matches.
+   * 
+   * @example:
+   *  If the @property { Number } currUser.distance is 15 (km) it will set a list with the matches 
+   *  that are included in that value. 
+   * 
+   * @return the actual matches to display
+   * */
+  _filterLongDistanceMatches(matches) {
     const currUser = this.state.currUser;
-    const keys = Object.keys(players);
-
-    if (currUser.key) {
-      keys.forEach(key => {
-        const player = players[key];
-        // If the user did the welcome tour and has coordinates
-        if (!player.position || !player.position.coords) {
-          delete players[key];
-        } else if (!player.firstTime) {
-          const playerDistance = parseInt(
-            LocationService.calculatePlayerDistance(currUser, player)
-          );
-          if (currUser.distance <= playerDistance) {
-            delete players[key];
-          }
-        }
-      });
-      this.setState({ loading: false, players: players });
-    }
+     return matches.filter( (match) => {
+      const matchDistance = parseInt(LocationService.calculateMatchDistance(currUser, match));
+      return currUser.distance <= matchDistance
+    })
   }
 
   render() {
@@ -102,46 +107,28 @@ export default class NearMatchesScreen extends React.Component {
         </View>
       );
     } else {
-      const players = this.state.players;
-      const playersKeys = Object.keys(players);
+      const matches = this.state.displayMatches;
       const currUser = this.state.currUser;
 
-      // <SearchBar
-      //   clearIcon={this.state.search ? { name: 'clear', type: 'ionicons' } : false}
-      //   containerStyle={styles.searchBar}
-      //   inputStyle={styles.input}
-      //   lightTheme
-      //   onChangeText={(search) => { this.setState({ search }) }}
-      //   placeholder={Lang.t('home.placeholder')} />
-
-      if (playersKeys.length) {
+      if (matches.length !== 0) {
         return (
           <View style={styles.container}>
             <ScrollView>
               <List>
-                {playersKeys.map(key => {
+                {matches.map(match => {
                   if (currUser) {
                     const dist = parseInt(
-                      LocationService.calculatePlayerDistance(
+                      LocationService.calculateMatchDistance(
                         currUser,
-                        players[key]
+                        match
                       )
                     );
-                    const player = players[key];
+                    ;
                     return (
                       <ListItem
-                        key={player.uid}
+                        key={match.id}
                         roundAvatar
-                        title={player.displayName}
-                        avatar={{ uri: player.photoURL }}
-                        subtitle={Lang.t(`playerCard.fromDistance`, {
-                          distance: dist
-                        })}
-                        onPress={() =>
-                          this.props.navigation.navigate("SelectMatch", {
-                            player
-                          })
-                        }
+                        title={match.name}
                       />
                     );
                   }
