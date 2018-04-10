@@ -128,8 +128,8 @@ export default class NearMatchesScreen extends React.Component {
                     return (
                       <ListItem
                         key={match.key}
-                        roundAvatar
                         title={match.name}
+                        subtitle={match.place}
                       />
                     );
                   }
