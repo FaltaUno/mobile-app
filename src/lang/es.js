@@ -96,6 +96,9 @@ export default {
     invitationText: `Hola. Me faltan jugadores para mi partido que se juega {{matchDateOn}}*{{matchDate}} hs.* en *"{{matchPlace}}"*.\nSi te interesa, sumate mediante el siguiente enlace.\n`,
     on: `el`,
   },
+  nearMatches: {
+    title:`Partidos cerca`
+  },
   myProfile: {
     title: `Perfil`,
     available: `Estoy disponible para jugar`,

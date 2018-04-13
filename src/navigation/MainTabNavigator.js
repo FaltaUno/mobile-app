@@ -6,7 +6,7 @@ import { TabNavigator, TabBarBottom } from "react-navigation";
 import Lang from "lang";
 import Colors from "constants/Colors";
 
-import InvitePlayerNavigator from "navigation/InvitePlayerNavigator";
+import LookingForMatchesNavigator from "navigation/LookingForMatchesNavigator";
 import MyMatchesNavigator from "navigation/MyMatchesNavigator";
 
 const navigationResolver = ({ navigation }) => ({
@@ -22,8 +22,8 @@ const iconResolver = (navigation, focused) => {
     case "Home":
       iconName =
         Platform.OS === "ios"
-          ? `ios-people${focused ? "" : "-outline"}`
-          : "md-people";
+          ? `ios-search${focused ? "" : "-outline"}`
+          : "md-search";
       break;
     case "MyMatches":
       iconName =
@@ -47,7 +47,7 @@ const labelResolver = navigation => {
   let labelTitle;
   switch (routeName) {
     case "Home":
-      labelTitle = Lang.t("home.title");
+      labelTitle = Lang.t("nearMatches.title");
       break;
     case "MyMatches":
       labelTitle = Lang.t("myMatches.title");
@@ -59,7 +59,7 @@ const labelResolver = navigation => {
 export default TabNavigator(
   {
     Home: {
-      screen: InvitePlayerNavigator
+      screen: LookingForMatchesNavigator
     },
     MyMatches: {
       screen: MyMatchesNavigator
