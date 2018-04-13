@@ -96,7 +96,7 @@ export default class NearMatchesScreen extends React.Component {
     const currUser = this.state.currUser;
      return matches.filter( (match) => {
       const matchDistance = parseInt(LocationService.calculateMatchDistance(currUser, match));
-      return currUser.distance <= matchDistance
+      return matchDistance <= currUser.distance 
     })
   }
 
@@ -129,7 +129,11 @@ export default class NearMatchesScreen extends React.Component {
                       <ListItem
                         key={match.key}
                         title={match.name}
-                        subtitle={match.place}
+                        subtitle={
+                          match.address.name + "," + 
+                          match.address.city + "," +  
+                          match.address.country
+                        }
                       />
                     );
                   }
