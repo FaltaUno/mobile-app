@@ -134,6 +134,10 @@ export default class NearMatchesScreen extends React.Component {
                           match.address.city + "," +  
                           match.address.country
                         }
+                        onPress={() =>
+                          this.props
+                          .navigation.navigate("RequestMatchInvite", { match })
+                        }
                       />
                     );
                   }

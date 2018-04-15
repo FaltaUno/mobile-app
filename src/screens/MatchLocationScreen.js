@@ -46,7 +46,7 @@ export default class MatchLocationScreen extends React.Component {
     const match = navigation.state.params.match
     let region = {
       latitudeDelta: 0.0922,
-      longitudeDelta: 0.0421,
+      longitudeDelta: 0.0421
     }
 
     let marker = false
