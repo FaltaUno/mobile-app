@@ -89,7 +89,16 @@ export default {
     deleteMatch: `Delete`
   },
   nearMatches: {
-    title:`Near matches`
+    title: `Near matches`
+  },
+  matchDetails: {
+    title: `Match details`
+  },
+  matchCard: {
+    organizedBy: `Organized by {{organizer}}`,
+    requestInvite: `I wanna play!`,
+    remainingSpots: `There are {{spots}} spots left`,
+    place: `Dirección`
   },
   match: {
     inviteButtonText: `Invite players`,
@@ -132,7 +141,7 @@ export default {
     }
   },
   invite: {
-    title: `Match details`,
+    title: `{{name}}'s invitation`,
     invitationTitle: `Invitation to...`,
     matchPlaceholder: `It'll be played at {{place}}`,
     invalidPhoneNumber: `This player didn't set up the phone. We can do nothing :(`,
@@ -168,13 +177,13 @@ export default {
       descriptionFinal: `You will receive a SMS`,
       disclaimerFinal: `Your telephone company could charge your the common taxes for receiving this SMS`,
       buttonLabelFinal: `Receive verification code`,
-      backText: 'Welcome'
+      backText: "Welcome"
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmation`,
       title: `Check your phone`,
       description: `We have sent you the code at\n{{phone}}`,
-      buttonLabel: `Enter your code`,
+      buttonLabel: `Enter your code`
     },
     phoneVerification: {
       headerTitle: `Invitacion`,
@@ -190,7 +199,7 @@ export default {
       title: `Invitation confirmed`,
       description: `Your phone {{phone}} is between the enabled users for the closed beta`,
       buttonLabel: `Continue with the setup`,
-      backText:`Check code`
+      backText: `Check code`
     },
     locationPermission: {
       headerTitle: `Localization`,

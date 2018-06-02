@@ -7,13 +7,14 @@ import {
   StyleSheet,
   View
 } from "react-native";
-import { Button, Card, Text, ListItem } from "react-native-elements";
+import { Button, Card, Text, List, ListItem } from "react-native-elements";
 import { MapView } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 
 import Colors from "constants/Colors";
 import Lang from "lang";
+import { Button as ButtonStyle } from "styles";
 
 export default class MatchCard extends Component {
   constructor(props) {
@@ -74,15 +75,30 @@ export default class MatchCard extends Component {
       }
       return (
         <View style={styles.container}>
-          <Card title={theMatch.name} containerStyle={styles.cardContainer}>
-            <Text>Partido organizado por {theMatch.creatorKey}</Text>
-            <Text>{moment(theMatch.date).fromNow()}</Text>
-            <Text>Queda 1 lugar</Text>
-            <Button text="¡Quiero jugar!" />
+          <Card
+            title={theMatch.name.toUpperCase()}
+            containerStyle={styles.cardContainer}
+          >
+            <Text>
+              {Lang.t("matchCard.organizedBy", {
+                organizer: "Nahuel Sotelo"
+              })}
+            </Text>
+            <Text style={styles.matchDate}>
+              {moment(theMatch.date).fromNow()}
+            </Text>
+            <Text h4>{Lang.t("matchCard.remainingSpots", { spots: 1 })}</Text>
+            <Button
+              text={Lang.t("matchCard.requestInvite")}
+              textStyle={ButtonStyle.block.textStyle}
+              containerStyle={ButtonStyle.block.containerStyle}
+              buttonStyle={ButtonStyle.block.buttonStyle}
+            />
           </Card>
-          <Card title={"Información del partido"} containerStyle={styles.cardContainer}>
+          <List>
             <ListItem
-              title={theMatch.place}
+              title={Lang.t(`matchCard.place`)}
+              subtitle={theMatch.place}
               rightIcon={
                 <View style={styles.actionsContainer}>
                   <Ionicons
@@ -90,6 +106,7 @@ export default class MatchCard extends Component {
                       Platform.OS === "ios" ? "ios-navigate" : "md-navigate"
                     }
                     size={32}
+                    color={Colors.primary}
                     style={styles.actionButton}
                   />
                   <Ionicons
@@ -97,20 +114,17 @@ export default class MatchCard extends Component {
                       (Platform.OS === "ios" ? "ios" : "md") + "-arrow-forward"
                     }
                     size={22}
-                    color={Colors.text}
+                    color={Colors.muted}
                     style={styles.actionButton}
                   />
                 </View>
               }
               onPress={() => this.handleMapOpen(theMatch.location)}
             />
-          </Card>
-          {/*<MapView
-            style={styles.map}
-            region={this.state.region}
-          >
+          </List>
+          <MapView style={styles.map} region={this.state.region}>
             {marker}
-          </MapView>*/}
+          </MapView>
         </View>
       );
     }
@@ -132,13 +146,10 @@ const styles = StyleSheet.create({
     flex: 1
   },
   map: {
-    flex: 2,
-    marginTop: 10,
-    marginBottom: 10
+    flex: 1
   },
   cardContainer: {
-    flex: 1,
-    marginTop: 15
+    flex: 1
   },
   actionsContainer: {
     flexDirection: "row",
@@ -147,5 +158,8 @@ const styles = StyleSheet.create({
   actionButton: {
     marginLeft: 10,
     marginRight: 0
+  },
+  matchDate: {
+    color: Colors.muted
   }
 });

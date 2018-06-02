@@ -11,7 +11,7 @@ export default class RequestMatchInviteScreen extends Component {
   }
 
   static navigationOptions = ({ navigation }) => ({
-    title: Lang.t('invite.title', navigation.state.params.match),
+    title: Lang.t('matchDetails.title', navigation.state.params.match),
     tabBarVisible: true,
     ...headerStyle
   });
