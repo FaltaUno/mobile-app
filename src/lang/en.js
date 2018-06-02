@@ -89,7 +89,7 @@ export default {
     deleteMatch: `Delete`
   },
   nearMatches: {
-    title:`Partidos cerca`
+    title:`Near matches`
   },
   match: {
     inviteButtonText: `Invite players`,
@@ -132,7 +132,7 @@ export default {
     }
   },
   invite: {
-    title: `{{name}}'s invitation`,
+    title: `Match details`,
     invitationTitle: `Invitation to...`,
     matchPlaceholder: `It'll be played at {{place}}`,
     invalidPhoneNumber: `This player didn't set up the phone. We can do nothing :(`,

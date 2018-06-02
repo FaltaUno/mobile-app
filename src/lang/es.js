@@ -133,7 +133,7 @@ export default {
     }
   },
   invite: {
-    title: `Invitar a {{name}}`,
+    title: `Detalles del partido`,
     invitationTitle: `Invitación a...`,
     matchPlaceholder: `Se juega en {{place}}`,
     invalidPhoneNumber: "El jugador no cargó su teléfono. Probá con señales de humo. ",

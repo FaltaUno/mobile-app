@@ -12,7 +12,7 @@ export default class RequestMatchInviteScreen extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: Lang.t('invite.title', navigation.state.params.match),
-    tabBarVisible: false,
+    tabBarVisible: true,
     ...headerStyle
   });
 

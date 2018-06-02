@@ -1,7 +1,19 @@
 import React, { Component } from "react";
-import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
-import { Card } from "react-native-elements";
+import {
+  ActivityIndicator,
+  Alert,
+  Linking,
+  Platform,
+  StyleSheet,
+  View
+} from "react-native";
+import { Button, Card, Text, ListItem } from "react-native-elements";
 import { MapView } from "expo";
+import { Ionicons } from "@expo/vector-icons";
+import moment from "moment";
+
+import Colors from "constants/Colors";
+import Lang from "lang";
 
 export default class MatchCard extends Component {
   constructor(props) {
@@ -62,17 +74,56 @@ export default class MatchCard extends Component {
       }
       return (
         <View style={styles.container}>
-          <MapView
+          <Card title={theMatch.name} containerStyle={styles.cardContainer}>
+            <Text>Partido organizado por {theMatch.creatorKey}</Text>
+            <Text>{moment(theMatch.date).fromNow()}</Text>
+            <Text>Queda 1 lugar</Text>
+            <Button text="¡Quiero jugar!" />
+          </Card>
+          <Card title={"Información del partido"} containerStyle={styles.cardContainer}>
+            <ListItem
+              title={theMatch.place}
+              rightIcon={
+                <View style={styles.actionsContainer}>
+                  <Ionicons
+                    name={
+                      Platform.OS === "ios" ? "ios-navigate" : "md-navigate"
+                    }
+                    size={32}
+                    style={styles.actionButton}
+                  />
+                  <Ionicons
+                    name={
+                      (Platform.OS === "ios" ? "ios" : "md") + "-arrow-forward"
+                    }
+                    size={22}
+                    color={Colors.text}
+                    style={styles.actionButton}
+                  />
+                </View>
+              }
+              onPress={() => this.handleMapOpen(theMatch.location)}
+            />
+          </Card>
+          {/*<MapView
             style={styles.map}
             region={this.state.region}
-            onRegionChange={region => this.setState({ region })}
           >
             {marker}
-          </MapView>
-          <Card title={theMatch.name} containerStyle={styles.container} />
+          </MapView>*/}
         </View>
       );
     }
+  }
+
+  handleMapOpen({ lat, lng }) {
+    const mapUrl = `http://maps.apple.com/?q=${lat},${lng}`;
+    Linking.canOpenURL(mapUrl).then(supported => {
+      if (!supported) {
+        return Alert.alert(Lang.t(`error.urlNotSupported`, { mapUrl }));
+      }
+      return Linking.openURL(mapUrl);
+    });
   }
 }
 
@@ -81,6 +132,20 @@ const styles = StyleSheet.create({
     flex: 1
   },
   map: {
-    flex: 1
+    flex: 2,
+    marginTop: 10,
+    marginBottom: 10
+  },
+  cardContainer: {
+    flex: 1,
+    marginTop: 15
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    alignItems: "center"
+  },
+  actionButton: {
+    marginLeft: 10,
+    marginRight: 0
   }
 });
