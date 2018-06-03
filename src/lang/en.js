@@ -96,9 +96,11 @@ export default {
   },
   matchCard: {
     organizedBy: `Organized by {{organizer}}`,
+    organizer: `Organizer`,
     requestInvite: `I wanna play!`,
     remainingSpots: `There are {{spots}} spots left`,
-    place: `Dirección`
+    place: `Place`,
+    date: `Date`,
   },
   match: {
     inviteButtonText: `Invite players`,

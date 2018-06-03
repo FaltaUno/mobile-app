@@ -103,9 +103,11 @@ export default {
   },
   matchCard: {
     organizedBy: `Organizado por {{organizer}}`,
+    organizer: `Organizador`,
     requestInvite: `¡Quiero jugar!`,
     remainingSpots: `Quedan {{spots}} lugares`,
-    place: `Address`
+    place: `Lugar`,
+    date: `Fecha`,
   },
   myProfile: {
     title: `Perfil`,

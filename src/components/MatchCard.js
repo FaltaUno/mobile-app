@@ -12,24 +12,30 @@ import { MapView } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 
-import Colors from "constants/Colors";
+import Colors from "../constants/Colors";
 import Lang from "lang";
 import { Button as ButtonStyle } from "styles";
 
-export default class MatchCard extends Component {
-  constructor(props) {
-    super(props);
-  }
+import UserService from "../services/UserService";
+import MatchService from "../services/MatchService";
 
+export default class MatchCard extends Component {
   state = {
     loading: true,
     marker: false,
-    region: {}
+    region: {},
+    matchCreator: {
+      displayName: <ActivityIndicator />
+    }
   };
 
-  componentDidMount() {
+  async componentDidMount() {
     let marker = false;
     const match = this.props.match;
+
+    UserService.readOnce(match.creatorKey).then(matchCreator => {
+      this.setState({ matchCreator });
+    });
 
     let region = {
       latitude: match.location.lat,
@@ -73,32 +79,29 @@ export default class MatchCard extends Component {
           />
         );
       }
+
       return (
         <View style={styles.container}>
-          <Card
-            title={theMatch.name.toUpperCase()}
-            containerStyle={styles.cardContainer}
-          >
-            <Text>
-              {Lang.t("matchCard.organizedBy", {
-                organizer: "Nahuel Sotelo"
-              })}
-            </Text>
-            <Text style={styles.matchDate}>
-              {moment(theMatch.date).fromNow()}
-            </Text>
-            <Text h4>{Lang.t("matchCard.remainingSpots", { spots: 1 })}</Text>
-            <Button
-              text={Lang.t("matchCard.requestInvite")}
-              textStyle={ButtonStyle.block.textStyle}
-              containerStyle={ButtonStyle.block.containerStyle}
-              buttonStyle={ButtonStyle.block.buttonStyle}
-            />
-          </Card>
           <List>
             <ListItem
-              title={Lang.t(`matchCard.place`)}
-              subtitle={theMatch.place}
+              title={this.state.matchCreator.displayName}
+              subtitle={Lang.t("matchCard.organizer")}
+              hideChevron
+            />
+            <ListItem
+              title={Lang.t("matchCard.remainingSpots", { spots: 1 })}
+              hideChevron
+            />
+          </List>
+          <List>
+            <ListItem
+              title={Lang.t("matchCard.date")}
+              rightTitle={moment(theMatch.date).fromNow()}
+              hideChevron
+            />
+            <ListItem
+              title={theMatch.place}
+              subtitle={Lang.t(`matchCard.place`)}
               rightIcon={
                 <View style={styles.actionsContainer}>
                   <Ionicons
@@ -125,9 +128,39 @@ export default class MatchCard extends Component {
           <MapView style={styles.map} region={this.state.region}>
             {marker}
           </MapView>
+          <Button
+            text={Lang.t("matchCard.requestInvite")}
+            textStyle={ButtonStyle.block.textStyle}
+            containerStyle={[
+              ButtonStyle.block.containerStyle,
+              styles.buttonContainerStyle
+            ]}
+            buttonStyle={ButtonStyle.block.buttonStyle}
+            onPress={this.handleRequestInvite}
+          />
         </View>
       );
     }
+  }
+
+  handleRequestInvite = () => {
+    UserService.me().then(me => {
+      this.doRequestInvite(
+        this.state.match,
+        me,
+        me.phone,
+        this.state.matchCreator
+      );
+    });
+  };
+
+  async doRequestInvite(match, user, phone, matchCreator) {
+    // Va ahora en el open dialog
+    this.setState({ sendingInvite: true });
+    await MatchService.requestInvite(match, user, phone, matchCreator);
+    // const invites = this.state.invites.slice();
+    //invites.push(invite);
+    //this.setState({ sendingInvite: false, invites });
   }
 
   handleMapOpen({ lat, lng }) {
@@ -146,10 +179,11 @@ const styles = StyleSheet.create({
     flex: 1
   },
   map: {
-    flex: 1
-  },
-  cardContainer: {
-    flex: 1
+    flex: 1,
+    borderColor: Colors.gray,
+    borderWidth: 1,
+    marginTop: 15,
+    marginBottom: 15
   },
   actionsContainer: {
     flexDirection: "row",
@@ -159,7 +193,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 0
   },
-  matchDate: {
-    color: Colors.muted
+  buttonContainerStyle: {
+    marginTop: 0,
+    marginBottom: 0
   }
 });
