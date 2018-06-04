@@ -19,6 +19,11 @@ export default {
     textStyle: {
       width: '100%',
       textAlign: 'center',
+    },
+    loadingStyle: {
+      width: '100%',
+      paddingTop: 9,
+      paddingBottom: 9,
     }
   },
   rounded: {

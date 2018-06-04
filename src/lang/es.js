@@ -108,6 +108,8 @@ export default {
     remainingSpots: `Quedan {{spots}} lugares`,
     place: `Lugar`,
     date: `Fecha`,
+    requestInviteSent: `Pedido enviado`,
+    requestInviteApproved: `¡Fuiste convocado!`
   },
   myProfile: {
     title: `Perfil`,
@@ -149,7 +151,7 @@ export default {
     invalidPhoneNumber:
       "El jugador no cargó su teléfono. Probá con señales de humo. ",
     invalidPhoneNumberTitle: "Número inválido. ",
-    invitationText: `Hola, {{playerName}}.\nTe contacto a través de *{{appName}}*.\nTe invito a un partido el *{{matchDate}} hs* en *{{matchPlace}}*.\n{{matchLocationInfo}}\nSi te interesa, respondeme este mensaje por favor.`,
+    invitationText: `Hola, {{playerName}}.\nTe contacto a través de *{{appName}}*.\nTe invito a un partido el {{matchDate}} hs. en *{{matchPlace}}*.\n{{matchLocationInfo}}\nSi te interesa, respondeme este mensaje por favor.`,
     invitationLocationText: `Por las dudas, te dejo el link de la ubicación del lugar.\n{{locationUrl}}\n`,
     invitationFooter: `Mensaje enviado desde *{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`
   },
@@ -162,7 +164,8 @@ export default {
   whatsapp: {
     buttonTitle: `Invitar por WhatsApp`,
     urlNotSupported: `No se puede abrir la url: {{url}}`,
-    urlUnkownError: `An error occurred.\n{{err}}`
+    urlUnkownError: `Ocurrió un error.\n{{err}}`,
+    contactAdminForMatch: `Hola, {{creatorName}}.\nSoy {{userName}} y te contacto para saber más acerca del partido "{{matchName}}" que se juegan en *{{matchPlace}}* el {{matchDate}} hs.`
   },
   welcome: {
     hi: {

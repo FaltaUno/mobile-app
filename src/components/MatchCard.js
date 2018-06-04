@@ -7,17 +7,19 @@ import {
   StyleSheet,
   View
 } from "react-native";
-import { Button, Card, Text, List, ListItem } from "react-native-elements";
+import { Button, List, ListItem } from "react-native-elements";
 import { MapView } from "expo";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
-
-import Colors from "../constants/Colors";
 import Lang from "lang";
 import { Button as ButtonStyle } from "styles";
 
+import Colors from "../constants/Colors";
+
 import UserService from "../services/UserService";
 import MatchService from "../services/MatchService";
+import { getInvites } from "../services/InviteService";
+import WhatsappService from "../services/WhatsappService";
 
 export default class MatchCard extends Component {
   state = {
@@ -26,16 +28,18 @@ export default class MatchCard extends Component {
     region: {},
     matchCreator: {
       displayName: <ActivityIndicator />
-    }
+    },
+    requestingInvite: false,
+    userInviteStatus: null,
+    spots: 0
   };
 
-  async componentDidMount() {
+  componentDidMount() {
     let marker = false;
-    const match = this.props.match;
+    const { match } = this.props;
 
-    UserService.readOnce(match.creatorKey).then(matchCreator => {
-      this.setState({ matchCreator });
-    });
+    this.loadMatchCreator(match);
+    this.loadUserInviteStatus(match);
 
     let region = {
       latitude: match.location.lat,
@@ -80,20 +84,86 @@ export default class MatchCard extends Component {
         );
       }
 
+      let bottomButton;
+      const { userInviteStatus } = this.state;
+
+      if (userInviteStatus === null) {
+        bottomButton = (
+          <Button
+            text={Lang.t("matchCard.requestInvite")}
+            loading={this.state.requestingInvite}
+            disabled={this.state.requestingInvite}
+            loadingStyle={ButtonStyle.block.loadingStyle}
+            textStyle={ButtonStyle.block.textStyle}
+            containerStyle={[
+              ButtonStyle.block.containerStyle,
+              styles.buttonContainerStyle
+            ]}
+            buttonStyle={ButtonStyle.block.buttonStyle}
+            onPress={this.handleRequestInvite}
+          />
+        );
+      } else if (userInviteStatus === false) {
+        bottomButton = (
+          <Button
+            text={Lang.t("matchCard.requestInviteSent")}
+            disabled={true}
+            textStyle={ButtonStyle.block.textStyle}
+            containerStyle={[
+              ButtonStyle.block.containerStyle,
+              styles.buttonContainerStyle
+            ]}
+            buttonStyle={ButtonStyle.block.buttonStyle}
+          />
+        );
+      } else {
+        bottomButton = (
+          <Button
+            text={Lang.t("matchCard.requestInviteApproved")}
+            disabled={true}
+            textStyle={ButtonStyle.block.textStyle}
+            containerStyle={[
+              ButtonStyle.block.containerStyle,
+              styles.buttonContainerStyle
+            ]}
+            buttonStyle={ButtonStyle.block.buttonStyle}
+          />
+        );
+      }
+
       return (
         <View style={styles.container}>
           <List>
             <ListItem
               title={this.state.matchCreator.displayName}
               subtitle={Lang.t("matchCard.organizer")}
-              hideChevron
+              rightIcon={
+                <View style={styles.actionsContainer}>
+                  <Ionicons
+                    name={"logo-whatsapp"}
+                    size={28}
+                    color={Colors.primary}
+                    style={styles.actionButton}
+                  />
+                  <Ionicons
+                    name={
+                      (Platform.OS === "ios" ? "ios" : "md") + "-arrow-forward"
+                    }
+                    size={22}
+                    color={Colors.gray}
+                    style={styles.actionButton}
+                  />
+                </View>
+              }
+              hideChevron={userInviteStatus !== true}
+              onPress={() =>
+                this.handleWhatsappMessage(
+                  userInviteStatus === true,
+                  this.state.matchCreator,
+                  theMatch
+                )
+              }
             />
-            <ListItem
-              title={Lang.t("matchCard.remainingSpots", { spots: 1 })}
-              hideChevron
-            />
-          </List>
-          <List>
             <ListItem
               title={Lang.t("matchCard.date")}
               rightTitle={moment(theMatch.date).fromNow()}
@@ -105,10 +175,8 @@ export default class MatchCard extends Component {
               rightIcon={
                 <View style={styles.actionsContainer}>
                   <Ionicons
-                    name={
-                      Platform.OS === "ios" ? "ios-navigate" : "md-navigate"
-                    }
-                    size={32}
+                    name={Platform.OS === "ios" ? "ios-compass" : "md-compass"}
+                    size={28}
                     color={Colors.primary}
                     style={styles.actionButton}
                   />
@@ -117,7 +185,7 @@ export default class MatchCard extends Component {
                       (Platform.OS === "ios" ? "ios" : "md") + "-arrow-forward"
                     }
                     size={22}
-                    color={Colors.muted}
+                    color={Colors.gray}
                     style={styles.actionButton}
                   />
                 </View>
@@ -128,39 +196,45 @@ export default class MatchCard extends Component {
           <MapView style={styles.map} region={this.state.region}>
             {marker}
           </MapView>
-          <Button
-            text={Lang.t("matchCard.requestInvite")}
-            textStyle={ButtonStyle.block.textStyle}
-            containerStyle={[
-              ButtonStyle.block.containerStyle,
-              styles.buttonContainerStyle
-            ]}
-            buttonStyle={ButtonStyle.block.buttonStyle}
-            onPress={this.handleRequestInvite}
-          />
+          <List containerStyle={styles.listBottom}>
+            <ListItem
+              title={Lang.t("matchCard.remainingSpots", {
+                spots: this.state.spots
+              })}
+              hideChevron
+            />
+          </List>
+          {bottomButton}
         </View>
       );
     }
   }
 
-  handleRequestInvite = () => {
-    UserService.me().then(me => {
-      this.doRequestInvite(
-        this.state.match,
-        me,
-        me.phone,
-        this.state.matchCreator
-      );
+  loadMatchCreator(match) {
+    UserService.readOnce(match.creatorKey).then(matchCreator => {
+      this.setState({ matchCreator });
     });
-  };
+  }
 
-  async doRequestInvite(match, user, phone, matchCreator) {
-    // Va ahora en el open dialog
-    this.setState({ sendingInvite: true });
-    await MatchService.requestInvite(match, user, phone, matchCreator);
-    // const invites = this.state.invites.slice();
-    //invites.push(invite);
-    //this.setState({ sendingInvite: false, invites });
+  // Get the invites and look if the user has already sent an invite request
+  loadUserInviteStatus(match) {
+    const { invites = {} } = match;
+    const invitesKeys = Object.keys(invites).map(inviteKey => inviteKey);
+    UserService.me().then(me => {
+      getInvites(invitesKeys).then(invites => {
+        let userInviteStatus = null;
+        for (let invite of invites) {
+          if (invite.userKey === me.key) {
+            userInviteStatus = invite.requestRead && invite.approved;
+          }
+        }
+        const spots =
+          match.playersNeeded -
+          invites.filter(invite => invite.approved === true).length;
+
+        this.setState({ spots, userInviteStatus });
+      });
+    });
   }
 
   handleMapOpen({ lat, lng }) {
@@ -170,6 +244,30 @@ export default class MatchCard extends Component {
         return Alert.alert(Lang.t(`error.urlNotSupported`, { mapUrl }));
       }
       return Linking.openURL(mapUrl);
+    });
+  }
+
+  handleRequestInvite = () => {
+    const { match } = this.props;
+    const { matchCreator } = this.state;
+
+    UserService.me()
+      .then(me => {
+        // Va ahora en el open dialog
+        this.setState({ requestingInvite: true });
+        return MatchService.requestInvite(match, me, me.phone, matchCreator);
+      })
+      .then(() => {
+        this.setState({ requestingInvite: false, userInviteStatus: false });
+      });
+  };
+
+  handleWhatsappMessage(enabled, creator, match) {
+    if (!enabled) {
+      return false;
+    }
+    UserService.me().then(me => {
+      WhatsappService.contactAdminForMatch(creator, match, me);
     });
   }
 }
@@ -182,8 +280,7 @@ const styles = StyleSheet.create({
     flex: 1,
     borderColor: Colors.gray,
     borderWidth: 1,
-    marginTop: 15,
-    marginBottom: 15
+    marginTop: 15
   },
   actionsContainer: {
     flexDirection: "row",
@@ -193,8 +290,14 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 0
   },
+  listBottom: { marginBottom: 15 },
   buttonContainerStyle: {
     marginTop: 0,
     marginBottom: 0
+  },
+  userIsInvitedText: {
+    color: Colors.primary,
+    fontSize: 20,
+    textAlign: "center"
   }
 });

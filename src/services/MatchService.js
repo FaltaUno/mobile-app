@@ -5,7 +5,8 @@ import Config from "config";
 import Lang from "lang";
 import FirebaseService from "./FirebaseService";
 import UserService from "./UserService";
-import InviteService from "./InviteService";
+import { getInviteRef } from "./InviteService";
+import PushService from "./PushService";
 
 let ref = null;
 
@@ -60,13 +61,13 @@ class MatchService {
 
   // TODO: revisar
   async requestInvite(match, user, phone, matchCreator) {
-    const ServerValue = FirebaseService.database.ServerValue;
+    const timestamp = FirebaseService.timestamp();
     const db = FirebaseService.db();
 
     // Invite
-    const inviteKey = await db.child(`invites`).push().key;
+    const inviteKey = await getInviteRef().push().key;
     const invite = {
-      createdAt: ServerValue.TIMESTAMP,
+      createdAt: timestamp,
       matchKey: match.key,
       userKey: user.key,
       userEmail: user.email,
@@ -77,7 +78,7 @@ class MatchService {
     };
 
     // Invite relations
-    const inviteRelation = { date: ServerValue.TIMESTAMP };
+    const inviteRelation = { date: timestamp };
 
     let updates = {};
     updates[`invites/${inviteKey}`] = invite;
@@ -86,37 +87,25 @@ class MatchService {
     // User contact info
     updates[`users/${user.key}/contactInfo`] = { phone };
 
-    await db.update(updates);
+    db.ref().update(updates); // Async process
+
     // Send the push notification, no matters the response
     this.notifyInviteRequestToMatchCreator(matchCreator, match, user);
     return invite;
   }
 
   notifyInviteRequestToMatchCreator(matchCreator, match, user) {
-    return notify(matchCreator, {
-      title: `${user.displayName} quiere jugar en ${match.name}`,
-      body: `Ingresá para aceptarlo o rechazarlo`,
-      data: {
-        action: "myMatch.inviteRequest",
-        matchKey: match.key,
-        userKey: user.key
-      }
-    });
-  }
-
-  async notify(user, data) {
-    data.to = user.pushToken;
-    data.badge = await this.getUnreadInviteRequestsCountForMatchAdmin(user.key);
-    return fetch(process.env.PUSH_URI, {
-      mode: "no-cors",
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-Encoding": "gzip, deflate",
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-      body: JSON.stringify(data)
+    this.getUnreadInviteRequestsCountForMatchAdmin(user.key).then(badge => {
+      PushService.notify(matchCreator, {
+        title: `${user.displayName} quiere jugar en ${match.name}`,
+        body: `Ingresá para aceptarlo o rechazarlo`,
+        badge,
+        data: {
+          action: "myMatch.inviteRequest",
+          matchKey: match.key,
+          userKey: user.key
+        }
+      });
     });
   }
 
@@ -127,7 +116,7 @@ class MatchService {
       let reqs$ = [];
       Object.keys(user.matches).map(matchKey => {
         reqs$.push(
-          InviteService.getInvitesRef()
+          getInviteRef()
             .orderByChild(`matchKey`)
             .equalTo(matchKey)
             .once("value", snaps => {

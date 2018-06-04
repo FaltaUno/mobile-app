@@ -101,6 +101,8 @@ export default {
     remainingSpots: `There are {{spots}} spots left`,
     place: `Place`,
     date: `Date`,
+    requestInviteSent: `Request sent`,
+    requestInviteApproved: `You're in`
   },
   match: {
     inviteButtonText: `Invite players`,
@@ -161,7 +163,8 @@ export default {
   whatsapp: {
     buttonTitle: `Invite through WhatsApp`,
     urlNotSupported: `Can't handle url: {{url}}`,
-    urlUnkownError: `An error occurred.\n{{err}}`
+    urlUnkownError: `An error occurred.\n{{err}}`,
+    contactAdminForMatch: `Hi, {{creatorName}}.\nI'm {{userName}} and I reach to you to know more about the match "{{matchName}}" that will be played at *{{matchPlace}}* on *{{matchDate}} h*`
   },
   welcome: {
     hi: {

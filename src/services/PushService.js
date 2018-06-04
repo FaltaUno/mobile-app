@@ -87,8 +87,8 @@ class PushService {
   };
 
   //TODO: Localize when the app is detached
-
-  notify = (to, data) => {
+  notify = (user, data) => {
+    const to = user.pushToken;
     return fetch(Config.push.uri, {
       mode: "no-cors",
       method: "POST",
