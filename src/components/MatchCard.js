@@ -175,9 +175,8 @@ export default class MatchCard extends Component {
               rightIcon={
                 <View style={styles.actionsContainer}>
                   <Ionicons
-                    name={Platform.OS === "ios" ? "ios-compass" : "md-compass"}
+                    name={Platform.OS === "ios" ? "ios-map-outline" : "md-map"}
                     size={28}
-                    color={Colors.primary}
                     style={styles.actionButton}
                   />
                   <Ionicons
