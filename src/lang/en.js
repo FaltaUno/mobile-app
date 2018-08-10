@@ -89,7 +89,20 @@ export default {
     deleteMatch: `Delete`
   },
   nearMatches: {
-    title:`Partidos cerca`
+    title: `Near matches`
+  },
+  matchDetails: {
+    title: `Match details`
+  },
+  matchCard: {
+    organizedBy: `Organized by {{organizer}}`,
+    organizer: `Organizer`,
+    requestInvite: `I wanna play!`,
+    remainingSpots: `There are {{spots}} spots left`,
+    place: `Place`,
+    date: `Date`,
+    requestInviteSent: `Request sent`,
+    requestInviteApproved: `You're in`
   },
   match: {
     inviteButtonText: `Invite players`,
@@ -150,7 +163,8 @@ export default {
   whatsapp: {
     buttonTitle: `Invite through WhatsApp`,
     urlNotSupported: `Can't handle url: {{url}}`,
-    urlUnkownError: `An error occurred.\n{{err}}`
+    urlUnkownError: `An error occurred.\n{{err}}`,
+    contactAdminForMatch: `Hi, {{creatorName}}.\nI'm {{userName}} and I reach to you to know more about the match "{{matchName}}" that will be played at *{{matchPlace}}* on *{{matchDate}} h*`
   },
   welcome: {
     hi: {
@@ -168,13 +182,13 @@ export default {
       descriptionFinal: `You will receive a SMS`,
       disclaimerFinal: `Your telephone company could charge your the common taxes for receiving this SMS`,
       buttonLabelFinal: `Receive verification code`,
-      backText: 'Welcome'
+      backText: "Welcome"
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmation`,
       title: `Check your phone`,
       description: `We have sent you the code at\n{{phone}}`,
-      buttonLabel: `Enter your code`,
+      buttonLabel: `Enter your code`
     },
     phoneVerification: {
       headerTitle: `Invitacion`,
@@ -190,7 +204,7 @@ export default {
       title: `Invitation confirmed`,
       description: `Your phone {{phone}} is between the enabled users for the closed beta`,
       buttonLabel: `Continue with the setup`,
-      backText:`Check code`
+      backText: `Check code`
     },
     locationPermission: {
       headerTitle: `Localization`,

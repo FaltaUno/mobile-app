@@ -22,6 +22,10 @@ class FirebaseService {
     return this.app.database();
   }
 
+  timestamp(){
+    return Firebase.database.ServerValue.TIMESTAMP
+  }
+
   normalizeSnap(snap) {
     let element = snap.val();
     element.key = snap.key;

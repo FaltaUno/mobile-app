@@ -34,18 +34,17 @@ export default class NearMatchesScreen extends React.Component {
   constructor(props) {
     super(props);
     /** WARNING: This will bring the whole matches, filtering in the app could be very expensive
-     * we need to consider a strategy that brings the matches by near location: ie: 
+     * we need to consider a strategy that brings the matches by near location: ie:
      * if I'm Lomas de Zamora player this can retrive Lomas, Banfield, Temperley matches as default.
      */
-    this.matchesRef = Firebase.database()
-      .ref(`matches`)
+    this.matchesRef = Firebase.database().ref(`matches`);
 
     this.state = {
       loading: true,
       search: "",
       currentPosition: {},
       matches: {},
-      displayMatches: {},
+      displayMatches: [],
       currUser: {}
     };
   }
@@ -65,39 +64,45 @@ export default class NearMatchesScreen extends React.Component {
     this.usersRef.off("value");
   }
 
-  /** 
+  /**
    * Return the near matches.
    */
   _getNearMatches() {
     this.matchesRef.on("value", snapshot => {
       const matchesListObj = snapshot.val();
-      const matchesList = Object.keys(matchesListObj)
-                            .map((key) => Object.assign({}, matchesListObj[key], { key: key } ) )
-      const displayMatches = this._filterLongDistanceMatches(matchesList);
-      this.setState({loading: false, displayMatches: displayMatches })
+      if (matchesListObj) {
+        const matchesList = Object.keys(matchesListObj).map(key =>
+          Object.assign({}, matchesListObj[key], { key: key })
+        );
+        const displayMatches = this._filterLongDistanceMatches(matchesList);
+        this.setState({ displayMatches: displayMatches });
+      }
+      this.setState({ loading: false });
     });
   }
 
-  /** 
+  /**
    * Sets the matches that are in the locationg range allowed by the player configuration
-   * distance.  
+   * distance.
    * 1 - It gets from the state the current user
    * 2 - Filter the matches list by distance
    *  2.1 - Calculates the match distance using the @type { LocationService }
    * @param matches a list of matches.
-   * 
+   *
    * @example:
-   *  If the @property { Number } currUser.distance is 15 (km) it will set a list with the matches 
-   *  that are included in that value. 
-   * 
+   *  If the @property { Number } currUser.distance is 15 (km) it will set a list with the matches
+   *  that are included in that value.
+   *
    * @return the actual matches to display
    * */
   _filterLongDistanceMatches(matches) {
     const currUser = this.state.currUser;
-     return matches.filter( (match) => {
-      const matchDistance = parseInt(LocationService.calculateMatchDistance(currUser, match));
-      return matchDistance <= currUser.distance 
-    })
+    return matches.filter(match => {
+      const matchDistance = parseInt(
+        LocationService.calculateMatchDistance(currUser, match)
+      );
+      return matchDistance <= currUser.distance;
+    });
   }
 
   render() {
@@ -119,20 +124,23 @@ export default class NearMatchesScreen extends React.Component {
                 {matches.map(match => {
                   if (currUser) {
                     const dist = parseInt(
-                      LocationService.calculateMatchDistance(
-                        currUser,
-                        match
-                      )
+                      LocationService.calculateMatchDistance(currUser, match)
                     );
-                    ;
                     return (
                       <ListItem
                         key={match.key}
                         title={match.name}
                         subtitle={
-                          match.address.name + "," + 
-                          match.address.city + "," +  
+                          match.address.name +
+                          "," +
+                          match.address.city +
+                          "," +
                           match.address.country
+                        }
+                        onPress={() =>
+                          this.props.navigation.navigate("RequestMatchInvite", {
+                            match
+                          })
                         }
                       />
                     );

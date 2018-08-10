@@ -63,6 +63,10 @@ class UserService {
     this.users[me.key] = user
     this.usersRef.child(me.key).update({ pushToken })
   }
+
+  readOnce(userKey){
+    return this.usersRef.child(userKey).once('value').then(snap => snap.val())
+  }
 }
 
 export default new UserService();

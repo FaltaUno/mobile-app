@@ -1,5 +1,4 @@
-
-import { Platform } from 'react-native';
+import { Platform } from "react-native";
 
 export default {
   app: {
@@ -13,26 +12,26 @@ export default {
     done: `OK`,
     edit: `Editar`,
     close: `Cerrar`,
-    cancel: `Cancelar`,
+    cancel: `Cancelar`
   },
   home: {
     title: `Cerca tuyo`,
     placeholder: `Escribe para filtrar`,
-    noPlayers: `No hay jugadores disponibles por ahora`,
+    noPlayers: `No hay jugadores disponibles por ahora`
   },
   login: {
     loginWithFacebook: `Ingresar con Facebook`,
     logging: `Ingresando...`,
     error: {
       auth: `Ocurrió un error al guardar la autorización.\nIntentá nuevamente más tarde`,
-      user_cancelled: `Cancelaste el proceso.\nPara ingresar tenés que autorizar la aplicación.`,
+      user_cancelled: `Cancelaste el proceso.\nPara ingresar tenés que autorizar la aplicación.`
     },
-    success: `¡Proceso completado con éxito!`,
+    success: `¡Proceso completado con éxito!`
   },
   loading: `Cargando...`,
   location: {
     service: {
-      unkownError: `Ocurrió un error.\n{{error}}`,
+      unkownError: `Ocurrió un error.\n{{error}}`
     },
     error: {
       androidEmulator: `Oops, this will not work on Sketch in an Android emulator. Try it on your device!`,
@@ -50,24 +49,24 @@ export default {
     addressLabel: `Dirección`,
     ...Platform.select({
       ios: {
-        dateLabel: '¿Cuándo?',
+        dateLabel: "¿Cuándo?"
       },
       android: {
-        dateLabel: 'Fecha',
-        timeLabel: 'Hora',
-      },
+        dateLabel: "Fecha",
+        timeLabel: "Hora"
+      }
     }),
     notesLabel: `Notas`,
     noNameDefined: `Indica el título del partido`,
     noLocationDefined: `Debes indicar el lugar donde se jugará el partido`,
-    noPlayersNeededDefined: `Debes indicar la cantidad de jugadores que precisás para tu partido`,
+    noPlayersNeededDefined: `Debes indicar la cantidad de jugadores que precisás para tu partido`
   },
   matchSelector: {
     title: `Selección de partido`,
-    label: `¿A qué partido querés invitar a {{displayName}}?`,
-  },  
+    label: `¿A qué partido querés invitar a {{displayName}}?`
+  },
   myMatches: {
-    title: `Mis partidos`,
+    title: `Mis partidos`
   },
   myMatch: {
     loadingInvitesInfo: `Cargando info de invitaciones`,
@@ -82,22 +81,35 @@ export default {
     approvedInvitesLabel: `Aprobados`,
     noApprovedInvites: `No hay jugadores aprobados`,
     rejectedInvitesLabel: `Rechazados`,
-    noRejectedInvites: `No hay jugadores rechazados`,
+    noRejectedInvites: `No hay jugadores rechazados`
   },
-  matches:{
+  matches: {
     noAvailable: `No tenés ningún partido`,
     addMatch: `Agregar partido`,
     deleteMatch: `Eliminar`
   },
-  match:{
+  match: {
     inviteButtonText: `Invitar jugadores`,
     invitationTitle: `Invitar jugadores`,
     invitationDialogTitle: `Invitar jugadores`,
     invitationText: `Hola. Me faltan jugadores para mi partido que se juega {{matchDateOn}}*{{matchDate}} hs.* en *"{{matchPlace}}"*.\nSi te interesa, sumate mediante el siguiente enlace.\n`,
-    on: `el`,
+    on: `el`
   },
   nearMatches: {
-    title:`Partidos cerca`
+    title: `Partidos cerca`
+  },
+  matchDetails: {
+    title: `Detalles del partido`
+  },
+  matchCard: {
+    organizedBy: `Organizado por {{organizer}}`,
+    organizer: `Organizador`,
+    requestInvite: `¡Quiero jugar!`,
+    remainingSpots: `Quedan {{spots}} lugares`,
+    place: `Lugar`,
+    date: `Fecha`,
+    requestInviteSent: `Pedido enviado`,
+    requestInviteApproved: `¡Fuiste convocado!`
   },
   myProfile: {
     title: `Perfil`,
@@ -119,28 +131,29 @@ export default {
     placeholder: `País`,
     list: {
       AR: `Argentina`,
-      UY: `Uruguay`,
+      UY: `Uruguay`
     },
     phoneData: {
       AR: {
         code: `+54 9`,
-        placeholder: `11 2345-6789`,
+        placeholder: `11 2345-6789`
       },
       UY: {
         code: `+598`,
-        placeholder: '99 123 456',
-      },
+        placeholder: "99 123 456"
+      }
     }
   },
   invite: {
-    title: `Invitar a {{name}}`,
+    title: `Detalles del partido`,
     invitationTitle: `Invitación a...`,
     matchPlaceholder: `Se juega en {{place}}`,
-    invalidPhoneNumber: "El jugador no cargó su teléfono. Probá con señales de humo. ",
+    invalidPhoneNumber:
+      "El jugador no cargó su teléfono. Probá con señales de humo. ",
     invalidPhoneNumberTitle: "Número inválido. ",
-    invitationText: `Hola, {{playerName}}.\nTe contacto a través de *{{appName}}*.\nTe invito a un partido el *{{matchDate}} hs* en *{{matchPlace}}*.\n{{matchLocationInfo}}\nSi te interesa, respondeme este mensaje por favor.`,
+    invitationText: `Hola, {{playerName}}.\nTe contacto a través de *{{appName}}*.\nTe invito a un partido el {{matchDate}} hs. en *{{matchPlace}}*.\n{{matchLocationInfo}}\nSi te interesa, respondeme este mensaje por favor.`,
     invitationLocationText: `Por las dudas, te dejo el link de la ubicación del lugar.\n{{locationUrl}}\n`,
-    invitationFooter: `Mensaje enviado desde *{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`,
+    invitationFooter: `Mensaje enviado desde *{{appName}}, _{{appSlogan}}_*\nPedí tu acceso de prueba a {{appContactEmail}}`
   },
   playerCard: {
     fromDistance: `A {{distance}} km de distancia`
@@ -151,11 +164,12 @@ export default {
   whatsapp: {
     buttonTitle: `Invitar por WhatsApp`,
     urlNotSupported: `No se puede abrir la url: {{url}}`,
-    urlUnkownError: `An error occurred.\n{{err}}`,
+    urlUnkownError: `Ocurrió un error.\n{{err}}`,
+    contactAdminForMatch: `Hola, {{creatorName}}.\nSoy {{userName}} y te contacto para saber más acerca del partido "{{matchName}}" que se juegan en *{{matchPlace}}* el {{matchDate}} hs.`
   },
   welcome: {
     hi: {
-      headerTitle: 'Antes de empezar...',
+      headerTitle: "Antes de empezar...",
       title: `Hola, {{displayName}}`,
       description: `Vamos a configurar la aplicación para sacarle el máximo provecho`,
       buttonLabel: `Comenzar`
@@ -164,12 +178,12 @@ export default {
       headerTitle: `Verificación`,
       title: `Ingresá tu teléfono...`,
       description: `Tené a mano tu código de invitación`,
-      disclaimer: '',
+      disclaimer: "",
       buttonLabel: `Ingresar código de invitación`,
       descriptionFinal: `Vamos enviarte un SMS de verificación`,
       disclaimerFinal: `Puede que tu compañía telefónica te cobre la tarifa estándar por recibir el mensaje de verificación`,
       buttonLabelFinal: `Recibir código de verificación`,
-      backText: 'Bienvenida'
+      backText: "Bienvenida"
     },
     phoneVerificationFinal: {
       headerTitle: `Confirmación`,
@@ -214,4 +228,4 @@ export default {
       backText: `Geolocalización`
     }
   }
-}
+};

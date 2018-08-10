@@ -225,6 +225,7 @@ export default class MyMatchPlayersScreen extends React.Component {
   }
 
   showActionButtons(invite, inviteType) {
+    // TODO: if approved, show email and phone/whatsapp icons to contact the user
     if (this.state.loadingInvites[invite.key]) {
       return <ActivityIndicator />;
     }
