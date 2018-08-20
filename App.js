@@ -7,7 +7,8 @@ import Colors from 'constants/Colors';
 import I18n from 'lang'
 
 import FirebaseService from 'services/FirebaseService';
-import AuthService from 'services/AuthService';
+import FacebookAuthService from 'services/auth/FacebookAuthService';
+import GoogleAuthService from 'services/auth/GoogleAuthService'
 
 import LoginScreen from 'screens/LoginScreen';
 import WelcomeNavigator from 'navigation/WelcomeNavigator';
@@ -119,9 +120,12 @@ export default class App extends React.Component {
     Alert.alert(error);
   };
 
-  _handleFinishLoading = () => (
+  _handleFinishLoading = () => {
     // Check authentication
-    AuthService.onAuthStateChanged((isRegistered, firstTime = true) => {
+    //let provider = FirebaseService.providerId();
+    //console.log("Provider is " + provider)
+    //let authService = providerId === 'facebook.com' ? FacebookAuthService : GoogleAuthService;
+    return FacebookAuthService.onAuthStateChanged((isRegistered, firstTime = true) => {
       // Loading is totally completed,
       let screen = 'login'
       if(isRegistered){
@@ -133,7 +137,7 @@ export default class App extends React.Component {
 
       this.setState({ screen, loaded: true })
     })
-  )
+  }
 }
 
 const styles = StyleSheet.create({

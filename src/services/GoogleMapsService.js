@@ -1,6 +1,6 @@
 import Config from 'config'
 
-const geocoderUrl = Config.geocoder.url;
+const geocoderUrl = Config.geocoder == undefined ? '' : Config.geocoder.url;
 
 const isValidLatLong = (num, range) => {
   let isNumber = typeof num === 'number'

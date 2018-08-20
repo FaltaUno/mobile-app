@@ -10,7 +10,7 @@ import Lang from 'lang'
 import { headerStyle, headerButtonStyle } from 'constants/Theme';
 import Colors from 'constants/Colors';
 
-import AuthService from 'services/AuthService';
+import AuthService from 'services/auth/AuthService';
 import UserService from 'services/UserService';
 
 export default class MyProfileScreen extends React.Component {
@@ -52,7 +52,7 @@ export default class MyProfileScreen extends React.Component {
             hideChevron
             titleStyle={styles.logout}
             containerStyle={styles.logoutWrapper}
-            onPress={() => AuthService.signOut().then(() => Alert.alert(Lang.t(`myProfile.logoutSuccess`)))}
+            onPress={() => new AuthService().signOut().then(() => Alert.alert(Lang.t(`myProfile.logoutSuccess`)))}
           />
         </List>
       </ScrollView>

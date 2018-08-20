@@ -3,7 +3,8 @@ import { View, Image, StyleSheet } from 'react-native';
 import { Text, SocialIcon } from 'react-native-elements';
 import * as Firebase from 'firebase';
 
-import AuthService from 'services/AuthService'
+import FacebookAuthService from 'services/auth/FacebookAuthService'
+import GoogleAuthService from 'services/auth/GoogleAuthService'
 
 import Colors from 'constants/Colors';
 import Lang from 'lang'
@@ -35,7 +36,8 @@ export default class LoginScreen extends React.Component {
           <Text h4>{Lang.t('app.slogan')}</Text>
         </View>
         <View style={[styles.flexible, styles.end]}>
-          <SocialIcon button type="facebook" title={this.state.isLogging ? Lang.t('login.logging') : Lang.t('login.loginWithFacebook')} disabled={this.state.isLogging} onPress={this.login} />
+          <SocialIcon button type="facebook" title={this.state.isLogging ? Lang.t('login.logging') : Lang.t('login.loginWithFacebook')} disabled={this.state.isLogging} onPress={this.loginFacebook} />
+          <SocialIcon button type="google-plus-official" title={this.state.isLogging ? Lang.t('login.logging') : Lang.t('login.loginWithGoogle')} disabled={this.state.isLogging} onPress={this.loginGoogle} />
         </View>
         <View style={[styles.flexible, styles.end]}>
           {toast}
@@ -44,9 +46,12 @@ export default class LoginScreen extends React.Component {
     );
   }
 
-  login = async () => {
+  loginFacebook = async () => await this.login(FacebookAuthService);
+  loginGoogle = async () => await this.login(GoogleAuthService);
+
+  login = async (authService) => {
     this.setState({ isLogging: true });
-    const loggedIn = await AuthService.logIn();
+    const loggedIn = await authService.logIn();
 
     // Popup login window
     if (!loggedIn) {
@@ -67,7 +72,7 @@ export default class LoginScreen extends React.Component {
     });
 
     // Sign in with credential from the Facebook user.
-    AuthService.signIn().catch(() => {
+    authService.signIn().catch(() => {
       this.setState({
         isLogging: false,
         toast: true,

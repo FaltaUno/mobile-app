@@ -21,6 +21,7 @@ export default {
   },
   login: {
     loginWithFacebook: `Login with Facebook`,
+    loginWithGoogle: `Login with Google`,
     logging: `Logging in...`,
     error: {
       auth: `An error ocurrend with the authorization..\nTry again later`,

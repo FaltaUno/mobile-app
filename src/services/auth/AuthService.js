@@ -1,41 +1,32 @@
 
-import { Facebook } from 'expo';
-
 import Config from 'config'
 
 import FirebaseService from 'services/FirebaseService'
 
-class AuthService {
+export default class AuthService {
 
   type
   token
   credential
   user
-
+  
   async logIn() {
-    const { type, token } = await Facebook.logInWithReadPermissionsAsync(Config.facebook.appId, {
-      permissions: [
-        // -- Default Expo Permissions -- //
-        'public_profile',
-        'email',
-        // 'user_friends',
-
-        // -- Custom permissions -- //
-        'user_birthday',
-      ]
-    });
-
-    this.token = token
-    this.type = type
-
+    await this.doLogin();
     return this.isLogged()
   }
 
+  // abstract method to be implemented in all our sign-in providers
+  async doLogin() {
+    throw new Error('You have to implement the method doLogin()!');
+  }
+
+  doGetCredential() {
+    throw new Error('You have to implement the method doGetCredential()!');
+  }
+
   getCredential() {
-    // Build Firebase credential with the Facebook access token.
     if (this.isLogged()) {
-      this.credential = FirebaseService.FacebookAuthProvider.credential(this.token)
-      return this.credential
+      return this.doGetCredential();
     }
     return false
   }
@@ -109,5 +100,3 @@ class AuthService {
     })
   }
 }
-
-export default new AuthService();

@@ -4,6 +4,7 @@ import Config from "config";
 class FirebaseService {
   app = null; //Firebase app
   FacebookAuthProvider = Firebase.auth.FacebookAuthProvider;
+  GoogleAuthProvider = Firebase.auth.GoogleAuthProvider;
 
   init() {
     // Start firebase connection
@@ -12,6 +13,10 @@ class FirebaseService {
 
   auth() {
     return this.app.auth();
+  }
+
+  providerId() {
+    return this.auth().AuthCredential.providerId();
   }
 
   user() {

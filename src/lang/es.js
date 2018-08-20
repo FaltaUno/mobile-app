@@ -22,6 +22,7 @@ export default {
   },
   login: {
     loginWithFacebook: `Ingresar con Facebook`,
+    loginWithGoogle: `Ingresar con Google`,
     logging: `Ingresando...`,
     error: {
       auth: `Ocurrió un error al guardar la autorización.\nIntentá nuevamente más tarde`,
