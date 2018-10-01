@@ -2,7 +2,10 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "scripts": {
-    "start": "react-native-scripts start",
+    "start": "expo start",
+    "eject": "expo eject",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "test": "node ./node_modules/jest/bin/jest.js --watch",
     "packager:kill": "react-native-kill-packager"
   },
