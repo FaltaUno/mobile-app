@@ -96,7 +96,8 @@ export default {
     on: `el`
   },
   nearMatches: {
-    title: `Partidos cerca`
+    title: `Partidos cerca`,
+    noMatches: `No hay partidos cercanos`
   },
   matchDetails: {
     title: `Detalles del partido`

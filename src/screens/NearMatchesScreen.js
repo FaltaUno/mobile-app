@@ -153,7 +153,7 @@ export default class NearMatchesScreen extends React.Component {
       }
       return (
         <View style={styles.emptyPlayersContainer}>
-          <Text style={styles.emptyPlayers}>{Lang.t(`home.noPlayers`)}</Text>
+          <Text style={styles.emptyPlayers}>{Lang.t(`nearMatches.noMatches`)}</Text>
         </View>
       );
     }

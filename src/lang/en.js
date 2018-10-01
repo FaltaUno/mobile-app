@@ -89,7 +89,8 @@ export default {
     deleteMatch: `Delete`
   },
   nearMatches: {
-    title: `Near matches`
+    title: `Near matches`,
+    noMatches: `No near matches found`
   },
   matchDetails: {
     title: `Match details`
