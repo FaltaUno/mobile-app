@@ -2,7 +2,8 @@
   "main": "node_modules/expo/AppEntry.js",
   "private": true,
   "scripts": {
-    "start": "expo start",
+    "start": "react-native-scripts start",
+    "expo-start": "expo start",
     "eject": "expo eject",
     "android": "expo start --android",
     "ios": "expo start --ios",
