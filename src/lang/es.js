@@ -229,7 +229,8 @@ export default {
       backText: `Geolocalización`
     }
   },
-  availablePlayerList: {
-    title: "Jugadores disponibles"
+  approvedPlayersList: {
+    title: "Jugadores aprobados",
+    emptyList: "No aprobaste ningún jugador todavía"
   }
 };

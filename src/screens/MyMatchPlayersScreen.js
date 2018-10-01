@@ -65,13 +65,13 @@ export default class MyMatchPlayersScreen extends React.Component {
       const req$ = getInvite(inviteKey).then(invite => {
         // Fill the user data
         usersRef
-        .child(invite.userKey)
-        .once("value")
-        .then(snap => {
-          invite.user = snap.val();
-          invite.user.key = snap.key;
-          this.pushInvite(invite);
-        });
+          .child(invite.userKey)
+          .once("value")
+          .then(snap => {
+            invite.user = snap.val();
+            invite.user.key = snap.key;
+            this.pushInvite(invite);
+          });
       });
       reqs$.push(req$);
     });
@@ -337,11 +337,14 @@ export default class MyMatchPlayersScreen extends React.Component {
       }
     });
 
-    this.props.navigation.state.params.onInvitesUpdate({
-      pending,
-      approved,
-      rejected
-    });
+    this.props.navigation.state.params.onInvitesUpdate(
+      {
+        pending,
+        approved,
+        rejected
+      },
+      invites
+    );
   }
 }
 

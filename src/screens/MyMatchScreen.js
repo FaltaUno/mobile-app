@@ -16,7 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Lang from "lang";
 import { headerStyle, headerButtonStyle } from "constants/Theme";
 import Colors from "constants/Colors";
-import AvailablePlayersList from "components/AvailablePlayersList";
+import ApprovedPlayersList from "components/ApprovedPlayersList";
 import MatchService from "services/MatchService";
 import UserService from "services/UserService";
 
@@ -57,7 +57,7 @@ export default class MyMatchScreen extends React.Component {
   state = {
     match: {},
     invites: {},
-    players: [],
+    inviteUsers: [],
     playersAreLoading: true,
     loadingInvites: true,
     invitesRequestCount: 0,
@@ -83,7 +83,7 @@ export default class MyMatchScreen extends React.Component {
 
     let reqs$ = [];
     let users$ = [];
-    let players = [];
+    let inviteUsers = [];
     Object.keys(invites).forEach(inviteKey => {
       // Get the invites
       const req$ = this.invitesRef
@@ -92,11 +92,11 @@ export default class MyMatchScreen extends React.Component {
         .then(snap => {
           // Si la invitacion fue aprobada, es un jugador disponible
           let invite = snap.val();
-          if(invite.requestRead && invite.approved){
-            users$.push(UserService.readOnce(invite.userKey).then(user => {
-              players.push(user)
-            }));
-          }
+          users$.push(
+            UserService.readOnce(invite.userKey).then(user => {
+              inviteUsers.push({ invite, user });
+            })
+          );
           return this.handleInvite(snap);
         });
       reqs$.push(req$);
@@ -106,13 +106,13 @@ export default class MyMatchScreen extends React.Component {
       this.setState({
         loadingInvites: false,
         invites
-      })
+      });
 
       Promise.all(users$).then(() => {
         this.setState({
           playersAreLoading: false,
-          players
-        })
+          inviteUsers
+        });
       });
     });
 
@@ -144,7 +144,12 @@ export default class MyMatchScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { match, loadingInvites, players, playersAreLoading } = this.state;
+    const {
+      match,
+      loadingInvites,
+      inviteUsers,
+      playersAreLoading
+    } = this.state;
     let playersNeededItem = (
       <ListItem
         title={Lang.t("myMatch.loadingInvitesInfo")}
@@ -176,8 +181,18 @@ export default class MyMatchScreen extends React.Component {
             onPress={() => {
               navigation.navigate("MyMatchPlayers", {
                 match,
-                onInvitesUpdate: ({ pending, approved }) => {
+                onInvitesUpdate: ({ pending, approved }, modifiedInvites) => {
+                  let inviteUsers = [...this.state.inviteUsers];
+                  inviteUsers.map(({ invite }, index) => {
+                    const foundInvite = Object.values(modifiedInvites).find(
+                      modifiedInvite =>
+                        modifiedInvite.userKey === invite.userKey
+                    );
+                    inviteUsers[index].invite = foundInvite;
+                  });
+
                   this.setState({
+                    inviteUsers,
                     invitesApprovedCount: Object.values(approved).length,
                     invitesRequestCount: Object.values(pending).length
                   });
@@ -202,8 +217,6 @@ export default class MyMatchScreen extends React.Component {
                 </Text>
               }
             />
-          </List>
-          <List>
             <ListItem
               hideChevron
               title={Lang.t("addMatch.dateLabel")}
@@ -235,7 +248,10 @@ export default class MyMatchScreen extends React.Component {
             />
           </List>
           <List>{playersNeededItem}</List>
-          <AvailablePlayersList players={players} loading={playersAreLoading}/>
+          <ApprovedPlayersList
+            inviteUsers={inviteUsers.filter(({invite}) => invite.requestRead && invite.approved)}
+            loading={playersAreLoading}
+          />
         </View>
         <Button
           text={Lang.t(`match.inviteButtonText`)}

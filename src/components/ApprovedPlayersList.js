@@ -6,10 +6,10 @@ import { ListItem, Text } from "react-native-elements";
 import Lang from "lang";
 import Colors from "constants/Colors";
 
-export default class AvailablePlayersList extends Component {
+export default class ApprovedPlayersList extends Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
-    players: PropTypes.array.isRequired
+    inviteUsers: PropTypes.array.isRequired
   };
 
   state = {};
@@ -22,27 +22,37 @@ export default class AvailablePlayersList extends Component {
     if (this.props.loading) {
       return (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator />
+          <ActivityIndicator size={"large"} />
         </View>
       );
     }
 
+    const sections = [];
+
+    if (this.props.inviteUsers.length) {
+      sections.push({
+        title: Lang.t("approvedPlayersList.title"),
+        data: this.props.inviteUsers
+      });
+    }
+
     return (
       <SectionList
-        sections={[
-          {
-            title: Lang.t("availablePlayerList.title"),
-            data: this.props.players
-          }
-        ]}
+        sections={sections}
         renderSectionHeader={this.handleRenderSectionHeader}
         keyExtractor={this.handleKeyExtractor}
         renderItem={({ item }) => this.handleRenderItem(item)}
+        ListEmptyComponent={
+          <View style={styles.sectionContainer}>
+            <Text style={styles.sectionTitle}>{Lang.t("approvedPlayersList.emptyList")}</Text>
+          </View>
+        }
       />
     );
   }
-  handleKeyExtractor(item) {
-    return item.key;
+  handleKeyExtractor(inviteUsers) {
+    const { user } = inviteUsers;
+    return user.key;
   }
 
   handleRenderSectionHeader({ section }) {
@@ -53,17 +63,23 @@ export default class AvailablePlayersList extends Component {
     );
   }
 
-  handleRenderItem(player) {
+  handleRenderItem(inviteUsers) {
+    const { invite, user } = inviteUsers;
     return (
       <ListItem
         containerStyle={styles.listItem}
-        key={player.key}
+        key={user.key}
         roundAvatar
-        avatar={{ uri: player.photoURL }}
-        title={player.displayName}
-        subtitle={moment(player.createdAt).calendar()}
+        avatar={{ uri: user.photoURL }}
+        title={user.displayName}
+        subtitle={moment(invite.createdAt).calendar()}
+        rightIcon={this.showActionButtons(invite, user)}
       />
     );
+  }
+
+  showActionButtons(invite, user) {
+    return <View style={styles.actionsContainer} />;
   }
 }
 
@@ -71,7 +87,7 @@ const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
-    marginTop: 24
+    marginTop: 64
   },
   sectionContainer: {
     borderBottomWidth: 1,
@@ -88,5 +104,8 @@ const styles = StyleSheet.create({
   },
   listItem: {
     backgroundColor: Colors.white
+  },
+  actionsContainer: {
+    flexDirection: "row"
   }
 });

@@ -228,7 +228,8 @@ export default {
       backText: `Geolocation`
     }
   },
-  availablePlayerList: {
-    title: "Available players"
+  approvedPlayerList: {
+    title: "Approved players",
+    emptyList: "You didn't approve any player yet"
   }
 };
