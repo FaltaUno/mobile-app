@@ -68,17 +68,27 @@ export default class NearMatchesScreen extends React.Component {
    * Return the near matches.
    */
   _getNearMatches() {
-    this.matchesRef.on("value", snapshot => {
-      const matchesListObj = snapshot.val();
-      if (matchesListObj) {
-        const matchesList = Object.keys(matchesListObj).map(key =>
-          Object.assign({}, matchesListObj[key], { key: key })
-        );
-        const displayMatches = this._filterLongDistanceMatches(matchesList);
-        this.setState({ displayMatches: displayMatches });
-      }
-      this.setState({ loading: false });
-    });
+    UserService.me().then(me => {
+      this.matchesRef.on("value", snapshot => {
+        const matchesListObj = snapshot.val();
+        if (matchesListObj) {
+          const myMatches = Object.keys(me.matches);
+          // We don't want the matches that the user owns
+          const matchesList = [];
+          Object.keys(matchesListObj).map(key => {
+            if(myMatches.indexOf(key) === -1){
+              const match = Object.assign({}, matchesListObj[key], { key })
+              matchesList.push(match)
+            }
+          });
+          if(matchesList.length){
+            const displayMatches = this._filterLongDistanceMatches(matchesList);
+            this.setState({ displayMatches });
+          }
+        }
+        this.setState({ loading: false });
+      });
+    })
   }
 
   /**
@@ -114,37 +124,30 @@ export default class NearMatchesScreen extends React.Component {
       );
     } else {
       const matches = this.state.displayMatches;
-      const currUser = this.state.currUser;
-
       if (matches.length !== 0) {
         return (
           <View style={styles.container}>
             <ScrollView>
               <List>
                 {matches.map(match => {
-                  if (currUser) {
-                    const dist = parseInt(
-                      LocationService.calculateMatchDistance(currUser, match)
-                    );
-                    return (
-                      <ListItem
-                        key={match.key}
-                        title={match.name}
-                        subtitle={
-                          match.address.name +
-                          "," +
-                          match.address.city +
-                          "," +
-                          match.address.country
-                        }
-                        onPress={() =>
-                          this.props.navigation.navigate("RequestMatchInvite", {
-                            match
-                          })
-                        }
-                      />
-                    );
-                  }
+                  return (
+                    <ListItem
+                      key={match.key}
+                      title={match.name}
+                      subtitle={
+                        match.address.name +
+                        "," +
+                        match.address.city +
+                        "," +
+                        match.address.country
+                      }
+                      onPress={() =>
+                        this.props.navigation.navigate("RequestMatchInvite", {
+                          match
+                        })
+                      }
+                    />
+                  );
                 })}
               </List>
             </ScrollView>
