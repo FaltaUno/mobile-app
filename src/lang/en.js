@@ -230,6 +230,6 @@ export default {
   },
   approvedPlayerList: {
     title: "Approved players",
-    emptyList: "You didn't approve any player yet"
+    emptyList: "You didn't approve any player"
   }
 };

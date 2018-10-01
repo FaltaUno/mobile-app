@@ -231,6 +231,6 @@ export default {
   },
   approvedPlayersList: {
     title: "Jugadores aprobados",
-    emptyList: "No aprobaste ningún jugador todavía"
+    emptyList: "No aprobaste a ningún jugador"
   }
 };

@@ -208,15 +208,8 @@ export default class MyMatchScreen extends React.Component {
         <View>
           <List>
             <ListItem hideChevron title={match.name} />
-            <ListItem
-              hideChevron
-              title={Lang.t("addMatch.notesLabel")}
-              subtitle={
-                <Text style={styles.listItemMultiline}>
-                  {match.notes ? match.notes : Lang.t(`myMatch.noNotes`)}
-                </Text>
-              }
-            />
+          </List>
+          <List>
             <ListItem
               hideChevron
               title={Lang.t("addMatch.dateLabel")}
@@ -247,9 +240,22 @@ export default class MyMatchScreen extends React.Component {
               onPress={() => this.handleMapOpen(match.location)}
             />
           </List>
+          <List>
+            <ListItem
+              hideChevron
+              title={Lang.t("addMatch.notesLabel")}
+              subtitle={
+                <Text style={styles.listItemMultiline}>
+                  {match.notes ? match.notes : Lang.t(`myMatch.noNotes`)}
+                </Text>
+              }
+            />
+          </List>
           <List>{playersNeededItem}</List>
           <ApprovedPlayersList
-            inviteUsers={inviteUsers.filter(({invite}) => invite.requestRead && invite.approved)}
+            inviteUsers={inviteUsers.filter(
+              ({ invite }) => invite.requestRead && invite.approved
+            )}
             loading={playersAreLoading}
           />
         </View>
