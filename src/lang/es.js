@@ -228,5 +228,8 @@ export default {
       buttonLabel: `¡Empezar a utilizar la app!`,
       backText: `Geolocalización`
     }
+  },
+  availablePlayerList: {
+    title: "Jugadores disponibles"
   }
 };

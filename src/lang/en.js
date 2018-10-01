@@ -227,5 +227,8 @@ export default {
       buttonLabel: `Start using the app!`,
       backText: `Geolocation`
     }
+  },
+  availablePlayerList: {
+    title: "Available players"
   }
 };

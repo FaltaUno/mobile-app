@@ -21,6 +21,7 @@
     "firebase": "^4.8.1",
     "libphonenumber-js": "^1.0.3",
     "moment": "^2.20.1",
+    "prop-types": "^15.6.2",
     "react": "^16.2.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-elements": "1.0.0-beta2",
