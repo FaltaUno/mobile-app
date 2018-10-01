@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   Platform,
   SectionList,
-  Share,
   StyleSheet,
   View
 } from "react-native";
@@ -15,11 +14,9 @@ import { Ionicons } from "@expo/vector-icons";
 
 import Lang from "lang";
 import Colors from "constants/Colors";
-import {
-  headerStyle,
-  headerButtonStyle
-} from "constants/Theme";
+import { headerStyle, headerButtonStyle } from "constants/Theme";
 
+import { getInvite } from "services/InviteService";
 import MatchService from "services/MatchService";
 import PushService from "../services/PushService";
 
@@ -60,29 +57,22 @@ export default class MyMatchPlayersScreen extends React.Component {
     const { invites = {} } = match;
 
     const db = firebase.database();
-    const invitesRef = db.ref(`invites`);
     const usersRef = db.ref(`users`);
 
     let reqs$ = [];
     Object.keys(invites).forEach(inviteKey => {
       // Get the invites
-      const req$ = invitesRef
-        .child(inviteKey)
-        .once("value")
-        .then(snap => {
-          let invite = snap.val();
-          invite.key = snap.key;
-          // Fill the user data
-          usersRef
-            .child(invite.userKey)
-            .once("value")
-            .then(snap => {
-              invite.user = snap.val();
-              invite.user.key = snap.key;
-
-              this.pushInvite(invite);
-            });
-        });
+      const req$ = getInvite(inviteKey).then(invite => {
+        // Fill the user data
+        usersRef
+          .child(invite.userKey)
+          .once("value")
+          .then(snap => {
+            invite.user = snap.val();
+            invite.user.key = snap.key;
+            this.pushInvite(invite);
+          });
+      });
       reqs$.push(req$);
     });
 
@@ -131,42 +121,6 @@ export default class MyMatchPlayersScreen extends React.Component {
         keyExtractor={this.handleKeyExtractor}
         renderItem={({ item }) => this.handleRenderItem(item)}
       />
-    );
-  }
-
-  handleShare(match) {
-    let now = moment();
-    let matchDate = moment(match.date);
-    let diff = now.diff(matchDate, "days");
-    let matchDateOn = "";
-    if (diff < -1 || 1 < diff) {
-      matchDateOn = Lang.t(`match.on`) + " ";
-    }
-
-    const inviteText = Lang.t("match.invitationText", {
-      appName: Lang.t("app.name"),
-      matchDate: matchDate.calendar(),
-      matchPlace: match.place,
-      matchDateOn: matchDateOn
-    });
-
-    const inviteFooter = Lang.t("match.invitationFooter", {
-      appName: Lang.t("app.name"),
-      appSlogan: Lang.t("app.slogan"),
-      appContactEmail: Lang.t("app.contactEmail")
-    });
-
-    const text = `${inviteText}\n\n----------\n${inviteFooter}\n\n`;
-
-    Share.share(
-      {
-        title: Lang.t(`match.invitationTitle`),
-        message: text,
-        url: match.locationUrl
-      },
-      {
-        dialogTitle: Lang.t(`match.invitationDialogTitle`)
-      }
     );
   }
 
@@ -342,8 +296,7 @@ export default class MyMatchPlayersScreen extends React.Component {
     this.setState({ loadingInvites });
 
     const { requestRead, approved } = invite;
-    db
-      .ref(`invites`)
+    db.ref(`invites`)
       .child(invite.key)
       .update({ requestRead, approved })
       .then(() => {
@@ -355,7 +308,7 @@ export default class MyMatchPlayersScreen extends React.Component {
 
         this.setState({ [inviteType]: invites, loadingInvites });
         // Update the unread notifications
-        PushService.updateNotificationsCount()
+        PushService.updateNotificationsCount();
         this.triggerInvitesUpdate();
       });
   }
@@ -384,11 +337,14 @@ export default class MyMatchPlayersScreen extends React.Component {
       }
     });
 
-    this.props.navigation.state.params.onInvitesUpdate({
-      pending,
-      approved,
-      rejected
-    });
+    this.props.navigation.state.params.onInvitesUpdate(
+      {
+        pending,
+        approved,
+        rejected
+      },
+      invites
+    );
   }
 }
 

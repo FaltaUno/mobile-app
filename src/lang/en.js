@@ -227,5 +227,9 @@ export default {
       buttonLabel: `Start using the app!`,
       backText: `Geolocation`
     }
+  },
+  approvedPlayerList: {
+    title: "Approved players",
+    emptyList: "You didn't approve any player"
   }
 };

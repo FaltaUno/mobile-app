@@ -14,12 +14,11 @@ import { ListItem, Text, List, Button } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
 
 import Lang from "lang";
-import {
-  headerStyle,
-  headerButtonStyle
-} from "constants/Theme";
+import { headerStyle, headerButtonStyle } from "constants/Theme";
 import Colors from "constants/Colors";
+import ApprovedPlayersList from "components/ApprovedPlayersList";
 import MatchService from "services/MatchService";
+import UserService from "services/UserService";
 
 export default class MyMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
@@ -57,6 +56,9 @@ export default class MyMatchScreen extends React.Component {
 
   state = {
     match: {},
+    invites: {},
+    inviteUsers: [],
+    playersAreLoading: true,
     loadingInvites: true,
     invitesRequestCount: 0,
     invitesApprovedCount: 0
@@ -80,20 +82,39 @@ export default class MyMatchScreen extends React.Component {
     });
 
     let reqs$ = [];
+    let users$ = [];
+    let inviteUsers = [];
     Object.keys(invites).forEach(inviteKey => {
       // Get the invites
       const req$ = this.invitesRef
         .child(inviteKey)
         .once("value")
-        .then(snap => this.handleInvite(snap));
+        .then(snap => {
+          // Si la invitacion fue aprobada, es un jugador disponible
+          let invite = snap.val();
+          users$.push(
+            UserService.readOnce(invite.userKey).then(user => {
+              inviteUsers.push({ invite, user });
+            })
+          );
+          return this.handleInvite(snap);
+        });
       reqs$.push(req$);
     });
 
-    Promise.all(reqs$).then(() =>
+    Promise.all(reqs$).then(() => {
       this.setState({
-        loadingInvites: false
-      })
-    );
+        loadingInvites: false,
+        invites
+      });
+
+      Promise.all(users$).then(() => {
+        this.setState({
+          playersAreLoading: false,
+          inviteUsers
+        });
+      });
+    });
 
     // - Si se genera un pedido de invitacion
     this.matchesRef
@@ -115,12 +136,20 @@ export default class MyMatchScreen extends React.Component {
 
   componentWillUnmount() {
     const { match } = this.state;
-    this.matchesRef.child(match.key).child('invites').off("child_added");
+    this.matchesRef
+      .child(match.key)
+      .child("invites")
+      .off("child_added");
   }
 
   render() {
     const { navigation } = this.props;
-    const { match, loadingInvites } = this.state;
+    const {
+      match,
+      loadingInvites,
+      inviteUsers,
+      playersAreLoading
+    } = this.state;
     let playersNeededItem = (
       <ListItem
         title={Lang.t("myMatch.loadingInvitesInfo")}
@@ -131,7 +160,6 @@ export default class MyMatchScreen extends React.Component {
 
     if (!loadingInvites) {
       const { playersNeeded = 0 } = match;
-
       if (!playersNeeded) {
         playersNeededItem = (
           <ListItem hideChevron title={Lang.t(`myMatch.noPlayersNeeded`)} />
@@ -153,8 +181,18 @@ export default class MyMatchScreen extends React.Component {
             onPress={() => {
               navigation.navigate("MyMatchPlayers", {
                 match,
-                onInvitesUpdate: ({ pending, approved }) => {
+                onInvitesUpdate: ({ pending, approved }, modifiedInvites) => {
+                  let inviteUsers = [...this.state.inviteUsers];
+                  inviteUsers.map(({ invite }, index) => {
+                    const foundInvite = Object.values(modifiedInvites).find(
+                      modifiedInvite =>
+                        modifiedInvite.userKey === invite.userKey
+                    );
+                    inviteUsers[index].invite = foundInvite;
+                  });
+
                   this.setState({
+                    inviteUsers,
                     invitesApprovedCount: Object.values(approved).length,
                     invitesRequestCount: Object.values(pending).length
                   });
@@ -168,18 +206,8 @@ export default class MyMatchScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View>
-          <List>{playersNeededItem}</List>
           <List>
             <ListItem hideChevron title={match.name} />
-            <ListItem
-              hideChevron
-              title={Lang.t("addMatch.notesLabel")}
-              subtitle={
-                <Text style={styles.listItemMultiline}>
-                  {match.notes ? match.notes : Lang.t(`myMatch.noNotes`)}
-                </Text>
-              }
-            />
           </List>
           <List>
             <ListItem
@@ -212,6 +240,24 @@ export default class MyMatchScreen extends React.Component {
               onPress={() => this.handleMapOpen(match.location)}
             />
           </List>
+          <List>
+            <ListItem
+              hideChevron
+              title={Lang.t("addMatch.notesLabel")}
+              subtitle={
+                <Text style={styles.listItemMultiline}>
+                  {match.notes ? match.notes : Lang.t(`myMatch.noNotes`)}
+                </Text>
+              }
+            />
+          </List>
+          <List>{playersNeededItem}</List>
+          <ApprovedPlayersList
+            inviteUsers={inviteUsers.filter(
+              ({ invite }) => invite.requestRead && invite.approved
+            )}
+            loading={playersAreLoading}
+          />
         </View>
         <Button
           text={Lang.t(`match.inviteButtonText`)}

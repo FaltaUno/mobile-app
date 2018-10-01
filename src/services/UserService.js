@@ -65,7 +65,11 @@ class UserService {
   }
 
   readOnce(userKey){
-    return this.usersRef.child(userKey).once('value').then(snap => snap.val())
+    return this.usersRef.child(userKey).once('value').then(snap => {
+      let user = snap.val()
+      user.key = snap.key;
+      return user;
+    })
   }
 }
 
