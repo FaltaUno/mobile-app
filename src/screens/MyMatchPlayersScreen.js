@@ -278,13 +278,17 @@ export default class MyMatchPlayersScreen extends React.Component {
   handleApprovedInvite(invite, inviteType) {
     invite.requestRead = true;
     invite.approved = true;
-    this.handleUpdateInvite(invite, inviteType);
+    this.handleUpdateInvite(invite, inviteType).then(() => {
+      // Notify user
+    });
   }
 
   handleRejectedInvite(invite, inviteType) {
     invite.requestRead = true;
     invite.approved = false;
-    this.handleUpdateInvite(invite, inviteType);
+    this.handleUpdateInvite(invite, inviteType).then(() => {
+      // Notify user
+    });
   }
 
   handleUpdateInvite(invite, inviteType) {
@@ -296,7 +300,7 @@ export default class MyMatchPlayersScreen extends React.Component {
     this.setState({ loadingInvites });
 
     const { requestRead, approved } = invite;
-    db.ref(`invites`)
+    return db.ref(`invites`)
       .child(invite.key)
       .update({ requestRead, approved })
       .then(() => {

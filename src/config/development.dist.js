@@ -4,7 +4,8 @@ export default {
   },
 
   push: {
-    uri: ""
+    uri: "",
+    fcm: "",
   },
 
   // Facebook

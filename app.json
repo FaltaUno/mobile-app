@@ -19,9 +19,6 @@
     },
     "ios": {
       "supportsTablet": true
-    },
-    "infoPlist": {
-      "LSApplicationQueriesSchemes": ["whatsapp"]
     }
   }
 }
