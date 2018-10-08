@@ -1,11 +1,10 @@
 export default {
-  "webapp":{
-    "uri" : ""
+  "webapp": {
+    "uri": ""
   },
 
   push: {
     uri: "",
-    fcm: "",
   },
 
   // Facebook
@@ -21,6 +20,12 @@ export default {
     projectId: "",
     storageBucket: "",
     messagingSenderId: "",
+  },
+
+  // Firebase Cloud Messaing
+  fcm: {
+    uri: "",
+    serverKey: "",
   },
 
   // Google maps geocoder Redis

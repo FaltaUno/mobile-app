@@ -71,7 +71,8 @@ export default {
   myMatch: {
     loadingInvitesInfo: `Loading invites information`,
     noPlayersNeeded: `No players needed for this match`,
-    approvedPlayersOutOfTotal: `{{approved}} approved players out of {{total}}`,
+    approvedInviteRequest: `{{approved}} invite requests approved`,
+    outOfInviteRequests: `Out of {{total}} required`,
     noNotes: `No notes added`,
     invitesLabel: `Players`,
     inviteAction: `Invite`,

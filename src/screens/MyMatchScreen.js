@@ -7,6 +7,7 @@ import {
   Alert,
   Linking,
   Platform,
+  ScrollView,
   StyleSheet,
   View
 } from "react-native";
@@ -23,7 +24,7 @@ import UserService from "services/UserService";
 export default class MyMatchScreen extends React.Component {
   // Dynamic definition so we can get the actual Lang locale
   static navigationOptions = ({ navigation }) => {
-    const { match, handleOnMatchUpdate = () => {} } = navigation.state.params;
+    const { match, handleOnMatchUpdate = () => { } } = navigation.state.params;
     let myMatch = Object.assign({}, match);
     let navigationOptions = {
       title: match.name,
@@ -166,10 +167,12 @@ export default class MyMatchScreen extends React.Component {
         );
       } else {
         const { invitesApprovedCount, invitesRequestCount } = this.state;
-        const invitesTitle = Lang.t(`myMatch.approvedPlayersOutOfTotal`, {
-          approved: invitesApprovedCount,
-          total: playersNeeded
+        const invitesTitle = Lang.t(`myMatch.approvedInviteRequest`, {
+          approved: invitesApprovedCount
         });
+        const invitesSubtitle = Lang.t(`myMatch.outOfInviteRequests`, {
+          total: playersNeeded
+        })
         const invitesBadge = invitesRequestCount
           ? { value: invitesRequestCount }
           : false;
@@ -177,6 +180,7 @@ export default class MyMatchScreen extends React.Component {
         playersNeededItem = (
           <ListItem
             title={invitesTitle}
+            subtitle={invitesSubtitle}
             badge={invitesBadge}
             onPress={() => {
               navigation.navigate("MyMatchPlayers", {
@@ -205,7 +209,7 @@ export default class MyMatchScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <View>
+        <ScrollView>
           <List>
             <ListItem hideChevron title={match.name} />
           </List>
@@ -258,7 +262,7 @@ export default class MyMatchScreen extends React.Component {
             )}
             loading={playersAreLoading}
           />
-        </View>
+        </ScrollView>
         <Button
           text={Lang.t(`match.inviteButtonText`)}
           buttonStyle={styles.button}
@@ -288,7 +292,7 @@ export default class MyMatchScreen extends React.Component {
   }
 
   handleOnMatchUpdate(match) {
-    const { onMatchUpdate = () => {} } = this.props.navigation.state.params;
+    const { onMatchUpdate = () => { } } = this.props.navigation.state.params;
     this.setState({ match });
     onMatchUpdate(match);
   }

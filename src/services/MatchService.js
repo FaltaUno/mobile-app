@@ -95,18 +95,18 @@ class MatchService {
   }
 
   notifyInviteRequestToMatchCreator(matchCreator, match, user) {
-    this.getUnreadInviteRequestsCountForMatchAdmin(user.key).then(badge => {
+    //this.getUnreadInviteRequestsCountForMatchAdmin(user.key).then(badge => {
       PushService.notify(matchCreator, {
         title: `${user.displayName} quiere jugar en ${match.name}`,
         body: `Ingresá para aceptarlo o rechazarlo`,
-        badge,
+        badge: 1,
         data: {
           action: "myMatch.inviteRequest",
           matchKey: match.key,
           userKey: user.key
         }
       });
-    });
+    //});
   }
 
   getUnreadInviteRequestsCountForMatchAdmin = userKey => {

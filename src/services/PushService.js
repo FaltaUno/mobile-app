@@ -88,21 +88,47 @@ class PushService {
 
   //TODO: Localize when the app is detached
   notify = (user, data) => {
-    const to = user.pushToken;
-    return fetch(Config.push.uri, {
-      mode: "no-cors",
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Accept-Encoding": "gzip, deflate",
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        to,
-        ...data
-      })
-    });
+    const { pushToken = null, messagingTokens = [] } = user;
+
+    if(pushToken){
+      fetch(Config.push.uri, {
+        mode: "no-cors",
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          to: pushToken,
+          ...data
+        })
+      });
+    }
+
+    let webTokens = Object.keys(messagingTokens);
+    if(webTokens.length){
+      for(let webToken of webTokens){
+        fetch(Config.fcm.uri, {
+          mode: "no-cors",
+          method: "POST",
+          headers: {
+            "Authorization": `key=${Config.fcm.serverKey}`,
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            to: webToken,
+            notification: {
+              body: data.body,
+              title: data.title
+            },
+            data: data.data
+          })
+        })
+      }
+    }
   };
 }
 

@@ -278,8 +278,20 @@ export default class MyMatchPlayersScreen extends React.Component {
   handleApprovedInvite(invite, inviteType) {
     invite.requestRead = true;
     invite.approved = true;
+    const { user } = invite;
+    const { match } = this.props.navigation.state.params;
     this.handleUpdateInvite(invite, inviteType).then(() => {
-      // Notify user
+      PushService.notify(user, {
+        title: `Fuiste aceptado en "${match.name}"`,
+        body: `Ingresá para comunicarte con el organizador`,
+        badge: 1,
+        data: {
+          action: "match.inviteApproved",
+          inviteKey: invite.key,
+          matchKey: match.key,
+          userKey: user.key
+        }
+      });
     });
   }
 
