@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { ListItem, Text } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
-import { format } from "libphonenumber-js";
+import { isValidNumber, format } from "libphonenumber-js";
 import Lang from "lang";
 import Colors from "constants/Colors";
 
@@ -90,21 +90,13 @@ export default class ApprovedPlayersList extends Component {
   }
 
   showActionButtons(invite, user) {
-    const phoneNumber = format(invite.userPhone, "E.164");
-    const whatsappPhoneNumber = phoneNumber.substr(1); // No "+" sign
-    const whatsappMessagingUrl = `https://wa.me/${whatsappPhoneNumber}`;
-    // Linking.canOpenURL(whatsappMessagingUrl)
-    //   .then(supported => {
-    //     if (!supported) {
-    //       console.log("Can't handle url: " + whatsappMessaging);
-    //     } else {
-    //       //return Linking.openURL(whatsappMessaging);
-    //     }
-    //   })
-    //   .catch(err => console.error("An error occurred", err));
+    if (!user.email && !invite.userPhone) {
+      return null;
+    }
 
-    return (
-      <View style={styles.actionsContainer}>
+    let emailIcon;
+    if (user.email) {
+      emailIcon = (
         <Ionicons
           style={styles.actionButton}
           name={(Platform.OS === "ios" ? "ios" : "md") + "-mail"}
@@ -112,6 +104,20 @@ export default class ApprovedPlayersList extends Component {
           color={Colors.gray}
           onPress={() => Linking.openURL(`mailto:${invite.userEmail}`)}
         />
+      );
+    }
+
+    let phoneButton;
+    let whatsappButton;
+
+    const { phone, country } = invite.userPhone;
+    const isValidPhoneNumber = isValidNumber(phone, country);
+    if (invite.userPhone && isValidPhoneNumber) {
+      const phoneNumber = format(invite.userPhone, "E.164");
+      const whatsappPhoneNumber = phoneNumber.substr(1); // No "+" sign
+      const whatsappMessagingUrl = `https://wa.me/${whatsappPhoneNumber}`;
+      
+      phoneButton = (
         <Ionicons
           style={styles.actionButton}
           name={(Platform.OS === "ios" ? "ios" : "md") + "-call"}
@@ -119,6 +125,8 @@ export default class ApprovedPlayersList extends Component {
           color={Colors.gray}
           onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
         />
+      );
+      whatsappButton = (
         <Ionicons
           style={styles.actionButton}
           name={"logo-whatsapp"}
@@ -126,6 +134,14 @@ export default class ApprovedPlayersList extends Component {
           color={Colors.primary}
           onPress={() => Linking.openURL(whatsappMessagingUrl)}
         />
+      );
+    }
+
+    return (
+      <View style={styles.actionsContainer}>
+        {emailIcon}
+        {phoneButton}
+        {whatsappButton}
       </View>
     );
   }
